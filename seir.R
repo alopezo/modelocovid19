@@ -138,7 +138,7 @@ seir <- function(tipo = "A", actualiza = F,
         R0_lag <- mean(
                       (E[(t-5):(t-1)] - E[(t-6):(t-2)] * (1-1/rep(duracionE,5))) * rep(duracionI,5) / 
                        I[(t-6):(t-2)] / Sprop[(t-6):(t-2)])
-        if(actualiza==T){R0_proy[t:fin] = R0_lag}
+        if(actualiza==T){R0_proy[t:fin] = R0[t:fin] = R0_lag}
       }
       
     # resetea trigger, solo para lo proyectado
