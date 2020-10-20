@@ -1,0 +1,12 @@
+name: corrientes
+title: corrientes
+username:
+account: iecs
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2477411
+bundleId: 3292122
+url: https://iecs.shinyapps.io/corrientes/
+when: 1592576722.53468
+asMultiple: FALSE
+asStatic: FALSE

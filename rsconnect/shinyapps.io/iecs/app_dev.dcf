@@ -1,0 +1,12 @@
+name: app_dev
+title:
+username:
+account: iecs
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2489308
+bundleId: 3330526
+url: https://iecs.shinyapps.io/app_dev/
+when: 1593453346.61765
+asMultiple: FALSE
+asStatic: FALSE
