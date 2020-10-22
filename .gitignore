@@ -3,3 +3,4 @@ rt_data.Rdata
 Covid19Casos.csv
 .Rhistory
 rsconnect
+.DS_Store
