@@ -760,7 +760,7 @@ server <- function(input, output, session) {
 # url me dice si quiere ir a subnacional argentino
 observe({
   if(str_detect(session$clientData$url_pathname, "argentina")==T){
-    updateSelectInput(session, "pais",
+      updateSelectInput(session, "pais",
                       choices = c("Argentina - Ciudad Autónoma de Buenos Aires" = "ARG_2",
                                   "Argentina - AMBA" = "ARG_3",
                                   "Argentina - Buenos Aires (Partidos del AMBA)" = "ARG_7",
