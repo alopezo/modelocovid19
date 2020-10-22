@@ -117,6 +117,7 @@ union all
   
   dataEcdc<-data.frame(dataMsal %>% dplyr::select(dateRep,countryterritoryCode,new_cases=cases,new_deaths=deaths,total_cases,total_deaths))
   dataEcdc<-dataEcdc[,-2]
+  dataEcdc<-dataEcdc %>% dplyr::filter(dateRep>="2020-03-01") 
   rm(dataMsal)
   rm(dataMsalAmba)
   rm(dataMsalAmbaPBA)

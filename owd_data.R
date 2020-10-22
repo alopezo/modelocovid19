@@ -28,6 +28,7 @@ owd_data <- read.csv("https://covid.ourworldindata.org/data/owid-covid-data.csv"
 #agrega datos subnacionales de Argentina
 
 dataMsal<-read.csv("appTest - Cod/Covid19Casos.csv", encoding = "UTF-8")
+dataMsal<-dataMsal %>% dplyr::filter(fecha_diagnostico>="2020-03-01") 
 dataMsal<-dataMsal %>% filter(clasificacion_resumen=="Confirmado")
 deptosAmba<-c(28,
               35,
@@ -175,7 +176,7 @@ dataMsal<-
     life_expectancy
   )
 dataMsal$date<-as.character(dataMsal$date)
-dataMsal<-dataMsal %>% filter(date<='2020-08-30')
+dataMsal<-dataMsal %>% filter(date<='2020-10-10')
 dataMsal$location[dataMsal$iso_code=="ARG_2"]<-"Argentina - Ciudad Autónoma de Buenos Aires"
 dataMsal$population[dataMsal$iso_code=="ARG_2"]<-3075643
 dataMsal$aged_65_older[dataMsal$iso_code=="ARG_2"]<-16.43
