@@ -132,7 +132,7 @@ seir <- function(tipo = "A", actualiza = F,
     # seir común
     if(t>=hoy){ 
       
-    # si es tipo B, requiere algun R0 por defecto. Queda constante a hoy
+      # si es tipo B, requiere algun R0 por defecto. Queda constante a hoy
       if(t==hoy  & tipo=="B"){
         # toma promedio ult 5 R0
         R0_lag <- mean(
@@ -141,9 +141,9 @@ seir <- function(tipo = "A", actualiza = F,
         if(actualiza==T){R0_proy[t:fin] = R0[t:fin] = R0_lag}
       }
       
-    # resetea trigger, solo para lo proyectado
+      # resetea trigger, solo para lo proyectado
       if (triggerOn==1 & (fecha[t] > fechaVencimientoTrigger)) {triggerOn <- 0}
-    # chekea si trigger
+      # chekea si trigger
       if(triggerOn==0 & !is.na(BC_sat[t-1]) & (BC_sat[t-1]>triggerPorcCrit/100) & trigger_on_app_ok==1){
         triggerOn=1
         fechaVencimientoTrigger <- fecha[t] + diasInterv
@@ -154,14 +154,14 @@ seir <- function(tipo = "A", actualiza = F,
         }
       }
       
-    # R si estamos en trigger
-    if(actualiza==F){
-      R0[t] = ifelse(triggerOn == 1, R_trigger, R0_proy[t])
-    }
-    
-    # desde hoy
-    i[t]  = E[t-1]/duracionE
-    E[t]  = E[t-1] + I[t-1] * R0[t] * Sprop[t-1]/duracionI - E[t-1]/duracionE
+      # R si estamos en trigger
+      if(actualiza==F){
+        R0[t] = ifelse(triggerOn == 1, R_trigger, R0_proy[t])
+      }
+      
+      # desde hoy
+      i[t]  = E[t-1]/duracionE
+      E[t]  = E[t-1] + I[t-1] * R0[t] * Sprop[t-1]/duracionI - E[t-1]/duracionE
     }
     
     # resto de seir según seapor compartimentos
