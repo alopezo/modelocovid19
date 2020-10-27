@@ -1824,7 +1824,10 @@ observeEvent(input$updateResults, ignoreInit = T,{
     # Proyecta
       # completo período de proyección
     Final_proy = max(as.Date(modeloSimulado$fecha[!is.na(modeloSimulado$fecha)]))
-    Rusuario$Final[nrow(Rusuario)] <- Final_proy
+    if (Rusuario$Comienzo[nrow(Rusuario)] < Final_proy) {
+      Rusuario$Final[nrow(Rusuario)] <- Final_proy
+    }
+
     
     # s/ tipo
     source("seir.R", encoding = "UTF-8")
