@@ -59,6 +59,7 @@ seir <- function(tipo = "A", actualiza = F,
   # observo y suaviz muertes
   d_obs = data$new_deaths
   d_obs_smooth = predict(loess(d_obs~seq(1,nrow(data)),span=.5)) # saco negativos
+  d_obs_smooth[d_obs_smooth<0] = 0
 
   # organizo R recibido
   R0_proy <- rep(0,fin)
