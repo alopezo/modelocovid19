@@ -90,6 +90,7 @@ seir <- function(tipo = "A", actualiza = F,
       i_raw = data$new_cases / porc_detectado
       i = rollmean(i_raw, 5, fill = 0)
       i[(hoy-1):hoy] = c(mean(i_raw[(hoy-3):hoy]),mean(i_raw[(hoy-2):hoy]))
+      i=predict(loess(i~seq(1,nrow(data)),span=.5))
     }
  
   # para trigger

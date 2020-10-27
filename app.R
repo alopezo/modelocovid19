@@ -23,7 +23,7 @@ library(tinytex)
 versionModelo <<- "2.6"
 
 # funs --------------------------------------------------------------------
-hoy <<- as.Date("2020-10-10")
+hoy <<- as.Date("2020-10-17")
 default <<- FALSE
 # setwd("appTest - Cod")
 source("modulos.R", encoding = "UTF-8")
@@ -724,7 +724,7 @@ hr(),
                       column(6,
                              br(),br(),
                              tags$a(href="https://www.medrxiv.org/content/10.1101/2020.05.13.20101253v3",
-                                    "Ionnidis et al.(2020) Ref: 0.26% (0.02%-0.86%)Rango",target="_blank"))),
+                                    "Ioannidis et al.(2020) Ref: 0.26% (0.02%-0.86%)Rango",target="_blank"))),
                     fluidRow( 
                       column(6,
                              uiOutput("Valuepi8")),

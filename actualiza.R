@@ -14,7 +14,7 @@ library(EpiEstim)
 setwd("C:/Users/Adrian/Desktop")
 #### países/juris a actualizar ####
 
-hoy <<- diaActualizacion <<- as.Date("2020-10-10")
+hoy <<- diaActualizacion <<- as.Date("2020-10-17")
 paises_actualizar <- c("ARG","BOL","CRI","SLV","ECU","GTM",
                         "HND","JAM","PAN","PRY","DOM","CHL","NIC",
                         "URY","BRA","PER","MEX","COL", "BHS",
