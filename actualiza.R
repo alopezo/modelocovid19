@@ -256,7 +256,9 @@ porcentajeDisponibilidadCamasCOVID <- recursos[,"porcentajeDisponibilidadCamasCO
 source("appTest - Cod/seir.R", encoding = "UTF-8")
 
 # paises con infectados segun porcentaje no detectado
-paises_distintos <- c("ARG_18","CRI","SLV","JAM","PRY","ARG_50","BHS","BLZ","BRB",
+paises_distintos <- c("ARG_18","CRI","SLV","JAM",
+                      #"PRY",
+                      "ARG_50","BHS","BLZ","BRB",
                        "GUY","HTI","NIC","SUR","TTO","VEN")
 
 # valores por default de intervención. En actualización nunca aplica trigger
