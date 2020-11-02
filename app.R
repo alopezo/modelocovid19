@@ -816,10 +816,10 @@ observeEvent(input$pais,{
     incProgress(.1)
 
     # levanta data, según sea corrientes (hay cosas separadas) SAQUE "HND", de paises_distintos
-    paises_distintos <<- c("ARG_18","CRI","SLV","JAM",
-                           #"PRY",
-                           "ARG_50","BHS","BLZ","BRB",
-                           "GUY","HTI","NIC","SUR","TTO","VEN")
+    # paises_distintos <<- c("ARG_18","CRI","SLV","JAM",
+    #                        #"PRY",
+    #                        "ARG_50","BHS","BLZ","BRB",
+    #                        "GUY","HTI","NIC","SUR","TTO","VEN")
     # if(input$pais %!in% paises_distintos){
     #   load("DatosIniciales/dataEcdc.RData")
     #   #Info_ecdc <- dataEcdc %>% mutate(fecha=ymd(fecha)) %>% 
