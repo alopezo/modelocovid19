@@ -44,6 +44,10 @@ if (substr(input$pais,1,3)=="ARG"){
   dataMsalARG$residencia_provincia_id<-"0"
   dataMsalARG$residencia_provincia_nombre<-"Argentina"
   
+  dataMsal_6_756<-dataMsal %>% dplyr::filter(residencia_provincia_id==6 & residencia_departamento_id==756)
+  dataMsal_6_756$residencia_provincia_id<-"6_756"
+  dataMsal_6_756$residencia_provincia_nombre<-"Buenos Aires - Partido de San Isidro"
+  
   deptosAmba<-c(28,35,91,98,119,126,134,245,252,260,266,270,274,329,364,
                 371,408,410,412,427,441,434,490,497,515,525,539,560,568,
                 638,648,658,749,756,760,778,805,840,861,882)
@@ -65,6 +69,7 @@ if (substr(input$pais,1,3)=="ARG"){
   dataMsal<-union_all(dataMsal,dataMsalAmba)
   dataMsal<-union_all(dataMsal,dataMsalAmbaPBA)
   dataMsal<-union_all(dataMsal,dataMsalARG)
+  dataMsal<-union_all(dataMsal,dataMsal_6_756)
   
   dataMsal<-sqldf('
      select distinct "cases" as tipo,
@@ -122,6 +127,7 @@ union all
   rm(dataMsalAmba)
   rm(dataMsalAmbaPBA)
   rm(dataMsalARG)
+  rm(dataMsal_6_756)
   #   dataEcdc$new_deaths[6:nrow(dataEcdc)-6]<-rollmean(dataEcdc$new_deaths,7)
 } else
   

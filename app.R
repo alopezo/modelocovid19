@@ -23,7 +23,7 @@ library(tinytex)
 versionModelo <<- "2.6"
 
 # funs --------------------------------------------------------------------
-hoy <<- as.Date("2020-10-17")
+hoy <<- as.Date("2020-11-01")
 default <<- FALSE
 # setwd("appTest - Cod")
 source("modulos.R", encoding = "UTF-8")
@@ -816,10 +816,10 @@ observeEvent(input$pais,{
     incProgress(.1)
 
     # levanta data, según sea corrientes (hay cosas separadas) SAQUE "HND", de paises_distintos
-    paises_distintos <<- c("ARG_18","CRI","SLV","JAM",
-                           #"PRY",
-                           "ARG_50","BHS","BLZ","BRB",
-                           "GUY","HTI","NIC","SUR","TTO","VEN")
+    # paises_distintos <<- c("ARG_18","CRI","SLV","JAM",
+    #                        #"PRY",
+    #                        "ARG_50","BHS","BLZ","BRB",
+    #                        "GUY","HTI","NIC","SUR","TTO","VEN")
     # if(input$pais %!in% paises_distintos){
     #   load("DatosIniciales/dataEcdc.RData")
     #   #Info_ecdc <- dataEcdc %>% mutate(fecha=ymd(fecha)) %>% 
@@ -1803,6 +1803,10 @@ observeEvent(input$updateResults, ignoreInit = T,{
           diasHospCasosCriticos <- ifelse(is.null(input$DíasHospCrit),diasHospCasosCriticos,input$DíasHospCrit)
           diasUCICasosCriticos <- ifelse(is.null(input$DíasUCICrit),diasUCICasosCriticos,input$DíasUCICrit)
           tasaLetalidadAjustada <- ifelse(is.null(input$IFR),tasaLetalidadAjustada,input$IFR/100)
+          print("el usuario puso:")
+          print(input$IFR)
+          print("el modelo computo:")
+          print(tasaLetalidadAjustada)
           ventiladoresCamaCritica <- ifelse(is.null(input$Vent_por_CC),
                                             ventiladoresCamaCritica,input$Vent_por_CC/100)
           # solo lo cambio si se emtió en epi (devuelve null si entra en la pestaña)
