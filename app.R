@@ -1803,6 +1803,10 @@ observeEvent(input$updateResults, ignoreInit = T,{
           diasHospCasosCriticos <- ifelse(is.null(input$DíasHospCrit),diasHospCasosCriticos,input$DíasHospCrit)
           diasUCICasosCriticos <- ifelse(is.null(input$DíasUCICrit),diasUCICasosCriticos,input$DíasUCICrit)
           tasaLetalidadAjustada <- ifelse(is.null(input$IFR),tasaLetalidadAjustada,input$IFR/100)
+          print("el usuario puso:")
+          print(input$IFR)
+          print("el modelo computo:")
+          print(tasaLetalidadAjustada)
           ventiladoresCamaCritica <- ifelse(is.null(input$Vent_por_CC),
                                             ventiladoresCamaCritica,input$Vent_por_CC/100)
           # solo lo cambio si se emtió en epi (devuelve null si entra en la pestaña)
