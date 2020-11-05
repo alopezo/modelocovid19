@@ -19,12 +19,18 @@ library(kableExtra)
 library(knitr)
 library(sp)
 library(tinytex)
+library(shiny.i18n)
 
 versionModelo <<- "2.6"
 
 # funs --------------------------------------------------------------------
 hoy <<- as.Date("2020-11-01")
 default <<- FALSE
+
+# Configurando archivo de traducciones
+i18n <- Translator$new(translation_json_path = "./translation.json")
+i18n$set_translation_language("es")
+
 # setwd("appTest - Cod")
 source("modulos.R", encoding = "UTF-8")
 
@@ -46,11 +52,12 @@ colores = c("#FF2929","#FF4D27","#FF7025","#FF9424","#FFB822","#FFDB20",
 # App ---------------------------------------------------------------------
 
 ui <- fluidPage(
+  shiny.i18n::usei18n(i18n),
   useShinyjs(),
   theme = shinytheme("flatly"),
   tags$head(HTML('<link rel="icon", href="ISO-IECS.png", type="image/png" />')),
   tags$head(includeHTML("www/google-analytics.html")),
-  titlePanel(windowTitle = "IECS: Proyecciones COVID-19", title = ""),
+  titlePanel(windowTitle = i18n$t("IECS: Proyecciones COVID-19"), title = ""),
   fluidRow(
     column(3,
            fluidRow(
@@ -80,8 +87,8 @@ ui <- fluidPage(
            )
     ),
     column(9, 
-           h1("Impacto del COVID-19 en los sistemas de salud de Latinoamérica y el Caribe"),
-           h3("Proyecciones para la toma de decisiones públicas")
+           h1(i18n$t("Impacto del COVID-19 en los sistemas de salud de Latinoamérica y el Caribe")),
+           h3(i18n$t("Proyecciones para la toma de decisiones públicas"))
     )
   ),
   fluidRow(
@@ -111,6 +118,24 @@ ui <- fluidPage(
              a("Más información sobre el modelo", href="https://www.iecs.org.ar/modelocovid/", target="_blank"),
              "-",
              a("Consultas y feedback", href="https://www.iecs.org.ar/modelocovid-formulario/", target="_blank")
+             ),
+           p(style = "margin-bottom: 1px;  font-style: italic;", 
+             "Lenguaje de la aplicación: ",
+             tags$a(
+               id = "castellano",
+               img(src="spain.png", height = 20, width = 20),
+               href="javascript:void(0);"
+             ),
+             tags$a(
+               id = "ingles",
+               img(src="united-states-of-america.png", height = 20, width = 20),
+               href="javascript:void(0);"
+             ),
+             tags$a(
+               id = "portugues",
+               img(src="brazil.png", height = 20, width = 20),
+               href="javascript:void(0);"
+             )
            )
     ),
   ),
@@ -756,6 +781,27 @@ hr(),
 
 ########### server
 server <- function(input, output, session) {
+  
+# cambio de lenguaje
+  onclick("castellano", 
+    {
+      print(paste("Language change!","es"))
+      update_lang(session,"es")
+    }
+  )
+  onclick("ingles", 
+    {
+      print(paste("Language change!","en"))
+      update_lang(session,"en")
+    }
+  )
+  onclick("portugues", 
+     {
+       print(paste("Language change!","pt"))
+       update_lang(session,"pt")
+     }
+  )
+  
 
 # url me dice si quiere ir a subnacional argentino
 observe({

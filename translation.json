@@ -1,0 +1,21 @@
+{
+  "cultural_date_format": "%d-%m-%Y",
+  "languages": ["es", "en", "pt"],
+  "translation": [
+      {
+        "es": "IECS: Proyecciones COVID-19",
+        "en": "IECS: COVID-19 Projections",
+        "pt": "IECS: Projeções COVID-19"
+      },
+      {
+        "es": "Impacto del COVID-19 en los sistemas de salud de Latinoamérica y el Caribe",
+        "en": "Impact of COVID-19 in Latinamerica and the Caribbean Health Systems",
+        "pt": "Impacto do COVID-19 nos sistemas de saúde da América Latina e Caribe"
+      },
+      {
+        "es": "Proyecciones para la toma de decisiones públicas",
+        "en": "Projections for public decision making",
+        "pt": "Projeções para tomada de decisão pública"
+      }
+    ]
+}
