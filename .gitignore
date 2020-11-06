@@ -5,3 +5,5 @@ Covid19Casos.csv
 rsconnect
 .DS_Store
 .Rhistory
+**/*.icloud
+**/.DS_Store
