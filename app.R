@@ -101,21 +101,18 @@ ui <- fluidPage(
     ),
     column(2,
            p(style = "font-size: 10px; margin-top: 15px;", 
-             HTML(paste0("El desarrollo de la metodología que da soporte a 
-                           esta herramienta fue posible gracias al apoyo del 
-                           Banco Interamericano de Desarrollo (BID) bajo el 
-                           Contrato RG-E1696-P001"))),
+             HTML(paste0(i18n$t("El desarrollo de la metodología que da soporte a esta herramienta fue posible gracias al apoyo del Banco Interamericano de Desarrollo (BID) bajo el Contrato RG-E1696-P001")))),
     ),
     column(9,
            # class = "text-center",
            p(style = "margin-bottom: 1px; font-style: italic;", 
-             "Departamento de Evaluación de Tecnologías Sanitarias y Economía de la Salud"),
+             i18n$t("Departamento de Evaluación de Tecnologías Sanitarias y Economía de la Salud")),
            p(style = "margin-bottom: 1px; font-style: italic;", 
-             "Centro de Implementación e Innovación en Políticas de Salud"),
+             i18n$t("Centro de Implementación e Innovación en Políticas de Salud")),
            p(style = "margin-bottom: 1px; font-style: italic;", 
-             "Instituto de Efectividad Clínica y Sanitaria, Buenos Aires, Argentina"),
+             i18n$t("Instituto de Efectividad Clínica y Sanitaria, Buenos Aires, Argentina")),
            p(style = "margin-bottom: 1px;  font-style: italic;", 
-             a("Más información sobre el modelo", href="https://www.iecs.org.ar/modelocovid/", target="_blank"),
+             a(i18n$t("Más información sobre el modelo"), href="https://www.iecs.org.ar/modelocovid/", target="_blank"),
              "-",
              a("Consultas y feedback", href="https://www.iecs.org.ar/modelocovid-formulario/", target="_blank")
              ),
