@@ -114,10 +114,10 @@ ui <- fluidPage(
            p(style = "margin-bottom: 1px;  font-style: italic;", 
              a(i18n$t("Más información sobre el modelo"), href="https://www.iecs.org.ar/modelocovid/", target="_blank"),
              "-",
-             a("Consultas y feedback", href="https://www.iecs.org.ar/modelocovid-formulario/", target="_blank")
+             a(i18n$t("Consultas y feedback"), href="https://www.iecs.org.ar/modelocovid-formulario/", target="_blank")
              ),
            p(style = "margin-bottom: 1px;  font-style: italic;", 
-             "Lenguaje de la aplicación: ",
+             i18n$t("Lenguaje de la aplicación: "),
              tags$a(
                id = "castellano",
                img(src="spain.png", height = 20, width = 20),
@@ -181,7 +181,7 @@ ui <- fluidPage(
                             input.pais == 'ARG_50' ||
                             input.pais == 'ARG_3' || 
                             input.pais == 'ARG_7'  ",
-            em("Ultimos datos disponibles (fuentes ", 
+            em(i18n$t("Ultimos datos disponibles (fuentes "), 
                tags$a(href="https://www.ecdc.europa.eu/en", "ECDC",target="_blank"), ", ", 
                tags$a(href="https://ourworldindata.org/", "OWD", target="_blank"),  ", ", 
                tags$a(href="http://datos.salud.gob.ar/dataset/covid-19-casos-registrados-en-la-republica-argentina", 
@@ -196,7 +196,7 @@ ui <- fluidPage(
                             input.pais != 'ARG_50' &&
                             input.pais != 'ARG_3' && 
                             input.pais != 'ARG_7'  ",
-            em("Ultimos datos disponibles (fuentes ", 
+            em(i18n$t("Ultimos datos disponibles (fuentes "), 
                tags$a(href="https://www.ecdc.europa.eu/en", "ECDC",target="_blank"), ", ", 
                tags$a(href="https://ourworldindata.org/", "OWD", target="_blank"), ", ",
                tags$a(href="https://covid19.who.int/table", "OMS", target="_blank"),

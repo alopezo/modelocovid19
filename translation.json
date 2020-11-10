@@ -41,7 +41,24 @@
         "es": "Más información sobre el modelo",
         "en": "More information about the model",
         "pt": "Mais informações sobre o modelo"
+      },
+      {
+        "es": "Consultas y feedback",
+        "en": "Consultations and feedback",
+        "pt": "Consulta e feedback"
+      },
+      {
+        "es": "Lenguaje de la aplicación: ",
+        "en": "Application language: ",
+        "pt": "Linguagem de aplicação: "
+      },
+      {
+        "es": "Ultimos datos disponibles (fuentes ",
+        "en": "Latest available data (sources ",
+        "pt": "Últimos dados disponíveis (fontes "
       }
+      
+      
     
     
     ]
