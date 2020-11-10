@@ -56,7 +56,48 @@
         "es": "Ultimos datos disponibles (fuentes ",
         "en": "Latest available data (sources ",
         "pt": "Últimos dados disponíveis (fontes "
+      },
+      {
+        "es": "Población:",
+        "en": "Population:",
+        "pt": "População:"
+      },
+      {
+        "es": "Casos confirm. diarios:",
+        "en": "Daily confirmed cases:",
+        "pt": "Casos confirmados diariamente:"
+      },
+      {
+        "es": "Muertes confirmadas diarias:",
+        "en": "Daily confirmed deaths:",
+        "pt": "Mortes diarias confirmadas:"
+      },
+      {
+        "es": "% de mayores de 65 años:",
+        "en": "% 65 years and older:",
+        "pt": "% 65 anos ou mais:"
+      },
+      {
+        "es": "Total casos confirmados:",
+        "en": "Total confirmed cases:",
+        "pt": "Total de casos confirmados:"
+      },
+      {
+        "es": "Total muertes confirmadas:",
+        "en": "Total confirmed deaths:",
+        "pt": "Total de mortes confirmadas:"
+      },
+      {
+        "es": "Esperanza de vida al nacer:",
+        "en": "Life expectancy:",
+        "pt": "Expectativa de vida:"
+      },
+      {
+        "es": "Tests Totales c/ mill. hab.:",
+        "en": "Total test per million:",
+        "pt": "Teste total por milhão:"
       }
+      
       
       
     

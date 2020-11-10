@@ -210,18 +210,18 @@ ui <- fluidPage(
           fluidRow(
             column(
               4,
-              tags$b("Población:"),tags$p(textOutput("poblacion")),
+              tags$b(i18n$t("Población:")),tags$p(textOutput("poblacion")),
             ),
             column(
               4,
-              tags$b("Casos confirm. diarios:",
+              tags$b(i18n$t("Casos confirm. diarios:"),
                      tags$span(id="info_Inf_diarios", icon("info-circle"), 
                                 style=("margin-left:5px;"))),
               tags$p(textOutput("inf_ayer")),
             ),
             column(
               4,
-              tags$b("Muertes confirmadas diarias:",
+              tags$b(i18n$t("Muertes confirmadas diarias:"),
                      tags$span(id="info_Mue_diarios", icon("info-circle"), 
                                style=("margin-left:5px;"))),
               tags$p(textOutput("muertes_ayer")),
@@ -230,25 +230,25 @@ ui <- fluidPage(
           fluidRow(
             column(
               4,
-              tags$b("% de mayores de 65 años:"),tags$p(textOutput("poblacion65mas")),
+              tags$b(i18n$t("% de mayores de 65 años:")),tags$p(textOutput("poblacion65mas")),
             ),
             column(
               4,
-              tags$b("Total casos confirmados:"),tags$p(textOutput("inf_acum")),
+              tags$b(i18n$t("Total casos confirmados:")),tags$p(textOutput("inf_acum")),
             ),
             column(
               4,
-              tags$b("Total muertes confirmadas:"),tags$p(textOutput("muertes_acum")),
+              tags$b(i18n$t("Total muertes confirmadas:")),tags$p(textOutput("muertes_acum")),
             )
           ),
           fluidRow(
             column(
               4,
-              tags$b("Esperanza de vida al nacer:"),tags$p(textOutput("e0"))
+              tags$b(i18n$t("Esperanza de vida al nacer:")),tags$p(textOutput("e0"))
             ),
             column(
               4,
-              tags$b("Tests Totales c/ mill. hab."),tags$p(textOutput("test_acum"))
+              tags$b(i18n$t('Tests Totales c/ mill. hab.')),tags$p(textOutput("test_acum"))
             ),
             column(
               4,
