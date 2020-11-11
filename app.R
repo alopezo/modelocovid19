@@ -248,11 +248,11 @@ ui <- fluidPage(
             ),
             column(
               4,
-              tags$b(i18n$t('Tests Totales c/ mill. hab.')),tags$p(textOutput("test_acum"))
+              tags$b(i18n$t("Tests por millón de habitantes:")),tags$p(textOutput("test_acum"))
             ),
             column(
               4,
-              tags$b("Tests diarios (últ. dato disp.)"),tags$p(textOutput("new_tests"))
+              tags$b(i18n$t("Tests diarios (últ. dato disp.)")),tags$p(textOutput("new_tests"))
             )
           )
         )
@@ -919,7 +919,7 @@ observeEvent(input$pais,{
                                                  "S/D", owd_pais$total_tests_per_thousand*1000),0) })
     output$new_tests <- renderText({ fnum(ifelse(is.na(owd_pais$new_tests),
                                                  "S/D", owd_pais$new_tests),0) })
-    
+    prueba="prueba"
     addPopover(session, 
                "warning_data", "Nota sobre los datos", 
                content = "En esta aplicación se releva periódicamente información de distintas fuentes, 
@@ -1758,8 +1758,8 @@ observeEvent(input$pais,{
                   color = ~pal(cum_deaths_millon),
                   label = mytext) %>% 
       leaflet::addLegend("bottomright", pal = pal, values = ~cum_deaths_millon, opacity = .6, 
-                         title = "Muertes Acum. </br>
-                         c/Mill. hab.")
+                         title = paste(i18n$t("Muertes Acum."), "</br>",
+                                       i18n$t("c/Mill. hab.")))
   })
 
   

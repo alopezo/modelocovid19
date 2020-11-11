@@ -93,10 +93,32 @@
         "pt": "Expectativa de vida:"
       },
       {
-        "es": "Tests Totales c/ mill. hab.:",
+        "es": "Tests por millón de habitantes:",
         "en": "Total test per million:",
-        "pt": "Teste total por milhão:"
+        "pt": "Testes total por milhão:"
+      },
+      {
+        "es": "Tests diarios (últ. dato disp.)",
+        "en": "Daily test:",
+        "pt": "Testes por dia:"
+      },
+      {
+        "es": "Muertes Acum.",
+        "en": "Total deaths",
+        "pt": "Total de mortes"
+      },
+      {
+        "es": "c/Mill. hab.",
+        "en": "per million",
+        "pt": "por milhão"
+      },
+      {
+        "es": "prueba",
+        "en": "Newly infected",
+        "pt": "Infectados diariamente"
       }
+      
+   
       
       
       
