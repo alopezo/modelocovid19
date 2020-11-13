@@ -12,7 +12,9 @@ LA_data <- owd_data %>%
                   as.data.frame()
 
 # shapes países
-download.file("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip", "appTest - Cod/WorldMap/countries.zip")
+# download.file("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip", "countries.zip")
+# unzip("C:/Proyectos/covid_IECS/shapes/countries.zip")
+
 unzip(zipfile = "appTest - Cod/WorldMap/countries.zip", exdir = "appTest - Cod/WorldMap")
 World <- readOGR(dsn="appTest - Cod/WorldMap", layer="ne_10m_admin_0_countries",encoding = 'UTF-8')
 
@@ -27,8 +29,6 @@ download.file("https://www.indec.gob.ar/ftp/cuadros/territorio/codgeo/Codgeo_Pai
 unzip(zipfile = "appTest - Cod/WorldMap/provinciasArg.zip", exdir = "appTest - Cod/WorldMap")
 Provs <- readOGR("appTest - Cod/WorldMap/pxpciadatosok.shp", encoding = 'UTF-8')
 Provs <- subset(Provs, link %in% c("18","02","50"))
-
-
 
 # leaflet(Provs,
 #         options = leafletOptions(attributionControl=FALSE,

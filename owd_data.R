@@ -3,10 +3,9 @@ library(sqldf)
 library(tidyr)
 library(dplyr)
 
-
 # vector paises
-paises <-c("ARG","BOL","BRA","CHL","COL","CRI","SLV",
-           "ECU","GTM","HND","JAM","MEX","PAN","PRY","PER","DOM","URY","ARG_2","ARG_18","ARG_3","ARG_7", "ARG_50", "ARG_6_756",
+paises <-c("ARG","BOL","BRA","CHL","COL","CRI","SLV","CEA",
+           "ECU","GTM","HND","JAM","MEX","PAN","PRY","PER","DOM","URY","ARG_2","ARG_18","ARG_3","ARG_7", "ARG_50",
            "BHS", "BRB", "BLZ", "GUY", "HTI", "NIC", "SUR", "TTO", "VEN")
 
 # get data
@@ -28,20 +27,8 @@ owd_data <- read.csv("https://covid.ourworldindata.org/data/owid-covid-data.csv"
 
 #agrega datos subnacionales de Argentina
 
-dataMsal<-read.csv("AppTest - Cod/Covid19Casos.csv", encoding = "UTF-8")
-dataMsal<-dataMsal %>% dplyr::filter(fecha_diagnostico>="2020-03-01") 
+dataMsal<-read.csv("appTest - Cod/Covid19Casos.csv", encoding = "UTF-8")
 dataMsal<-dataMsal %>% filter(clasificacion_resumen=="Confirmado")
-
-dataMsalARG<-dataMsal
-dataMsalARG$residencia_provincia_id<-"0"
-dataMsalARG$residencia_provincia_nombre<-"Argentina"
-
-dataMsal_6_756<-dataMsal %>% dplyr::filter(residencia_provincia_id==6 & residencia_departamento_id==756)
-dataMsal_6_756$residencia_provincia_id<-"6_756"
-dataMsal_6_756$residencia_provincia_nombre<-"Buenos Aires - Partido de San Isidro"
-
-
-
 deptosAmba<-c(28,
               35,
               91,
@@ -101,8 +88,6 @@ dataMsalAmbaPBA$residencia_provincia_nombre<-"Argentina - Buenos Aires (Partidos
 
 dataMsal<-union_all(dataMsal,dataMsalAmba)
 dataMsal<-union_all(dataMsal,dataMsalAmbaPBA)
-dataMsal<-union_all(dataMsal,dataMsalARG)
-dataMsal<-union_all(dataMsal,dataMsal_6_756)
 
 dataMsal<-sqldf('
      select distinct "cases" as tipo,
@@ -190,7 +175,7 @@ dataMsal<-
     life_expectancy
   )
 dataMsal$date<-as.character(dataMsal$date)
-dataMsal<-dataMsal %>% filter(date<='2020-11-01')
+dataMsal<-dataMsal %>% filter(date<='2020-08-30')
 dataMsal$location[dataMsal$iso_code=="ARG_2"]<-"Argentina - Ciudad Autónoma de Buenos Aires"
 dataMsal$population[dataMsal$iso_code=="ARG_2"]<-3075643
 dataMsal$aged_65_older[dataMsal$iso_code=="ARG_2"]<-16.43
@@ -213,19 +198,90 @@ dataMsal$population[dataMsal$iso_code=="ARG_50"]<-1990338
 dataMsal$aged_65_older[dataMsal$iso_code=="ARG_50"]<-12.89
 dataMsal$life_expectancy[dataMsal$iso_code=="ARG_50"]<-79
 
+
+##### CEARA #####
+
+# download, extract and import  
+
+download.file("http://download-integrasus.saude.ce.gov.br/casos_covid19", 
+              destfile = "casos_covid19.zip", 
+              mode="wb")
+
+dataCeara <- read.csv(unzip("casos_covid19.zip"), sep=";")
+
+# prepare data
+
+dataCeara$dataInicioSintomas <- as.Date(dataCeara$dataInicioSintomas, format="%d-%m-%Y") #date format
+dataCeara$dataObito <- as.Date(dataCeara$dataObito, format="%d-%m-%Y") #date format
+
+firstDate <- min(dataCeara$dataInicioSintomas[is.na(dataCeara$dataInicioSintomas)==FALSE]) #first day of sequence
+lastDate <- max(dataCeara$dataInicioSintomas[is.na(dataCeara$dataInicioSintomas)==FALSE]) #last day of sequence
+
+cases <- dataCeara[is.na(dataCeara$dataInicioSintomas)==FALSE & 
+                     dataCeara$resultadoFinalExame=="Positivo",]
+
+cases <- cases %>% dplyr::group_by(dataInicioSintomas) %>% tally() 
+
+
+seq <- data.frame(dateRep=seq(firstDate,lastDate, by=1))
+
+cases <- merge(seq, cases, by.x="dateRep", by.y="dataInicioSintomas")
+
+deaths <- dataCeara[is.na(dataCeara$dataInicioSintomas)==FALSE & 
+                      dataCeara$obitoConfirmado=="True",]
+
+deaths <- deaths %>% dplyr::group_by(dataObito) %>% tally() 
+dataCeara <- merge(cases,deaths, by.x="dateRep", by.y="dataObito", all.x=TRUE)
+colnames(dataCeara)[2:3] <- c("new_cases","new_deaths")
+dataCeara$new_cases[is.na(dataCeara$new_cases)==TRUE] <- 0
+dataCeara$new_deaths[is.na(dataCeara$new_deaths)==TRUE] <- 0
+
+dataCeara <- dataCeara %>% mutate(total_cases=cumsum(new_cases), total_deaths=cumsum(new_deaths))
+dataCeara$iso_code <- "CEA"
+dataCeara$location <- "Ceara" 
+dataCeara$date <- as.character(dataCeara$dateRep) 
+
+# dataCeara <- dataCeara %>% dplyr::select(iso_code=iso_code, 
+#                                          location=location,
+#                                          date=dateRep,
+#                                          total_cases=total_cases,
+#                                          new_cases=new_cases,
+#                                          total_deaths=total_deaths,
+#                                          new_deaths=new_deaths,
+#                                          total_tests=0,
+#                                          new_tests=0,
+#                                          total_tests_per_thousand=0,
+#                                          new_tests_per_thousand=0,
+#                                          new_tests_smoothed_per_thousand=0,
+#                                          stringency_index=0,
+#                                          population=0,
+#                                          population_density=0,
+#                                          aged_65_older=0,
+#                                          life_expectancy=0)
+
+rm(cases)
+rm(deaths)
+rm(seq)
+rm(firstDate)
+rm(lastDate)
+
+
+
 owd_data<-union_all(owd_data,dataMsal)
 
-rm(dataMsal)
+
+owd_data<-union_all(owd_data,dataCeara)
+
+
 rm(dataMsalAmba)
+rm(dataMsal)
 rm(dataMsalAmbaPBA)
-rm(dataMsalARG)
-rm(dataMsal_6_756)
 rm(combinaciones)
 rm(df_full)
 
 # guarda input folder
 # setwd("appTest")
-save(owd_data, file =  "AppTest - Cod/DatosIniciales/owd_data.RData")
+save(owd_data, file =  "appTest - Cod/DatosIniciales/owd_data.RData")
 
 # graphs
 # gt <- owd_data %>% filter(as.Date(date) > as.Date("2020-03-01")) %>% 
@@ -250,3 +306,4 @@ save(owd_data, file =  "AppTest - Cod/DatosIniciales/owd_data.RData")
 #               #                   measure based on 9 response indicators including 
 #               #                   school closures, workplace closures, and travel bans, 
 #               #                   rescaled to a value from 0 to 100 (100 = strictest response)")
+

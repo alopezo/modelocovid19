@@ -1,3 +1,5 @@
+# setwd("C:/Users/Adrian/Desktop/CEARA/appTest - Cod")
+
 library(shiny)
 library(tidyverse)
 library(readxl)
@@ -23,7 +25,7 @@ library(tinytex)
 versionModelo <<- "2.6"
 
 # funs --------------------------------------------------------------------
-hoy <<- as.Date("2020-11-01")
+hoy <<- as.Date("2020-11-05")
 default <<- FALSE
 # setwd("appTest - Cod")
 source("modulos.R", encoding = "UTF-8")
@@ -121,32 +123,33 @@ ui <- fluidPage(
     fluidRow( align = "center",
               tags$head(tags$style(HTML(".selectize-input.pais {height: 45px; width: 500px; font-size: 30px;}"))),
               selectInput(inputId = "pais","",selected = "ARG", width = "400px",
-                          c("Argentina" = "ARG",
-                            "Bahamas" = "BHS",
-                            "Barbados" = "BRB",
-                            "Belize" = "BLZ",
-                            "Bolivia" = "BOL",
+                          c(#"Argentina" = "ARG",
+                            #"Bahamas" = "BHS",
+                            #"Barbados" = "BRB",
+                            #"Belize" = "BLZ",
+                            #"Bolivia" = "BOL",
                             "Brasil" = "BRA",
-                            "Chile" = "CHL",
-                            "Colombia" = "COL",
-                            "Costa Rica" = "CRI",
-                            "El Salvador" = "SLV",
-                            "Ecuador" = "ECU",
-                            "Guatemala" = "GTM",
-                            "Guyana" = "GUY",
-                            "Haití" = "HTI",
-                            "Honduras" = "HND",
-                            "Jamaica" = "JAM",
-                            "Mexico" = "MEX",
-                            "Nicaragua" = "NIC",
-                            "Panamá" = "PAN",
-                            "Paraguay" = "PRY",
-                            "Perú" = "PER",
-                            "República Dominicana" = "DOM",
-                            "Suriname" = "SUR",
-                            "Trinidad y Tobago" = "TTO",
-                            "Uruguay" = "URY",
-                            "Venezuela" = "VEN"
+                            "Brasil - Ceara" ="CEA"
+                            #"Chile" = "CHL",
+                            #"Colombia" = "COL",
+                            #"Costa Rica" = "CRI",
+                            #"El Salvador" = "SLV",
+                            #"Ecuador" = "ECU",
+                            #"Guatemala" = "GTM",
+                            #"Guyana" = "GUY",
+                            #"Haití" = "HTI",
+                            #"Honduras" = "HND",
+                            #"Jamaica" = "JAM",
+                            #"Mexico" = "MEX",
+                            #"Nicaragua" = "NIC",
+                            #"Panamá" = "PAN",
+                            #"Paraguay" = "PRY",
+                            #"Perú" = "PER",
+                            #"República Dominicana" = "DOM",
+                            #"Suriname" = "SUR",
+                            #"Trinidad y Tobago" = "TTO",
+                            #"Uruguay" = "URY",
+                            #"Venezuela" = "VEN"
                             ))
     ),
     fluidRow(
@@ -254,16 +257,6 @@ hr(),
     column(6,
            # h4(em(textOutput("default_o_no"))),
            p("La fecha de última actualización de datos es el", format(hoy,"%d-%m-%Y"),"."),
-           # conditionalPanel("input$pais %in% paises_distintos",
-           #                  p("La fecha de última actualización de datos es el", 
-           #                    format(hoy,"%d-%m-%Y"),". ","Ajustando el modelo en base a casos reportados")
-           #                  
-           # ),
-           # conditionalPanel("!(input$pais %in% paises_distintos)",
-           #                  p("La fecha de última actualización de datos es el", 
-           #                    format(hoy,"%d-%m-%Y"),". ","Ajustando el modelo en base a defunciones reportadas")
-           #                  
-           # ),
            br(),
            # p("Con esta plataforma interactiva es posible:", style="text-decoration: underline;"),
            # p(" - Personalizar la proyección y crear un escenario nuevo ", tags$a(href="#params", "aquí")),
@@ -724,7 +717,7 @@ hr(),
                       column(6,
                              br(),br(),
                              tags$a(href="https://www.medrxiv.org/content/10.1101/2020.05.13.20101253v3",
-                                    "Ioannidis et al.(2020) Ref: 0.26% (0.02%-0.86%)Rango",target="_blank"))),
+                                    "Ionnidis et al.(2020) Ref: 0.26% (0.02%-0.86%)Rango",target="_blank"))),
                     fluidRow( 
                       column(6,
                              uiOutput("Valuepi8")),
@@ -760,7 +753,7 @@ server <- function(input, output, session) {
 # url me dice si quiere ir a subnacional argentino
 observe({
   if(str_detect(session$clientData$url_pathname, "argentina")==T){
-      updateSelectInput(session, "pais",
+    updateSelectInput(session, "pais",
                       choices = c("Argentina - Ciudad Autónoma de Buenos Aires" = "ARG_2",
                                   "Argentina - AMBA" = "ARG_3",
                                   "Argentina - Buenos Aires (Partidos del AMBA)" = "ARG_7",
@@ -816,10 +809,8 @@ observeEvent(input$pais,{
     incProgress(.1)
 
     # levanta data, según sea corrientes (hay cosas separadas) SAQUE "HND", de paises_distintos
-    # paises_distintos <<- c("ARG_18","CRI","SLV","JAM",
-    #                        #"PRY",
-    #                        "ARG_50","BHS","BLZ","BRB",
-    #                        "GUY","HTI","NIC","SUR","TTO","VEN")
+    paises_distintos <<- c("ARG_18","CRI","SLV","JAM","PRY","ARG_50","BHS","BLZ","BRB",
+                           "GUY","HTI","NIC","SUR","TTO","VEN")
     # if(input$pais %!in% paises_distintos){
     #   load("DatosIniciales/dataEcdc.RData")
     #   #Info_ecdc <- dataEcdc %>% mutate(fecha=ymd(fecha)) %>% 
@@ -1803,10 +1794,6 @@ observeEvent(input$updateResults, ignoreInit = T,{
           diasHospCasosCriticos <- ifelse(is.null(input$DíasHospCrit),diasHospCasosCriticos,input$DíasHospCrit)
           diasUCICasosCriticos <- ifelse(is.null(input$DíasUCICrit),diasUCICasosCriticos,input$DíasUCICrit)
           tasaLetalidadAjustada <- ifelse(is.null(input$IFR),tasaLetalidadAjustada,input$IFR/100)
-          print("el usuario puso:")
-          print(input$IFR)
-          print("el modelo computo:")
-          print(tasaLetalidadAjustada)
           ventiladoresCamaCritica <- ifelse(is.null(input$Vent_por_CC),
                                             ventiladoresCamaCritica,input$Vent_por_CC/100)
           # solo lo cambio si se emtió en epi (devuelve null si entra en la pestaña)
@@ -1830,106 +1817,20 @@ observeEvent(input$updateResults, ignoreInit = T,{
     # Proyecta
       # completo período de proyección
     Final_proy = max(as.Date(modeloSimulado$fecha[!is.na(modeloSimulado$fecha)]))
-    if (Rusuario$Comienzo[nrow(Rusuario)] < Final_proy) {
-      Rusuario$Final[nrow(Rusuario)] <- Final_proy
-    }
-
+    Rusuario$Final[nrow(Rusuario)] <- Final_proy
     
     # s/ tipo
-    print(tasaLetalidadAjustada)
     source("seir.R", encoding = "UTF-8")
     iecs <- seir(tipo = ifelse(input$pais %in% paises_distintos,"B","A"),
-                 compartimentos = F,
-                 variacion = 0,
-                 porc_detectado = .2,
-                 hoy_date = hoy,
-                 R0_usuario = Rusuario, 
-                 lag = 17, cantidadDiasProyeccion = 600,
-                 ifr = tasaLetalidadAjustada, 
-                 duracionI = duracionMediaInf, 
-                 duracionE = periodoPreinfPromedio,
-                 porc_gr = porcentajeCasosGraves,
-                 porc_cr = porcentajeCasosCriticos,
-                 trigger_on_app_ok = trigger_on_app, 
-                 triggerPorcCrit = trigger_Porc_crit, diasInterv = Dias_interv, R_trigger = trigger_R_inter,
-                 data = dataEcdc, # data de ecdc
-                 porc_covid = porcentajeDisponibilidadCamasCOVID,
-                 N = poblacion, S = N,
-                 porc_uci = diasUCICasosCriticos / diasHospCasosCriticos,
-                 camasCC = camasCriticas,
-                 camasGG = camasGenerales,
-                 ventsCC = ventiladoresCamaCritica,
-                 camasGGEnfDia = camasGeneralesEnfermeraDia,
-                 camasUCIEnfDia = camasUCIEnfermerasDia,
-                 camasGGMedDia  = camasGeneralesMedicoDia,
-                 camasUCIMedDia = camasCCMedicoDia,
-                 enfCamasGG = enfermerasCamasGenerales,
-                 enfCamasUCI = enfermerasCamasUCI,
-                 medCamasGG = medicosCamasGenerales,
-                 medCamasUCI = medicosCamasUCI
-                 )
-    
+                 hoy_date = hoy, 
+                 R0_usuario = Rusuario)
     modeloSimulado <<- iecs$modeloSimulado %>% as.data.frame()
-    
     modeloSimulado_hi <<- seir(tipo = ifelse(input$pais %in% paises_distintos,"B","A"),
-                               compartimentos = F,
-                               variacion = variacion_escenario$x,
-                               porc_detectado = .2,
-                               hoy_date = hoy,
-                               R0_usuario = Rusuario, 
-                               lag = 17, cantidadDiasProyeccion = 600,
-                               ifr=tasaLetalidadAjustada,
-                               duracionI = duracionMediaInf, 
-                               duracionE = periodoPreinfPromedio,
-                               porc_gr = porcentajeCasosGraves,
-                               porc_cr = porcentajeCasosCriticos,
-                               trigger_on_app_ok = trigger_on_app, 
-                               triggerPorcCrit = trigger_Porc_crit, diasInterv = Dias_interv, R_trigger = trigger_R_inter,
-                               data = dataEcdc, # data de ecdc
-                               porc_covid = porcentajeDisponibilidadCamasCOVID,
-                               N = poblacion, S = N,
-                               porc_uci = diasUCICasosCriticos / diasHospCasosCriticos,
-                               camasCC = camasCriticas,
-                               camasGG = camasGenerales,
-                               ventsCC = ventiladoresCamaCritica,
-                               camasGGEnfDia = camasGeneralesEnfermeraDia,
-                               camasUCIEnfDia = camasUCIEnfermerasDia,
-                               camasGGMedDia  = camasGeneralesMedicoDia,
-                               camasUCIMedDia = camasCCMedicoDia,
-                               enfCamasGG = enfermerasCamasGenerales,
-                               enfCamasUCI = enfermerasCamasUCI,
-                               medCamasGG = medicosCamasGenerales,
-                               medCamasUCI = medicosCamasUCI
-                               )$modeloSimulado %>% as.data.frame()
+                               hoy_date = hoy, variacion = variacion_escenario$x,
+                               R0_usuario = Rusuario)$modeloSimulado %>% as.data.frame()
     modeloSimulado_low <<- seir(tipo = ifelse(input$pais %in% paises_distintos,"B","A"),
-                                compartimentos = F,
-                                variacion = -variacion_escenario$x,
-                                porc_detectado = .2,
-                                hoy_date = hoy,
-                                R0_usuario = Rusuario, 
-                                lag = 17, cantidadDiasProyeccion = 600,
-                                ifr=tasaLetalidadAjustada,
-                                duracionI = duracionMediaInf, 
-                                duracionE = periodoPreinfPromedio,
-                                porc_gr = porcentajeCasosGraves,
-                                porc_cr = porcentajeCasosCriticos,
-                                trigger_on_app_ok = trigger_on_app, 
-                                triggerPorcCrit = trigger_Porc_crit, diasInterv = Dias_interv, R_trigger = trigger_R_inter,
-                                data = dataEcdc, # data de ecdc
-                                porc_covid = porcentajeDisponibilidadCamasCOVID,
-                                N = poblacion, S = N,
-                                porc_uci = diasUCICasosCriticos / diasHospCasosCriticos,
-                                camasCC = camasCriticas,
-                                camasGG = camasGenerales,
-                                ventsCC = ventiladoresCamaCritica,
-                                camasGGEnfDia = camasGeneralesEnfermeraDia,
-                                camasUCIEnfDia = camasUCIEnfermerasDia,
-                                camasGGMedDia  = camasGeneralesMedicoDia,
-                                camasUCIMedDia = camasCCMedicoDia,
-                                enfCamasGG = enfermerasCamasGenerales,
-                                enfCamasUCI = enfermerasCamasUCI,
-                                medCamasGG = medicosCamasGenerales,
-                                medCamasUCI = medicosCamasUCI)$modeloSimulado %>% as.data.frame()
+                                hoy_date = hoy,  variacion = -variacion_escenario$x,
+                                R0_usuario = Rusuario)$modeloSimulado %>% as.data.frame()
     fechaIntervencionesTrigger <<- iecs$fechatrigger
     resumenResultados <<- crea_tabla_rr(modeloSimulado = modeloSimulado)
     crea_tabla_inputs()

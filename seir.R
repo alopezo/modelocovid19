@@ -35,9 +35,7 @@ seir <- function(tipo = "A", actualiza = F,
                  enfCamasUCI = enfermerasCamasUCI,
                  medCamasGG = medicosCamasGenerales,
                  medCamasUCI = medicosCamasUCI){
-  print("ifr en la funcion")
-  print(ifr)
-  print(tasaLetalidadAjustada)
+
   # variacion
   ifr_inv = ifr * (1 - variacion) # para calcular incidentes (escenario inverso por método)
   ifr = ifr * (1 + variacion)
@@ -61,7 +59,6 @@ seir <- function(tipo = "A", actualiza = F,
   # observo y suaviz muertes
   d_obs = data$new_deaths
   d_obs_smooth = predict(loess(d_obs~seq(1,nrow(data)),span=.5)) # saco negativos
-  d_obs_smooth[d_obs_smooth<0] = 0
 
   # organizo R recibido
   R0_proy <- rep(0,fin)
@@ -93,7 +90,6 @@ seir <- function(tipo = "A", actualiza = F,
       i_raw = data$new_cases / porc_detectado
       i = rollmean(i_raw, 5, fill = 0)
       i[(hoy-1):hoy] = c(mean(i_raw[(hoy-3):hoy]),mean(i_raw[(hoy-2):hoy]))
-      i=predict(loess(i~seq(1,nrow(data)),span=.5))
     }
  
   # para trigger
@@ -103,7 +99,7 @@ seir <- function(tipo = "A", actualiza = F,
     
   # seir
   for(t in 2:fin){
-    # t=166
+    # t=244
     # Expuestos según hay muertes observadas
     if(t<hoy){
       if(tipo=="B"){
@@ -136,7 +132,7 @@ seir <- function(tipo = "A", actualiza = F,
     # seir común
     if(t>=hoy){ 
       
-      # si es tipo B, requiere algun R0 por defecto. Queda constante a hoy
+    # si es tipo B, requiere algun R0 por defecto. Queda constante a hoy
       if(t==hoy  & tipo=="B"){
         # toma promedio ult 5 R0
         R0_lag <- mean(
@@ -145,9 +141,9 @@ seir <- function(tipo = "A", actualiza = F,
         if(actualiza==T){R0_proy[t:fin] = R0[t:fin] = R0_lag}
       }
       
-      # resetea trigger, solo para lo proyectado
+    # resetea trigger, solo para lo proyectado
       if (triggerOn==1 & (fecha[t] > fechaVencimientoTrigger)) {triggerOn <- 0}
-      # chekea si trigger
+    # chekea si trigger
       if(triggerOn==0 & !is.na(BC_sat[t-1]) & (BC_sat[t-1]>triggerPorcCrit/100) & trigger_on_app_ok==1){
         triggerOn=1
         fechaVencimientoTrigger <- fecha[t] + diasInterv
@@ -158,14 +154,14 @@ seir <- function(tipo = "A", actualiza = F,
         }
       }
       
-      # R si estamos en trigger
-      if(actualiza==F){
-        R0[t] = ifelse(triggerOn == 1, R_trigger, R0_proy[t])
-      }
-      
-      # desde hoy
-      i[t]  = E[t-1]/duracionE
-      E[t]  = E[t-1] + I[t-1] * R0[t] * Sprop[t-1]/duracionI - E[t-1]/duracionE
+    # R si estamos en trigger
+    if(actualiza==F){
+      R0[t] = ifelse(triggerOn == 1, R_trigger, R0_proy[t])
+    }
+    
+    # desde hoy
+    i[t]  = E[t-1]/duracionE
+    E[t]  = E[t-1] + I[t-1] * R0[t] * Sprop[t-1]/duracionI - E[t-1]/duracionE
     }
     
     # resto de seir según seapor compartimentos
