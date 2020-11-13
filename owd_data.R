@@ -31,9 +31,8 @@ owd_data <- read.csv("https://covid.ourworldindata.org/data/owid-covid-data.csv"
 
 # download, extract and import  
 
-
-dataCeara <- read.csv(unzip("casos_covid19.zip"), sep=";")
-
+dataCeara <- read.csv(unzip("casos_covid19.zip",exdir="tempZip"), sep=";")
+unlink("tempZip", recursive=TRUE)
 # prepare data
 
 dataCeara$dataInicioSintomas <- as.Date(dataCeara$dataInicioSintomas, format="%d-%m-%Y") #date format
