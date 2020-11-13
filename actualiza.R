@@ -13,13 +13,13 @@ library(zoo)
 library(EpiEstim)
 
 #### países/juris a actualizar ####
-setwd("C:/Users/Adrian/Desktop/CEARA")
+#setwd("C:/Users/Adrian/Desktop/CEARA")
 hoy <<- diaActualizacion <<- as.Date("2020-11-05")
 paises_actualizar <- c("CEA","BRA")
 
 ##### carga población y oms data  ####
-load("appTest - Cod/DatosIniciales/poblacion_data.RData")
-source("appTest - Cod/oms_data.R", encoding = "UTF-8")
+load("DatosIniciales/poblacion_data.RData")
+source("oms_data.R", encoding = "UTF-8")
 
 ##### descarga ultimos datos de msal  ####
 # urlMsal <- 'https://sisa.msal.gov.ar/datos/descargas/covid-19/files/Covid19Casos.csv'
@@ -43,7 +43,8 @@ if (substr(input$pais,1,3)=="CEA"){
                 destfile = "casos_covid19.zip", 
                 mode="wb")
   
-  dataCeara <- read.csv(unzip("casos_covid19.zip"), sep=";")
+  dataCeara <- read.csv(unzip("casos_covid19.zip",exdir="tempZip"), sep=";")
+  unlink("tempZip", recursive=TRUE)
   
   # prepare data
   
@@ -202,7 +203,7 @@ poblacion<-as.numeric(poblacion_data$value[which(poblacion_data$indicator=='tota
 
 ##### Recursos #####
 # asigna recursos según país
-recursos <- read.csv("appTest - Cod/recursos.csv",sep=";") %>% filter(pais==input$pais)
+recursos <- read.csv("recursos.csv",sep=";") %>% filter(pais==input$pais)
 camasGenerales <- recursos[,"camasGenerales"]
 camasCriticas <- recursos[,"camasCriticas"]
 ventiladores <- recursos[,"ventiladores"]
@@ -216,7 +217,7 @@ porcentajeDisponibilidadCamasCOVID <- recursos[,"porcentajeDisponibilidadCamasCO
 #### Actualizar ####
 
 # obtiene función seir
-source("appTest - Cod/seir.R", encoding = "UTF-8")
+source("seir.R", encoding = "UTF-8")
 
 # paises con infectados segun porcentaje no detectado
 paises_distintos <- c("ARG_18","CRI","SLV","JAM","PRY","ARG_50","BHS","BLZ","BRB",
@@ -271,13 +272,13 @@ rm(seir_update_hi)
 rm(seir_update_low)
 
 #### guarda conjunto de datos que serán levantados en la app####
-save.image(paste0("appTest - Cod/DatosIniciales/DatosIniciales_",input$pais,".RData"))
+save.image(paste0("DatosIniciales/DatosIniciales_",input$pais,".RData"))
 print(input$pais)
 }
 
 #### update owd_data and mapa ####
-source("appTest - Cod/owd_data.R", encoding = "UTF-8")
-source("appTest - Cod/map_set.R", encoding = "UTF-8")
+source("owd_data.R", encoding = "UTF-8")
+source("map_set.R", encoding = "UTF-8")
 
 
 

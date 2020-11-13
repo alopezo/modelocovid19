@@ -1,5 +1,3 @@
-# setwd("C:/Users/Adrian/Desktop/CEARA/appTest - Cod")
-
 library(shiny)
 library(tidyverse)
 library(readxl)

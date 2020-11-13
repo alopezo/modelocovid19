@@ -73,4 +73,4 @@ oms_data <-
     new_deaths = New_deaths
   ) %>% filter(oms_data$Date_reported<=hoy)
 
-save(oms_data,file="appTest - Cod/DatosIniciales/oms_data.RData")
+save(oms_data,file="DatosIniciales/oms_data.RData")
