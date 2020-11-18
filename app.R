@@ -23,7 +23,7 @@ library(tinytex)
 versionModelo <<- "2.6"
 
 # funs --------------------------------------------------------------------
-hoy <<- as.Date("2020-11-01")
+hoy <<- as.Date("2020-11-08")
 default <<- FALSE
 # setwd("appTest - Cod")
 source("modulos.R", encoding = "UTF-8")
