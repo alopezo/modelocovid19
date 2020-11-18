@@ -28,7 +28,7 @@ owd_data <- read.csv("https://covid.ourworldindata.org/data/owid-covid-data.csv"
 
 #agrega datos subnacionales de Argentina
 
-dataMsal<-read.csv("AppTest - Cod/Covid19Casos.csv", encoding = "UTF-8")
+dataMsal<-read.csv("Covid19Casos.csv", encoding = "UTF-8")
 dataMsal<-dataMsal %>% dplyr::filter(fecha_diagnostico>="2020-03-01") 
 dataMsal<-dataMsal %>% filter(clasificacion_resumen=="Confirmado")
 
@@ -225,7 +225,7 @@ rm(df_full)
 
 # guarda input folder
 # setwd("appTest")
-save(owd_data, file =  "AppTest - Cod/DatosIniciales/owd_data.RData")
+save(owd_data, file =  "DatosIniciales/owd_data.RData")
 
 # graphs
 # gt <- owd_data %>% filter(as.Date(date) > as.Date("2020-03-01")) %>% 

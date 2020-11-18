@@ -11,10 +11,10 @@ library(sqldf)
 library(readxl)
 library(zoo)
 library(EpiEstim)
-setwd("C:/Users/Adrian/Desktop")
+
 #### países/juris a actualizar ####
 
-hoy <<- diaActualizacion <<- as.Date("2020-10-17")
+hoy <<- diaActualizacion <<- as.Date("2020-11-08")
 paises_actualizar <- c("ARG","BOL","CRI","SLV","ECU","GTM",
                         "HND","JAM","PAN","PRY","DOM","CHL","NIC",
                         "URY","BRA","PER","MEX","COL", "BHS",
@@ -22,22 +22,21 @@ paises_actualizar <- c("ARG","BOL","CRI","SLV","ECU","GTM",
                         "ARG_18", "ARG_2", "ARG_7", "ARG_50", "ARG_3")
 
 ##### carga población y oms data  ####
-load("appTest - Cod/DatosIniciales/poblacion_data.RData")
-source("appTest - Cod/oms_data.R", encoding = "UTF-8")
+load("DatosIniciales/poblacion_data.RData")
+source("oms_data.R", encoding = "UTF-8")
 
 ##### descarga ultimos datos de msal  ####
 urlMsal <- 'https://sisa.msal.gov.ar/datos/descargas/covid-19/files/Covid19Casos.csv'
-download.file(urlMsal, "appTest - Cod/Covid19Casos.csv")
+#download.file(urlMsal, "Covid19Casos.csv")
 
 #### casos/muertes y parámetros para cada país ####
 input=list()
 for(p in paises_actualizar){
-  
 input$pais = p
 
 if (substr(input$pais,1,3)=="ARG"){
   
-  dataMsal<-read.csv("appTest - Cod/Covid19Casos.csv", fileEncoding = "UTF-8")
+  dataMsal<-read.csv("Covid19Casos.csv", fileEncoding = "UTF-8")
   dataMsal<-dataMsal %>% filter(clasificacion_resumen=="Confirmado")
 
   dataMsalARG<-dataMsal
@@ -245,7 +244,7 @@ poblacion<-as.numeric(poblacion_data$value[which(poblacion_data$indicator=='tota
 
 ##### Recursos #####
 # asigna recursos según país
-recursos <- read.csv("appTest - Cod/recursos.csv",sep=";") %>% filter(pais==input$pais)
+recursos <- read.csv("recursos.csv",sep=";") %>% filter(pais==input$pais)
 camasGenerales <- recursos[,"camasGenerales"]
 camasCriticas <- recursos[,"camasCriticas"]
 ventiladores <- recursos[,"ventiladores"]
@@ -259,7 +258,7 @@ porcentajeDisponibilidadCamasCOVID <- recursos[,"porcentajeDisponibilidadCamasCO
 #### Actualizar ####
 
 # obtiene función seir
-source("appTest - Cod/seir.R", encoding = "UTF-8")
+source("seir.R", encoding = "UTF-8")
 
 # paises con infectados segun porcentaje no detectado
 paises_distintos <- c("ARG_18","CRI","SLV","JAM",
@@ -278,7 +277,8 @@ fechaIntervencionesTrigger = c()
 # El R0 que ingreso al comienzo no es relevante debido que
 # al actualizar se se calcula, siguiendo ritmo de observado
 # escenario principal
-seir_update <- seir(actualiza = T,
+
+seir_update <- seir(actualiza = T, vent=ventiladores,
                 tipo = ifelse(input$pais %in% paises_distintos,"B","A"),
                 hoy_date = hoy, 
                 R0_usuario = data.frame(Comienzo=hoy, 
@@ -316,12 +316,12 @@ rm(seir_update_hi)
 rm(seir_update_low)
 
 #### guarda conjunto de datos que serán levantados en la app####
-save.image(paste0("appTest - Cod/DatosIniciales/DatosIniciales_",input$pais,".RData"))
+save.image(paste0("DatosIniciales/DatosIniciales_",input$pais,".RData"))
 print(input$pais)
 }
 
 #### update owd_data and mapa ####
-source("appTest - Cod/owd_data.R", encoding = "UTF-8")
-source("appTest - Cod/map_set.R", encoding = "UTF-8")
+source("owd_data.R", encoding = "UTF-8")
+source("map_set.R", encoding = "UTF-8")
 
 
