@@ -15,11 +15,7 @@ library(EpiEstim)
 #### países/juris a actualizar ####
 
 hoy <<- diaActualizacion <<- as.Date("2020-11-08")
-paises_actualizar <- c("ARG","BOL","CRI","SLV","ECU","GTM",
-                        "HND","JAM","PAN","PRY","DOM","CHL","NIC",
-                        "URY","BRA","PER","MEX","COL", "BHS",
-                        "BRB","BLZ","GUY","HTI","SUR","TTO","VEN",
-                        "ARG_18", "ARG_2", "ARG_7", "ARG_50", "ARG_3")
+paises_actualizar <- c( "ARG","ARG_2", "ARG_7", "ARG_50", "ARG_3","ARG_6_756","ARG_6_826")
 
 ##### carga población y oms data  ####
 load("DatosIniciales/poblacion_data.RData")
@@ -47,6 +43,11 @@ if (substr(input$pais,1,3)=="ARG"){
   dataMsal_6_756$residencia_provincia_id<-"6_756"
   dataMsal_6_756$residencia_provincia_nombre<-"Buenos Aires - Partido de San Isidro"
   
+  dataMsal_6_826<-dataMsal %>% dplyr::filter(residencia_provincia_id==6 & residencia_departamento_id==826)
+  dataMsal_6_826$residencia_provincia_id<-"6_826"
+  dataMsal_6_826$residencia_provincia_nombre<-"Buenos Aires - Partido de Trenque Lauquen"
+  
+  
   deptosAmba<-c(28,35,91,98,119,126,134,245,252,260,266,270,274,329,364,
                 371,408,410,412,427,441,434,490,497,515,525,539,560,568,
                 638,648,658,749,756,760,778,805,840,861,882)
@@ -69,7 +70,8 @@ if (substr(input$pais,1,3)=="ARG"){
   dataMsal<-union_all(dataMsal,dataMsalAmbaPBA)
   dataMsal<-union_all(dataMsal,dataMsalARG)
   dataMsal<-union_all(dataMsal,dataMsal_6_756)
-  
+  dataMsal<-union_all(dataMsal,dataMsal_6_826
+                      )
   dataMsal<-sqldf('
      select distinct "cases" as tipo,
      fecha_diagnostico as dateRep,
@@ -127,6 +129,7 @@ union all
   rm(dataMsalAmbaPBA)
   rm(dataMsalARG)
   rm(dataMsal_6_756)
+  rm(dataMsal_6_826)
   #   dataEcdc$new_deaths[6:nrow(dataEcdc)-6]<-rollmean(dataEcdc$new_deaths,7)
 } else
   
@@ -261,7 +264,7 @@ porcentajeDisponibilidadCamasCOVID <- recursos[,"porcentajeDisponibilidadCamasCO
 source("seir.R", encoding = "UTF-8")
 
 # paises con infectados segun porcentaje no detectado
-paises_distintos <- c("ARG_18","CRI","SLV","JAM",
+paises_distintos <- c("ARG_18","CRI","SLV","JAM", "ARG_6_826",
                       #"PRY",
                       "ARG_50","BHS","BLZ","BRB",
                        "GUY","HTI","NIC","SUR","TTO","VEN")
