@@ -16,6 +16,113 @@
         "es": "Proyecciones para la toma de decisiones públicas",
         "en": "Projections for public decision making",
         "pt": "Projeções para tomada de decisão pública"
+      },
+    {
+        "es": "El desarrollo de la metodología que da soporte a esta herramienta fue posible gracias al apoyo del Banco Interamericano de Desarrollo (BID) bajo el Contrato RG-E1696-P001",
+        "en": "The development of the methodology that supports this tool was made possible by the support of the Inter-American Development Bank (IDB) under Contract RG-E1696-P001",
+        "pt": "O desenvolvimento da metodologia que apóia esta ferramenta foi possível graças ao apoio do Banco Interamericano de Desenvolvimento (BID) sob o Contrato RG-E1696-P001"
+      },
+      {
+        "es": "Departamento de Evaluación de Tecnologías Sanitarias y Economía de la Salud",
+        "en": "Department of Health Technology Assessment and Health Economics",
+        "pt": "Departamento de Avaliação de Tecnologia da Saúde e Economia da Saúde"
+      },
+      {
+        "es": "Centro de Implementación e Innovación en Políticas de Salud",
+        "en": "Center for Health Policy Innovation and Implementation",
+        "pt": "Centro de Inovação e Implementação de Políticas de Saúde"
+      },
+      {
+        "es": "Instituto de Efectividad Clínica y Sanitaria, Buenos Aires, Argentina",
+        "en": "Institute of Clinical and Sanitary Effectiveness, Buenos Aires, Argentina",
+        "pt": "Instituto de Eficácia Clínica e Sanitária, Buenos Aires, Argentina"
+      },
+      {
+        "es": "Más información sobre el modelo",
+        "en": "More information about the model",
+        "pt": "Mais informações sobre o modelo"
+      },
+      {
+        "es": "Consultas y feedback",
+        "en": "Consultations and feedback",
+        "pt": "Consulta e feedback"
+      },
+      {
+        "es": "Lenguaje de la aplicación: ",
+        "en": "Application language: ",
+        "pt": "Linguagem de aplicação: "
+      },
+      {
+        "es": "Ultimos datos disponibles (fuentes ",
+        "en": "Latest available data (sources ",
+        "pt": "Últimos dados disponíveis (fontes "
+      },
+      {
+        "es": "Población:",
+        "en": "Population:",
+        "pt": "População:"
+      },
+      {
+        "es": "Casos confirm. diarios:",
+        "en": "Daily confirmed cases:",
+        "pt": "Casos confirmados diariamente:"
+      },
+      {
+        "es": "Muertes confirmadas diarias:",
+        "en": "Daily confirmed deaths:",
+        "pt": "Mortes diarias confirmadas:"
+      },
+      {
+        "es": "% de mayores de 65 años:",
+        "en": "% 65 years and older:",
+        "pt": "% 65 anos ou mais:"
+      },
+      {
+        "es": "Total casos confirmados:",
+        "en": "Total confirmed cases:",
+        "pt": "Total de casos confirmados:"
+      },
+      {
+        "es": "Total muertes confirmadas:",
+        "en": "Total confirmed deaths:",
+        "pt": "Total de mortes confirmadas:"
+      },
+      {
+        "es": "Esperanza de vida al nacer:",
+        "en": "Life expectancy:",
+        "pt": "Expectativa de vida:"
+      },
+      {
+        "es": "Tests por millón de habitantes:",
+        "en": "Total test per million:",
+        "pt": "Testes total por milhão:"
+      },
+      {
+        "es": "Tests diarios (últ. dato disp.)",
+        "en": "Daily test:",
+        "pt": "Testes por dia:"
+      },
+      {
+        "es": "Muertes Acum.",
+        "en": "Total deaths",
+        "pt": "Total de mortes"
+      },
+      {
+        "es": "c/Mill. hab.",
+        "en": "per million",
+        "pt": "por milhão"
+      },
+      {
+        "es": "prueba",
+        "en": "Newly infected",
+        "pt": "Infectados diariamente"
       }
+      
+   
+      
+      
+      
+    
+    
     ]
 }

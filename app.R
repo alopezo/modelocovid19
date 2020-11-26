@@ -101,26 +101,23 @@ ui <- fluidPage(
     ),
     column(2,
            p(style = "font-size: 10px; margin-top: 15px;", 
-             HTML(paste0("El desarrollo de la metodología que da soporte a 
-                           esta herramienta fue posible gracias al apoyo del 
-                           Banco Interamericano de Desarrollo (BID) bajo el 
-                           Contrato RG-E1696-P001"))),
+             HTML(paste0(i18n$t("El desarrollo de la metodología que da soporte a esta herramienta fue posible gracias al apoyo del Banco Interamericano de Desarrollo (BID) bajo el Contrato RG-E1696-P001")))),
     ),
     column(9,
            # class = "text-center",
            p(style = "margin-bottom: 1px; font-style: italic;", 
-             "Departamento de Evaluación de Tecnologías Sanitarias y Economía de la Salud"),
+             i18n$t("Departamento de Evaluación de Tecnologías Sanitarias y Economía de la Salud")),
            p(style = "margin-bottom: 1px; font-style: italic;", 
-             "Centro de Implementación e Innovación en Políticas de Salud"),
+             i18n$t("Centro de Implementación e Innovación en Políticas de Salud")),
            p(style = "margin-bottom: 1px; font-style: italic;", 
-             "Instituto de Efectividad Clínica y Sanitaria, Buenos Aires, Argentina"),
+             i18n$t("Instituto de Efectividad Clínica y Sanitaria, Buenos Aires, Argentina")),
            p(style = "margin-bottom: 1px;  font-style: italic;", 
-             a("Más información sobre el modelo", href="https://www.iecs.org.ar/modelocovid/", target="_blank"),
+             a(i18n$t("Más información sobre el modelo"), href="https://www.iecs.org.ar/modelocovid/", target="_blank"),
              "-",
-             a("Consultas y feedback", href="https://www.iecs.org.ar/modelocovid-formulario/", target="_blank")
+             a(i18n$t("Consultas y feedback"), href="https://www.iecs.org.ar/modelocovid-formulario/", target="_blank")
              ),
            p(style = "margin-bottom: 1px;  font-style: italic;", 
-             "Lenguaje de la aplicación: ",
+             i18n$t("Lenguaje de la aplicación: "),
              tags$a(
                id = "castellano",
                img(src="spain.png", height = 20, width = 20),
@@ -184,7 +181,7 @@ ui <- fluidPage(
                             input.pais == 'ARG_50' ||
                             input.pais == 'ARG_3' || 
                             input.pais == 'ARG_7'  ",
-            em("Ultimos datos disponibles (fuentes ", 
+            em(i18n$t("Ultimos datos disponibles (fuentes "), 
                tags$a(href="https://www.ecdc.europa.eu/en", "ECDC",target="_blank"), ", ", 
                tags$a(href="https://ourworldindata.org/", "OWD", target="_blank"),  ", ", 
                tags$a(href="http://datos.salud.gob.ar/dataset/covid-19-casos-registrados-en-la-republica-argentina", 
@@ -199,7 +196,7 @@ ui <- fluidPage(
                             input.pais != 'ARG_50' &&
                             input.pais != 'ARG_3' && 
                             input.pais != 'ARG_7'  ",
-            em("Ultimos datos disponibles (fuentes ", 
+            em(i18n$t("Ultimos datos disponibles (fuentes "), 
                tags$a(href="https://www.ecdc.europa.eu/en", "ECDC",target="_blank"), ", ", 
                tags$a(href="https://ourworldindata.org/", "OWD", target="_blank"), ", ",
                tags$a(href="https://covid19.who.int/table", "OMS", target="_blank"),
@@ -213,18 +210,18 @@ ui <- fluidPage(
           fluidRow(
             column(
               4,
-              tags$b("Población:"),tags$p(textOutput("poblacion")),
+              tags$b(i18n$t("Población:")),tags$p(textOutput("poblacion")),
             ),
             column(
               4,
-              tags$b("Casos confirm. diarios:",
+              tags$b(i18n$t("Casos confirm. diarios:"),
                      tags$span(id="info_Inf_diarios", icon("info-circle"), 
                                 style=("margin-left:5px;"))),
               tags$p(textOutput("inf_ayer")),
             ),
             column(
               4,
-              tags$b("Muertes confirmadas diarias:",
+              tags$b(i18n$t("Muertes confirmadas diarias:"),
                      tags$span(id="info_Mue_diarios", icon("info-circle"), 
                                style=("margin-left:5px;"))),
               tags$p(textOutput("muertes_ayer")),
@@ -233,29 +230,29 @@ ui <- fluidPage(
           fluidRow(
             column(
               4,
-              tags$b("% de mayores de 65 años:"),tags$p(textOutput("poblacion65mas")),
+              tags$b(i18n$t("% de mayores de 65 años:")),tags$p(textOutput("poblacion65mas")),
             ),
             column(
               4,
-              tags$b("Total casos confirmados:"),tags$p(textOutput("inf_acum")),
+              tags$b(i18n$t("Total casos confirmados:")),tags$p(textOutput("inf_acum")),
             ),
             column(
               4,
-              tags$b("Total muertes confirmadas:"),tags$p(textOutput("muertes_acum")),
+              tags$b(i18n$t("Total muertes confirmadas:")),tags$p(textOutput("muertes_acum")),
             )
           ),
           fluidRow(
             column(
               4,
-              tags$b("Esperanza de vida al nacer:"),tags$p(textOutput("e0"))
+              tags$b(i18n$t("Esperanza de vida al nacer:")),tags$p(textOutput("e0"))
             ),
             column(
               4,
-              tags$b("Tests Totales c/ mill. hab."),tags$p(textOutput("test_acum"))
+              tags$b(i18n$t("Tests por millón de habitantes:")),tags$p(textOutput("test_acum"))
             ),
             column(
               4,
-              tags$b("Tests diarios (últ. dato disp.)"),tags$p(textOutput("new_tests"))
+              tags$b(i18n$t("Tests diarios (últ. dato disp.)")),tags$p(textOutput("new_tests"))
             )
           )
         )
@@ -922,7 +919,7 @@ observeEvent(input$pais,{
                                                  "S/D", owd_pais$total_tests_per_thousand*1000),0) })
     output$new_tests <- renderText({ fnum(ifelse(is.na(owd_pais$new_tests),
                                                  "S/D", owd_pais$new_tests),0) })
-    
+    prueba="prueba"
     addPopover(session, 
                "warning_data", "Nota sobre los datos", 
                content = "En esta aplicación se releva periódicamente información de distintas fuentes, 
@@ -1761,8 +1758,8 @@ observeEvent(input$pais,{
                   color = ~pal(cum_deaths_millon),
                   label = mytext) %>% 
       leaflet::addLegend("bottomright", pal = pal, values = ~cum_deaths_millon, opacity = .6, 
-                         title = "Muertes Acum. </br>
-                         c/Mill. hab.")
+                         title = paste(i18n$t("Muertes Acum."), "</br>",
+                                       i18n$t("c/Mill. hab.")))
   })
 
   
