@@ -959,12 +959,8 @@ observeEvent(input$pais,{
     leafletProxy("mymap") %>% 
       setView(lng = coords[coords$pais==input$pais,"lng"], 
               lat = coords[coords$pais==input$pais,"lat"], 
-              zoom =       if (input$pais== "ARG_2" ) {10}
-                      else if (input$pais== "ARG"   ) {2}  
-                      else if (input$pais== "ARG_3" ) {8}
-                      else if (input$pais== "ARG_7" ) {8}
-                      else if (input$pais== "ARG_6_756" ) {10}
-                      else if (input$pais== "ARG_6_826" ) {10}
+              zoom =       if (input$pais== "ARG_6:826" ) {10}
+                      
               
               )
     
@@ -1709,20 +1705,18 @@ observeEvent(input$pais,{
              trigger = 'click')
   
 # map ---------------------------------------------------------------------
-
+#input$pais="ARG_6_756"
   output$mymap <- renderLeaflet({
-    mytext <- paste(
-      round(map_data@data$cum_deaths_millon,1),
-      " c/Mill.Hab.",
-      sep="") %>%
-      lapply(htmltools::HTML)
-    pal <- colorBin("YlOrRd", map_data@data$cum_deaths_millon)
-    leaflet(map_data,
+    leaflet(
+      if (input$pais=="ARG_6_826") {map_06826} else
+      if (input$pais=="ARG_6_756") {map_06756} else {Deptos},
             options = leafletOptions(attributionControl=FALSE,
                                      zoomControl = FALSE,
                                      zoomControl = FALSE,
-                                     minZoom = 3, maxZoom = 20)) %>%
-      addProviderTiles(providers$CartoDB.Positron) 
+                                     minZoom = 1, maxZoom = 20)) %>%
+      addProviderTiles(providers$CartoDB.Positron) %>% addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
+                                                                   opacity = 1.0)
+    
     #%>%
       # addPolygons(stroke = F, fillOpacity = .5, smoothFactor = .5, 
       #             color = ~pal(cum_deaths_millon),
