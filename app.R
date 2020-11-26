@@ -245,9 +245,10 @@ ui <- fluidPage(
     
     # map some index
     column(5,
-           leafletOutput("mymap", width = "90%", height = 330) ,
-           bsTooltip("mymap", "Mapa de calor: Defunciones acumuladas cada millón de habitantes al día de ayer:",
-                     "right", options = list(container = "body"))
+           leafletOutput("mymap", width = "90%", height = 330) 
+           # ,
+           # bsTooltip("mymap", "Mapa de calor: Defunciones acumuladas cada millón de habitantes al día de ayer:",
+           #           "right", options = list(container = "body"))
       )
     ),
   br(),
@@ -1705,11 +1706,15 @@ observeEvent(input$pais,{
              trigger = 'click')
   
 # map ---------------------------------------------------------------------
-#input$pais="ARG_6_756"
+#input$pais="ARG_6_826"
   output$mymap <- renderLeaflet({
     leaflet(
       if (input$pais=="ARG_6_826") {map_06826} else
-      if (input$pais=="ARG_6_756") {map_06756} else {Deptos},
+      if (input$pais=="ARG_6_756") {map_06756} else
+      if (input$pais=="ARG_7") {map_07} else
+      if (input$pais=="ARG_3") {map_03} else
+      if (input$pais=="ARG_2") {map_02} else
+      if (input$pais=="ARG") {map_arg} else {Deptos},
             options = leafletOptions(attributionControl=FALSE,
                                      zoomControl = FALSE,
                                      zoomControl = FALSE,
