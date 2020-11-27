@@ -957,12 +957,14 @@ observeEvent(input$pais,{
     incProgress(.3)
     
     # zoom new country in map
-    leafletProxy("mymap") %>% 
-      setView(lng = coords[coords$pais==input$pais,"lng"], 
-              lat = coords[coords$pais==input$pais,"lat"], 
-              zoom =       if (input$pais== "ARG_6:826" ) {10}
-                      
-              
+    leafletProxy("mymap") %>%
+      setView(lng = if (input$pais== "ARG" ) {-64.34559893730913} else
+        {NULL},
+              lat = if (input$pais== "ARG" ) {-40.35136081901806}  else
+              {NULL},
+              zoom =       if (input$pais== "ARG" ) {3} else {8}
+
+
               )
     
     # Estrategias Base, reinicia con cada país
@@ -1715,14 +1717,12 @@ observeEvent(input$pais,{
       if (input$pais=="ARG_3") {map_03} else
       if (input$pais=="ARG_2") {map_02} else
       if (input$pais=="ARG") {map_arg} else {Deptos},
-            options = leafletOptions(attributionControl=FALSE,
-                                     zoomControl = FALSE,
-                                     zoomControl = FALSE,
-                                     minZoom = 1, maxZoom = 20)) %>%
-      addProviderTiles(providers$CartoDB.Positron) %>% addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
-                                                                   opacity = 1.0)
+      options = leafletOptions(attributionControl=FALSE,
+                               zoomControl = FALSE)) %>%
+      addProviderTiles(providers$CartoDB.Positron) %>%
+      addPolygons(stroke = F)
     
-    #%>%
+    #%>%, 
       # addPolygons(stroke = F, fillOpacity = .5, smoothFactor = .5, 
       #             color = ~pal(cum_deaths_millon),
       #             label = mytext) %>% 
