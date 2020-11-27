@@ -35,11 +35,11 @@ coords = data.frame(pais = c("ARG_6_826"),
 
 
 # test
-leaflet(map_07,
-        options = leafletOptions(attributionControl=FALSE,
-                                 zoomControl = FALSE)) %>%
-  addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(stroke = F)
+# leaflet(map_07,
+#         options = leafletOptions(attributionControl=FALSE,
+#                                  zoomControl = FALSE)) %>%
+#   addProviderTiles(providers$CartoDB.Positron) %>%
+#   addPolygons(stroke = F)
 
 # save
 save.image(file =  "DatosIniciales/Map.RData")
