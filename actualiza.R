@@ -15,7 +15,7 @@ library(EpiEstim)
 #### países/juris a actualizar ####
 
 hoy <<- diaActualizacion <<- as.Date("2020-11-08")
-paises_actualizar <- c( "ARG","ARG_2", "ARG_7", "ARG_50", "ARG_3","ARG_6_756","ARG_6_826")
+paises_actualizar <- c( "ARG","ARG_2", "ARG_7", "ARG_3","ARG_6_756","ARG_6_826")
 
 ##### carga población y oms data  ####
 load("DatosIniciales/poblacion_data.RData")
@@ -244,6 +244,10 @@ recuperados <- 0
 
 ## Población
 poblacion<-as.numeric(poblacion_data$value[which(poblacion_data$indicator=='total' & poblacion_data$pais==input$pais)])
+
+## Porcentaje detectado
+porc_detectado <- 0.2
+
 
 ##### Recursos #####
 # asigna recursos según país

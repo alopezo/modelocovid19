@@ -6,3 +6,4 @@ rsconnect
 .DS_Store
 casos_covid19.zip
 **/*.icloud
+covid19Casos.csv

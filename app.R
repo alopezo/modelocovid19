@@ -120,7 +120,7 @@ ui <- fluidPage(
 
     fluidRow( align = "center",
               tags$head(tags$style(HTML(".selectize-input.pais {height: 45px; width: 500px; font-size: 30px;}"))),
-              selectInput(inputId = "pais","",selected = "ARG", width = "400px",
+              selectInput(inputId = "pais","",selected = "ARG_6_826", width = "400px",
                           c("Argentina" = "ARG",
                             "Ciudad Autónoma de Buenos Aires" = "ARG_2",
                             #"Provincia de Buenos Aires" = "ARG_6",
@@ -245,9 +245,10 @@ ui <- fluidPage(
     
     # map some index
     column(5,
-           leafletOutput("mymap", width = "90%", height = 330) ,
-           bsTooltip("mymap", "Mapa de calor: Defunciones acumuladas cada millón de habitantes al día de ayer:",
-                     "right", options = list(container = "body"))
+           leafletOutput("mymap", width = "90%", height = 330) 
+           # ,
+           # bsTooltip("mymap", "Mapa de calor: Defunciones acumuladas cada millón de habitantes al día de ayer:",
+           #           "right", options = list(container = "body"))
       )
     ),
   br(),
@@ -744,6 +745,12 @@ hr(),
                       column(6,
                              br(),br(),
                              "No aplica")),
+                    fluidRow( 
+                      column(6,
+                             uiOutput("Valuepi9")),
+                      column(6,
+                             br(),br(),
+                             "No aplica")),
                     ),
                   ),
                ),
@@ -807,6 +814,7 @@ r_proyeccion_actual <- reactiveValues(Rs = 0)
 variacion_escenario <- reactiveValues(x = 0.25)
 
 prop_susceptible <- reactiveValues(x = 1)
+porc_det <- reactiveValues(x = 0.2)
 
 linkEscenarios <- function(input, output) {
   print("Clink!")
@@ -956,11 +964,14 @@ observeEvent(input$pais,{
     incProgress(.3)
     
     # zoom new country in map
-    leafletProxy("mymap") %>% 
-      setView(lng = coords[coords$pais==input$pais,"lng"], 
-              lat = coords[coords$pais==input$pais,"lat"], 
-              zoom = ifelse(input$pais %in% c("ARG_18", "ARG_7", "ARG_50"), 6,
-                            ifelse(input$pais == "ARG_2", 10, 3.5))
+    leafletProxy("mymap") %>%
+      setView(lng = if (input$pais== "ARG" ) {-64.34559893730913} else
+        {NULL},
+              lat = if (input$pais== "ARG" ) {-40.35136081901806}  else
+              {NULL},
+              zoom =       if (input$pais== "ARG" ) {3} else {8}
+
+
               )
     
     # Estrategias Base, reinicia con cada país
@@ -1044,6 +1055,13 @@ observeEvent(input$pais,{
       numericInput(inputId = "prop_susceptible",label = "Población susceptible al inicio. En porcentaje (%)",
                    value = prop_susceptible$x * 100, 
                    width = "90%",min = 50,max = 100,step = 10)
+    })
+    output$Valuepi9 <- renderUI({
+      numericInput(inputId = "porc_det",label = "Porcentaje detectado",
+                   value = as.numeric(
+                     as.character(
+                       tablaInputs$Valor[tablaInputs$Input=="Porcentaje detectado"])),
+                   width = "90%",min = 0,max = 1,step = 0.1)
     })
     
     # controles de rrhh
@@ -1704,26 +1722,27 @@ observeEvent(input$pais,{
              trigger = 'click')
   
 # map ---------------------------------------------------------------------
-
+#input$pais="ARG_6_826"
   output$mymap <- renderLeaflet({
-    mytext <- paste(
-      round(map_data@data$cum_deaths_millon,1),
-      " c/Mill.Hab.",
-      sep="") %>%
-      lapply(htmltools::HTML)
-    pal <- colorBin("YlOrRd", map_data@data$cum_deaths_millon)
-    leaflet(map_data,
-            options = leafletOptions(attributionControl=FALSE,
-                                     zoomControl = FALSE,
-                                     zoomControl = FALSE,
-                                     minZoom = 3, maxZoom = 4)) %>%
+    leaflet(
+      if (input$pais=="ARG_6_826") {map_06826} else
+      if (input$pais=="ARG_6_756") {map_06756} else
+      if (input$pais=="ARG_7") {map_07} else
+      if (input$pais=="ARG_3") {map_03} else
+      if (input$pais=="ARG_2") {map_02} else
+      if (input$pais=="ARG") {map_arg} else {Deptos},
+      options = leafletOptions(attributionControl=FALSE,
+                               zoomControl = FALSE)) %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
-      addPolygons(stroke = F, fillOpacity = .5, smoothFactor = .5, 
-                  color = ~pal(cum_deaths_millon),
-                  label = mytext) %>% 
-      leaflet::addLegend("bottomright", pal = pal, values = ~cum_deaths_millon, opacity = .6, 
-                         title = "Muertes Acum. </br>
-                         c/Mill. hab.")
+      addPolygons(stroke = F)
+    
+    #%>%, 
+      # addPolygons(stroke = F, fillOpacity = .5, smoothFactor = .5, 
+      #             color = ~pal(cum_deaths_millon),
+      #             label = mytext) %>% 
+      #leaflet::addLegend("bottomright", pal = pal, values = ~cum_deaths_millon, opacity = .6, 
+      #                   title = "Muertes Acum. </br>
+      #                   c/Mill. hab.")
   })
 
   
@@ -1744,6 +1763,7 @@ observeEvent(input$pais,{
   # si toca input de variacion de escnarios
   observeEvent(input$variacion_escenario |
                input$prop_susceptible |
+               input$porc_det |
                input$PerPreinfProm |
                input$DurMediaInf |
                input$PorcCasosCrit |
@@ -1810,16 +1830,16 @@ observeEvent(input$updateResults, ignoreInit = T,{
           diasHospCasosCriticos <- ifelse(is.null(input$DíasHospCrit),diasHospCasosCriticos,input$DíasHospCrit)
           diasUCICasosCriticos <- ifelse(is.null(input$DíasUCICrit),diasUCICasosCriticos,input$DíasUCICrit)
           tasaLetalidadAjustada <- ifelse(is.null(input$IFR),tasaLetalidadAjustada,input$IFR/100)
-          print("el usuario puso:")
-          print(input$IFR)
-          print("el modelo computo:")
-          print(tasaLetalidadAjustada)
+          porc_det <- ifelse(is.null(input$porc_det),porcentajeDetectado,input$porc_det)
+         
           ventiladoresCamaCritica <- ifelse(is.null(input$Vent_por_CC),
                                             ventiladoresCamaCritica,input$Vent_por_CC/100)
           # solo lo cambio si se emtió en epi (devuelve null si entra en la pestaña)
           if(proy_epi$x==1){
             variacion_escenario$x <- input$variacion_escenario
             prop_susceptible$x <- input$prop_susceptible/100
+            porc_det$x <- input$porc_det
+            
           }
         }
     
@@ -1843,12 +1863,15 @@ observeEvent(input$updateResults, ignoreInit = T,{
 
     
     # s/ tipo
-    print(tasaLetalidadAjustada)
+    
+
     source("seir.R", encoding = "UTF-8")
+    print("prueba")
+    print(porc_det$x)
     iecs <- seir(tipo = ifelse(input$pais %in% paises_distintos,"B","A"),
                  compartimentos = F,
                  variacion = 0,
-                 porc_detectado = .2,
+                 porc_detectado = porc_det$x,
                  hoy_date = hoy,
                  R0_usuario = Rusuario, 
                  lag = 17, cantidadDiasProyeccion = 600,
@@ -1881,7 +1904,7 @@ observeEvent(input$updateResults, ignoreInit = T,{
     modeloSimulado_hi <<- seir(tipo = ifelse(input$pais %in% paises_distintos,"B","A"),
                                compartimentos = F,
                                variacion = variacion_escenario$x,
-                               porc_detectado = .2,
+                               porc_detectado = porc_det$x,
                                hoy_date = hoy,
                                R0_usuario = Rusuario, 
                                lag = 17, cantidadDiasProyeccion = 600,
@@ -1911,7 +1934,7 @@ observeEvent(input$updateResults, ignoreInit = T,{
     modeloSimulado_low <<- seir(tipo = ifelse(input$pais %in% paises_distintos,"B","A"),
                                 compartimentos = F,
                                 variacion = -variacion_escenario$x,
-                                porc_detectado = .2,
+                                porc_detectado = porc_det$x,
                                 hoy_date = hoy,
                                 R0_usuario = Rusuario, 
                                 lag = 17, cantidadDiasProyeccion = 600,
@@ -2112,6 +2135,8 @@ observeEvent(input$aplicarEscenario | input$EscenarioActual, ignoreInit = T,{
     if(proy_epi$x==1){
       variacion_escenario$x <- input$variacion_escenario
       prop_susceptible$x <- input$prop_susceptible/100
+      porc_detectado$x <- input$porc_det
+     
     }
   }
   
@@ -2131,13 +2156,16 @@ observeEvent(input$aplicarEscenario | input$EscenarioActual, ignoreInit = T,{
   # s/ tipo
   source("seir.R", encoding = "UTF-8")
   iecs <- seir(tipo = ifelse(input$pais %in% paises_distintos,"B","A"),
+               porc_detectado = porc_det$x,
                hoy_date = hoy, 
                R0_usuario = Rusuario)
   modeloSimulado <<- iecs$modeloSimulado
   modeloSimulado_hi <<- seir(tipo = ifelse(input$pais %in% paises_distintos,"B","A"),
+                             porc_detectado = porc_det$x,
                              hoy_date = hoy, variacion = variacion_escenario$x,
                              R0_usuario = Rusuario)$modeloSimulado
   modeloSimulado_low <<- seir(tipo = ifelse(input$pais %in% paises_distintos,"B","A"),
+                              porc_detectado = porc_det,
                               hoy_date = hoy,  variacion = -variacion_escenario$x,
                               R0_usuario = Rusuario)$modeloSimulado
   fechaIntervencionesTrigger <<- iecs$fechatrigger
@@ -2259,6 +2287,9 @@ observeEvent(input$aplicarEscenario | input$EscenarioActual, ignoreInit = T,{
       )
     }
   )
+
+  
+ 
 }
 
 
