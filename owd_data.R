@@ -190,7 +190,7 @@ dataMsal<-
     life_expectancy
   )
 dataMsal$date<-as.character(dataMsal$date)
-dataMsal<-dataMsal %>% filter(date<='2020-11-01')
+dataMsal<-dataMsal %>% filter(date<='2020-11-17')
 dataMsal$location[dataMsal$iso_code=="ARG_2"]<-"Argentina - Ciudad Autónoma de Buenos Aires"
 dataMsal$population[dataMsal$iso_code=="ARG_2"]<-3075643
 dataMsal$aged_65_older[dataMsal$iso_code=="ARG_2"]<-16.43

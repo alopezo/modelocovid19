@@ -19,7 +19,7 @@ library(kableExtra)
 library(knitr)
 library(sp)
 library(tinytex)
-
+#arg="si"
 versionModelo <<- "2.6"
 
 # funs --------------------------------------------------------------------
@@ -759,7 +759,11 @@ server <- function(input, output, session) {
 
 # url me dice si quiere ir a subnacional argentino
 observe({
-  if(str_detect(session$clientData$url_pathname, "argentina")==T){
+  if(
+    str_detect(session$clientData$url_pathname, "argentina")==T
+    #arg=="si"
+    )
+    {
       updateSelectInput(session, "pais",
                       choices = c("Argentina - Ciudad Autónoma de Buenos Aires" = "ARG_2",
                                   "Argentina - AMBA" = "ARG_3",
@@ -905,7 +909,7 @@ observeEvent(input$pais,{
     #r_cori <<- trunc(get_R(modeloSimulado, window = 14)$cori[1]*10)/10 # truncado a 1 decimal
     dias_dupl <- get_dias_dupl(owd_data %>% filter(iso_code==input$pais), hoy, 7)[1]
     output$dias_dupl <- renderText({ fnum(dias_dupl, 2) })
-    
+     
     sus_prop_hoy <- modeloSimulado$Sprop[modeloSimulado$fecha==hoy]
     rt_cori <<- round(r_cori*sus_prop_hoy,2)
     output$R_hoy <- renderText({ paste0("Rt = ", fnum(rt_cori, 3)) })
