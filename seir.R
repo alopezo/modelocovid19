@@ -36,9 +36,7 @@ seir <- function(tipo = "A", actualiza = F,
                  enfCamasUCI = enfermerasCamasUCI,
                  medCamasGG = medicosCamasGenerales,
                  medCamasUCI = medicosCamasUCI){
-  print("ifr en la funcion")
-  print(ifr)
-  print(tasaLetalidadAjustada)
+
   # variacion
   ifr_inv = ifr * (1 - variacion) # para calcular incidentes (escenario inverso por método)
   ifr = ifr * (1 + variacion)
