@@ -6,10 +6,10 @@ library(dygraphs)
 library(zoo)
 library(EpiEstim)
 
-seir <- function(tipo = "A", actualiza = F,
+seir <- function(tipo="A", actualiza = F,
                  compartimentos = F,
                  variacion = 0,
-                 porc_detectado = .2,
+                 porc_detectado = 0.2,
                  hoy_date = "2020-09-18",
                  R0_usuario = Rusuario, 
                  lag = 17, cantidadDiasProyeccion = 600,
@@ -35,10 +35,9 @@ seir <- function(tipo = "A", actualiza = F,
                  enfCamasGG = enfermerasCamasGenerales,
                  enfCamasUCI = enfermerasCamasUCI,
                  medCamasGG = medicosCamasGenerales,
-                 medCamasUCI = medicosCamasUCI){
-  print("ifr en la funcion")
-  print(ifr)
-  print(tasaLetalidadAjustada)
+                 medCamasUCI = medicosCamasUCI){ 
+  
+
   # variacion
   ifr_inv = ifr * (1 - variacion) # para calcular incidentes (escenario inverso por método)
   ifr = ifr * (1 + variacion)
@@ -507,6 +506,7 @@ crea_tabla_rr <- function(modeloSimulado){
   
   colnames(resumenResultados) <- c("DIMENSION", "INDICADOR", "VALOR")
   return(resumenResultados)
+
 }
 
 
@@ -528,7 +528,8 @@ crea_tabla_inputs <- function(){
                            'Ventiladores por cama critica','Cantidad de dias de la proyeccion',
                            'Pais seleccionado','Poblacion','Camas generales','Cama criticas','Ventiladores',
                            'Enfermeras por camas generales','Enfermeras por camas UCI','Medicos por camas generales','Medicos por camas UCI',
-                           'Porcentaje de disponibilidad de camas para COVID-19'),
+                           'Porcentaje de disponibilidad de camas para COVID-19',
+                           'Porcentaje detectado'),
                   Valor=c(
                     periodoPreinfPromedio,duracionMediaInf,
                     porcentajeCasosGraves * 100,porcentajeCasosCriticos * 100,
@@ -538,7 +539,8 @@ crea_tabla_inputs <- function(){
                     camasCCMedicoDia,ventiladoresCamaCritica,cantidadDiasProyeccion,as.character(input$pais),
                     as.numeric(poblacion),camasGenerales,camasCriticas,ventiladores,
                     enfermerasCamasGenerales,enfermerasCamasUCI,medicosCamasGenerales,medicosCamasUCI,
-                    porcentajeDisponibilidadCamasCOVID * 100)
+                    porcentajeDisponibilidadCamasCOVID * 100,
+                    porcentajeDetectado)
                 )
 }
 
