@@ -19,7 +19,10 @@ library(kableExtra)
 library(knitr)
 library(sp)
 library(tinytex)
-#arg="si"
+library(raster)
+
+subNac <<- "si"
+subNacUrl <<- c("ARG_2","ARG_3","ARG_6","ARG_7","ARG_50","ARG_18")
 versionModelo <<- "2.6"
 
 # funs --------------------------------------------------------------------
@@ -171,9 +174,13 @@ ui <- fluidPage(
           )),
           conditionalPanel(
             condition = "input.pais != 'ARG_2' && 
-                            input.pais != 'ARG_50' &&
-                            input.pais != 'ARG_3' && 
-                            input.pais != 'ARG_7'  ",
+                            input.pais != 'ARG_3' &&
+                            input.pais != 'ARG_6' &&
+                            input.pais != 'ARG_7' &&
+                            input.pais != 'ARG_6_756' &&
+                            input.pais != 'ARG_6_726' &&
+                            input.pais != 'ARG_18' &&
+                            input.pais != 'ARG_50' ",
             em("Ultimos datos disponibles (fuentes ", 
                tags$a(href="https://www.ecdc.europa.eu/en", "ECDC",target="_blank"), ", ", 
                tags$a(href="https://ourworldindata.org/", "OWD", target="_blank"), ", ",
@@ -238,7 +245,17 @@ ui <- fluidPage(
     
     # map some index
     column(5,
-           leafletOutput("mymap", width = "90%", height = 330) ,
+           conditionalPanel(condition="input.pais == 'ARG_2' ||
+                              input.pais == 'ARG_3' ||
+                              input.pais == 'ARG_6' ||
+                              input.pais == 'ARG_7' ||
+                              input.pais == 'ARG_18' ||
+                              input.pais == 'ARG_50' ||
+                              input.pais == 'ARG_6_756' ||
+                              input.pais == 'ARG_6_826'",
+                            leafletOutput("mymap_subnac", width = "90%", height = 330)) ,
+           conditionalPanel(condition="input.pais == 'ARG'",
+           leafletOutput("mymap", width = "90%", height = 330)) ,
            bsTooltip("mymap", "Mapa de calor: Defunciones acumuladas cada millón de habitantes al día de ayer:",
                      "right", options = list(container = "body"))
       )
@@ -760,14 +777,17 @@ server <- function(input, output, session) {
 # url me dice si quiere ir a subnacional argentino
 observe({
   if(
-    str_detect(session$clientData$url_pathname, "argentina")==T
-    #arg=="si"
+    #str_detect(session$clientData$url_pathname, "argentina")==T
+    subNac=="si"
     )
     {
       updateSelectInput(session, "pais",
                       choices = c("Argentina - Ciudad Autónoma de Buenos Aires" = "ARG_2",
-                                  "Argentina - AMBA" = "ARG_3",
-                                  "Argentina - Buenos Aires (Partidos del AMBA)" = "ARG_7",
+                                  "Argentina - Provincia de Buenos Aires" = "ARG_6",
+                                  "Argentina - AMBA Total" = "ARG_3",
+                                  "Argentina - AMBA PBA (40 partidos)" = "ARG_7",
+                                  "Argentina - Provincia de Buenos Aires - Partido de San Isidro" = "ARG_6_756",
+                                  "Argentina - Provincia de Buenos Aires - Partido de Trenque Lauquen" = "ARG_6_826",
                                   "Argentina - Corrientes" = "ARG_18",
                                   "Argentina - Mendoza" = "ARG_50"),
                       selected = "ARG_2")
@@ -952,10 +972,10 @@ observeEvent(input$pais,{
   
     incProgress(.3)
     
-    # zoom new country in map
-    leafletProxy("mymap") %>% 
-      setView(lng = coords[coords$pais==input$pais,"lng"], 
-              lat = coords[coords$pais==input$pais,"lat"], 
+    #zoom new country in map
+    leafletProxy("mymap") %>%
+      setView(lng = coords[coords$pais==input$pais,"lng"],
+              lat = coords[coords$pais==input$pais,"lat"],
               zoom = ifelse(input$pais %in% c("ARG_18", "ARG_7", "ARG_50"), 6,
                             ifelse(input$pais == "ARG_2", 10, 3.5))
               )
@@ -1701,8 +1721,10 @@ observeEvent(input$pais,{
              trigger = 'click')
   
 # map ---------------------------------------------------------------------
-
-  output$mymap <- renderLeaflet({
+#####LEAFLET#####
+  observe( if (input$pais %!in% subNacUrl) {
+  
+    output$mymap <- renderLeaflet({
     mytext <- paste(
       round(map_data@data$cum_deaths_millon,1),
       " c/Mill.Hab.",
@@ -1721,6 +1743,26 @@ observeEvent(input$pais,{
       leaflet::addLegend("bottomright", pal = pal, values = ~cum_deaths_millon, opacity = .6, 
                          title = "Muertes Acum. </br>
                          c/Mill. hab.")
+  })
+  }
+  else {
+    output$mymap_subnac <- renderLeaflet({
+    leaflet(
+      if (input$pais=="ARG_18") {subset(map_data,ADM0_A3==input$pais)} else
+      if (input$pais=="ARG_2") {subset(map_data,ADM0_A3==input$pais)} else
+      if (input$pais=="ARG_3") {ambaMap} else
+      if (input$pais=="ARG_50") {ambaMap} else
+      if (input$pais=="ARG_6") {raster::aggregate(subset(Deptos,codpcia=="06"))} else
+      if (input$pais=="ARG_7") {ambaProvMap} else
+      if (input$pais=="ARG_6_756") {subset(Deptos,link=="06756")} else
+      if (input$pais=="ARG_6_826") {subset(Deptos,link=="06826")}
+      else {Deptos},
+      options = leafletOptions(attributionControl=FALSE,
+                                     zoomControl = FALSE)) %>%
+      addProviderTiles(providers$CartoDB.Positron) %>%
+      addPolygons(stroke = T, color="#18BC9C", weight=0.4)
+      })
+    
   })
 
   

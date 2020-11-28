@@ -1,6 +1,8 @@
 library(tidyverse)
 library(rgdal)
 library(leaflet)
+library(stringr)
+library(raster)
 
 # map y labels ---------------------------------------------------------------------
 load("DatosIniciales/owd_data.RData")
@@ -12,8 +14,8 @@ LA_data <- owd_data %>%
                   as.data.frame()
 
 # shapes países
-#download.file("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip", "WorldMap/countries.zip")
-#unzip(zipfile = "WorldMap/countries.zip", exdir = "WorldMap")
+download.file("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip", "WorldMap/countries.zip")
+unzip(zipfile = "WorldMap/countries.zip", exdir = "WorldMap")
 World <- readOGR(dsn="WorldMap", layer="ne_10m_admin_0_countries",encoding = 'UTF-8')
 
 LA <- subset(World, ADM0_A3 %in%  c("ARG","BOL","CRI","SLV","ECU","GTM",
@@ -66,15 +68,34 @@ coords$lat[coords$pais=="ARG_18"] = -28.983072
 coords$lng[coords$pais=="ARG_2"] = -58.437710
 coords$lat[coords$pais=="ARG_2"] = -34.598576
 
+###### mapas para web subnacional Argentina #####
 
-# test
-# leaflet(map_data,
+download.file("https://www.indec.gob.ar/ftp/cuadros/territorio/codgeo/Codgeo_Pais_x_dpto_con_datos.zip", "WorldMap/departamentosArg.zip")
+unzip(zipfile = "WorldMap/departamentosArg.zip", exdir = "WorldMap")
+Deptos <- readOGR("WorldMap/pxdptodatosok.shp", encoding = 'UTF-8')
+
+deptosAmba<-c(28,35,91,98,119,126,134,245,252,260,266,270,274,329,364,
+              371,408,410,412,427,441,434,490,497,515,525,539,560,568,
+              638,648,658,749,756,760,778,805,840,861,882)
+
+ambaMap <- aggregate(subset(Deptos, 
+                            link %in% paste0("06",str_pad(deptosAmba,3,"left","0")) |
+                            codpcia=="02"))
+
+ambaProvMap <- aggregate(subset(Deptos, 
+                            link %in% paste0("06",str_pad(deptosAmba,3,"left","0"))))
+
+cabaMap <- aggregate(subset(Deptos, 
+                        codpcia=="02"))
+
+
+#test
+# leaflet(subset(map_data,ADM0_A3=="ARG_50"),
 #         options = leafletOptions(attributionControl=FALSE,
 #                                  zoomControl = FALSE)) %>%
 #   addProviderTiles(providers$CartoDB.Positron) %>%
 #   addPolygons(stroke = F)
 
 # save
-save(map_data, coords, file =  "DatosIniciales/Map.RData")
-
+save.image(file =  "DatosIniciales/Map.RData")
 

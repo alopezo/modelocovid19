@@ -6,7 +6,7 @@ library(dplyr)
 
 # vector paises
 paises <-c("ARG","BOL","BRA","CHL","COL","CRI","SLV",
-           "ECU","GTM","HND","JAM","MEX","PAN","PRY","PER","DOM","URY","ARG_2","ARG_18","ARG_3","ARG_7", "ARG_50", "ARG_6_756",
+           "ECU","GTM","HND","JAM","MEX","PAN","PRY","PER","DOM","URY","ARG_2","ARG_18","ARG_3","ARG_7", "ARG_50", "ARG_6_756", "ARG_6_826", "ARG_6",
            "BHS", "BRB", "BLZ", "GUY", "HTI", "NIC", "SUR", "TTO", "VEN")
 
 # get data
@@ -40,6 +40,9 @@ dataMsal_6_756<-dataMsal %>% dplyr::filter(residencia_provincia_id==6 & residenc
 dataMsal_6_756$residencia_provincia_id<-"6_756"
 dataMsal_6_756$residencia_provincia_nombre<-"Buenos Aires - Partido de San Isidro"
 
+dataMsal_6_826<-dataMsal %>% dplyr::filter(residencia_provincia_id==6 & residencia_departamento_id==826)
+dataMsal_6_826$residencia_provincia_id<-"6_826"
+dataMsal_6_826$residencia_provincia_nombre<-"Buenos Aires - Partido de San Isidro"
 
 
 deptosAmba<-c(28,
@@ -103,6 +106,7 @@ dataMsal<-union_all(dataMsal,dataMsalAmba)
 dataMsal<-union_all(dataMsal,dataMsalAmbaPBA)
 dataMsal<-union_all(dataMsal,dataMsalARG)
 dataMsal<-union_all(dataMsal,dataMsal_6_756)
+dataMsal<-union_all(dataMsal,dataMsal_6_826)
 
 dataMsal<-sqldf('
      select distinct "cases" as tipo,
@@ -220,9 +224,10 @@ rm(dataMsalAmba)
 rm(dataMsalAmbaPBA)
 rm(dataMsalARG)
 rm(dataMsal_6_756)
+rm(dataMsal_6_826)
 rm(combinaciones)
 rm(df_full)
-
+unique(owd_data$iso_code)
 # guarda input folder
 # setwd("appTest")
 save(owd_data, file =  "DatosIniciales/owd_data.RData")
@@ -250,3 +255,4 @@ save(owd_data, file =  "DatosIniciales/owd_data.RData")
 #               #                   measure based on 9 response indicators including 
 #               #                   school closures, workplace closures, and travel bans, 
 #               #                   rescaled to a value from 0 to 100 (100 = strictest response)")
+
