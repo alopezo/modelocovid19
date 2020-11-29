@@ -21,7 +21,7 @@ library(sp)
 library(tinytex)
 library(raster)
 
-subNac <<- "si"
+subNac <<- "no"
 subNacUrl <<- c("ARG_2","ARG_3","ARG_6","ARG_7","ARG_50","ARG_18")
 versionModelo <<- "2.6"
 
