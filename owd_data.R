@@ -42,7 +42,8 @@ dataMsal_6_756$residencia_provincia_nombre<-"Buenos Aires - Partido de San Isidr
 
 dataMsal_6_826<-dataMsal %>% dplyr::filter(residencia_provincia_id==6 & residencia_departamento_id==826)
 dataMsal_6_826$residencia_provincia_id<-"6_826"
-dataMsal_6_826$residencia_provincia_nombre<-"Buenos Aires - Partido de San Isidro"
+dataMsal_6_826$residencia_provincia_nombre<-"Buenos Aires - Partido de Trenque Lauquen"
+
 
 
 deptosAmba<-c(28,
@@ -227,7 +228,7 @@ rm(dataMsal_6_756)
 rm(dataMsal_6_826)
 rm(combinaciones)
 rm(df_full)
-unique(owd_data$iso_code)
+
 # guarda input folder
 # setwd("appTest")
 save(owd_data, file =  "DatosIniciales/owd_data.RData")
@@ -255,4 +256,3 @@ save(owd_data, file =  "DatosIniciales/owd_data.RData")
 #               #                   measure based on 9 response indicators including 
 #               #                   school closures, workplace closures, and travel bans, 
 #               #                   rescaled to a value from 0 to 100 (100 = strictest response)")
-
