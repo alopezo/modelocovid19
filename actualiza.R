@@ -19,8 +19,8 @@ paises_actualizar <- c("ARG","BOL","CRI","SLV","ECU","GTM",
                         "HND","JAM","PAN","PRY","DOM","CHL","NIC",
                         "URY","BRA","PER","MEX","COL", "BHS",
                         "BRB","BLZ","GUY","HTI","SUR","TTO","VEN",
-                        "ARG_18", "ARG_2", "ARG_7", "ARG_50", "ARG_3", "ARG_6_826","ARG_6_756")
-paises_actualizar <- c("ARG_6_826","ARG_6_756")
+                        "ARG_18", "ARG_2", "ARG_6", "ARG_7", "ARG_50", "ARG_3", "ARG_6_826","ARG_6_756")
+
 ##### carga población y oms data  ####
 load("DatosIniciales/poblacion_data.RData")
 source("oms_data.R", encoding = "UTF-8")

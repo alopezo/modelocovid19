@@ -22,7 +22,7 @@ library(tinytex)
 library(raster)
 
 subNac <<- "si"
-subNacUrl <<- c("ARG_2","ARG_3","ARG_6","ARG_7","ARG_50","ARG_18")
+subNacUrl <<- c("ARG_2","ARG_3","ARG_6","ARG_7","ARG_50","ARG_18","ARG_6_756", "ARG_6_826")
 versionModelo <<- "2.6"
 
 # funs --------------------------------------------------------------------
@@ -874,7 +874,7 @@ server <- function(input, output, session) {
       # avg
       
       
-      if(input$pais %in% c("ARG_18", "ARG_50", "ARG_2", "ARG_3", "ARG_7")){
+      if(input$pais %in% subNacUrl){
         owd_pais_avg <- owd_data %>% 
           filter(iso_code==input$pais, as.Date(date) %in% seq(hoy-7,hoy-1,by="day")) %>% 
           dplyr::summarise(new_cases = mean(new_cases),
@@ -1749,13 +1749,13 @@ server <- function(input, output, session) {
     output$mymap_subnac <- renderLeaflet({
       leaflet(
         if (input$pais=="ARG_18") {subset(map_data,ADM0_A3==input$pais)} else
-          if (input$pais=="ARG_2") {subset(map_data,ADM0_A3==input$pais)} else
-            if (input$pais=="ARG_3") {ambaMap} else
-              if (input$pais=="ARG_50") {ambaMap} else
-                if (input$pais=="ARG_6") {raster::aggregate(subset(Deptos,codpcia=="06"))} else
-                  if (input$pais=="ARG_7") {ambaProvMap} else
-                    if (input$pais=="ARG_6_756") {subset(Deptos,link=="06756")} else
-                      if (input$pais=="ARG_6_826") {subset(Deptos,link=="06826")}
+        if (input$pais=="ARG_2") {subset(map_data,ADM0_A3==input$pais)} else
+        if (input$pais=="ARG_3") {ambaMap} else
+        if (input$pais=="ARG_50") {ambaMap} else
+        if (input$pais=="ARG_6") {raster::aggregate(subset(Deptos,codpcia=="06"))} else
+        if (input$pais=="ARG_7") {ambaProvMap} else
+        if (input$pais=="ARG_6_756") {subset(Deptos,link=="06756")} else
+        if (input$pais=="ARG_6_826") {subset(Deptos,link=="06826")}
         else {Deptos},
         options = leafletOptions(attributionControl=FALSE,
                                  zoomControl = FALSE)) %>%
@@ -2193,7 +2193,7 @@ server <- function(input, output, session) {
       # textos
       output$titulo_tabla_resultados <-renderText({  paste0("Tabla de resultados (", poblacion_data$label[poblacion_data$pais==input$pais][1],")") })
       output$poblacion <- renderText({ fnum(poblacion_data$value[poblacion_data$pais==input$pais][1]) })
-      output$poblacion65mas <- renderText({ paste0(fnum(poblacion_data$value[poblacion_data$pais==input$pais][2]),"%") })
+      output$poblacion65mas <- renderText({ paste0(round(fnum(poblacion_data$value[poblacion_data$pais==input$pais][2]),digits=2),"%") })
       output$camasCriticas <- renderText({ as.character(camasCriticas) })
       output$ventiladores <- renderText({ as.character(ventiladores) })
       
