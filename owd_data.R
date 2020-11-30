@@ -6,7 +6,7 @@ library(dplyr)
 
 # vector paises
 paises <-c("ARG","BOL","BRA","CHL","COL","CRI","SLV",
-           "ECU","GTM","HND","JAM","MEX","PAN","PRY","PER","DOM","URY","ARG_2","ARG_18","ARG_3","ARG_7", "ARG_50", "ARG_6_756",
+           "ECU","GTM","HND","JAM","MEX","PAN","PRY","PER","DOM","URY","ARG_2","ARG_18","ARG_3","ARG_7", "ARG_50", "ARG_6_756", "ARG_6_826", "ARG_6",
            "BHS", "BRB", "BLZ", "GUY", "HTI", "NIC", "SUR", "TTO", "VEN")
 
 # get data
@@ -39,6 +39,10 @@ dataMsalARG$residencia_provincia_nombre<-"Argentina"
 dataMsal_6_756<-dataMsal %>% dplyr::filter(residencia_provincia_id==6 & residencia_departamento_id==756)
 dataMsal_6_756$residencia_provincia_id<-"6_756"
 dataMsal_6_756$residencia_provincia_nombre<-"Buenos Aires - Partido de San Isidro"
+
+dataMsal_6_826<-dataMsal %>% dplyr::filter(residencia_provincia_id==6 & residencia_departamento_id==826)
+dataMsal_6_826$residencia_provincia_id<-"6_826"
+dataMsal_6_826$residencia_provincia_nombre<-"Buenos Aires - Partido de Trenque Lauquen"
 
 
 
@@ -220,6 +224,7 @@ rm(dataMsalAmba)
 rm(dataMsalAmbaPBA)
 rm(dataMsalARG)
 rm(dataMsal_6_756)
+rm(dataMsal_6_826)
 rm(combinaciones)
 rm(df_full)
 
