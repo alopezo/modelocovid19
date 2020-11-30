@@ -107,6 +107,7 @@ dataMsal<-union_all(dataMsal,dataMsalAmba)
 dataMsal<-union_all(dataMsal,dataMsalAmbaPBA)
 dataMsal<-union_all(dataMsal,dataMsalARG)
 dataMsal<-union_all(dataMsal,dataMsal_6_756)
+dataMsal<-union_all(dataMsal,dataMsal_6_826)
 
 dataMsal<-sqldf('
      select distinct "cases" as tipo,

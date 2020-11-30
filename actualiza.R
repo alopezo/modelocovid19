@@ -27,7 +27,7 @@ source("oms_data.R", encoding = "UTF-8")
 
 ##### descarga ultimos datos de msal  ####
 urlMsal <- 'https://sisa.msal.gov.ar/datos/descargas/covid-19/files/Covid19Casos.csv'
-download.file(urlMsal, "Covid19Casos.csv")
+#download.file(urlMsal, "Covid19Casos.csv")
 
 #### casos/muertes y parámetros para cada país ####
 input=list()
@@ -73,6 +73,7 @@ if (substr(input$pais,1,3)=="ARG"){
   dataMsal<-union_all(dataMsal,dataMsalAmbaPBA)
   dataMsal<-union_all(dataMsal,dataMsalARG)
   dataMsal<-union_all(dataMsal,dataMsal_6_756)
+  dataMsal<-union_all(dataMsal,dataMsal_6_826)
   
   dataMsal<-sqldf('
      select distinct "cases" as tipo,

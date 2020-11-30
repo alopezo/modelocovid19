@@ -12,8 +12,8 @@ LA_data <- owd_data %>%
                   as.data.frame()
 
 # shapes países
-#download.file("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip", "WorldMap/countries.zip")
-#unzip(zipfile = "WorldMap/countries.zip", exdir = "WorldMap")
+download.file("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip", "WorldMap/countries.zip")
+unzip(zipfile = "WorldMap/countries.zip", exdir = "WorldMap")
 World <- readOGR(dsn="WorldMap", layer="ne_10m_admin_0_countries",encoding = 'UTF-8')
 
 LA <- subset(World, ADM0_A3 %in%  c("ARG","BOL","CRI","SLV","ECU","GTM",
