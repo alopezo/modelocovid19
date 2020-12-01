@@ -21,7 +21,7 @@ library(sp)
 library(tinytex)
 library(raster)
 
-subNac <<- "si"
+#subNac <<- "no"
 subNacUrl <<- c("ARG_2","ARG_3","ARG_6","ARG_7","ARG_50","ARG_18","ARG_6_756", "ARG_6_826")
 versionModelo <<- "2.6"
 
@@ -254,7 +254,14 @@ ui <- fluidPage(
                               input.pais == 'ARG_6_756' ||
                               input.pais == 'ARG_6_826'",
                             leafletOutput("mymap_subnac", width = "90%", height = 330)) ,
-           conditionalPanel(condition="input.pais == 'ARG'",
+           conditionalPanel(condition="input.pais != 'ARG_2' &&
+                              input.pais != 'ARG_3' &&
+                              input.pais != 'ARG_6' &&
+                              input.pais != 'ARG_7' &&
+                              input.pais != 'ARG_18' &&
+                              input.pais != 'ARG_50' &&
+                              input.pais != 'ARG_6_756' &&
+                              input.pais != 'ARG_6_826'",
                             leafletOutput("mymap", width = "90%", height = 330)) ,
            bsTooltip("mymap", "Mapa de calor: Defunciones acumuladas cada millón de habitantes al día de ayer:",
                      "right", options = list(container = "body"))
@@ -777,8 +784,8 @@ server <- function(input, output, session) {
   # url me dice si quiere ir a subnacional argentino
   observe({
     if(
-      #str_detect(session$clientData$url_pathname, "argentina")==T
-      subNac=="si"
+      str_detect(session$clientData$url_pathname, "argentina")==T
+      #subNac=="si"
     )
     {
       updateSelectInput(session, "pais",
