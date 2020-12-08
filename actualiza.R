@@ -14,7 +14,7 @@ library(EpiEstim)
 
 #### países/juris a actualizar ####
 
-hoy <<- diaActualizacion <<- as.Date("2020-11-17")
+hoy <<- diaActualizacion <<- as.Date("2020-11-27")
 paises_actualizar <- c("ARG","BOL","CRI","SLV","ECU","GTM",
                         "HND","JAM","PAN","PRY","DOM","CHL","NIC",
                         "URY","BRA","PER","MEX","COL", "BHS",

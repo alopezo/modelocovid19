@@ -1,6 +1,7 @@
 library(tidyverse)
 library(rgdal)
 library(leaflet)
+library(raster)
 
 # map y labels ---------------------------------------------------------------------
 load("DatosIniciales/owd_data.RData")
