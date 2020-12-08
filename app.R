@@ -57,7 +57,7 @@ ui <- fluidPage(
   theme = shinytheme("flatly"),
   tags$head(HTML('<link rel="icon", href="ISO-IECS.png", type="image/png" />')),
   tags$head(includeHTML("www/google-analytics.html")),
-  titlePanel(windowTitle = i18n$t("IECS: Proyecciones COVID-19"), title = ""),
+  titlePanel(windowTitle = gsub("<.*?>", "", i18n$t("IECS: Proyecciones COVID-19")), title = ""),
   fluidRow(
     column(3,
            fluidRow(
@@ -937,7 +937,7 @@ observeEvent(input$pais,{
     incProgress(.4)
     
     # presenta país
-    output$pais <- renderText({ paste0("Proyecciones de ",
+    output$pais <- renderText({ paste0(i18n$t("Proyecciones de "),
                                        poblacion_data$label[poblacion_data$pais==input$pais][1]) })
     
     pais_actual_label <<- as.character(poblacion_data$label[poblacion_data$pais==input$pais][1])
