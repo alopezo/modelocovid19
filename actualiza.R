@@ -132,6 +132,7 @@ union all
   rm(dataMsalAmbaPBA)
   rm(dataMsalARG)
   rm(dataMsal_6_756)
+  rm(dataMsal_6_826)
   #   dataEcdc$new_deaths[6:nrow(dataEcdc)-6]<-rollmean(dataEcdc$new_deaths,7)
 } else
   
