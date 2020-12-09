@@ -275,7 +275,7 @@ hr(),
   fluidRow(
     column(6,
            # h4(em(textOutput("default_o_no"))),
-           p("La fecha de última actualización de datos es el", format(hoy,"%d-%m-%Y"),"."),
+           p(i18n$t("La fecha de última actualización de datos es el"), format(hoy,"%d-%m-%Y"),"."),
            # conditionalPanel("input$pais %in% paises_distintos",
            #                  p("La fecha de última actualización de datos es el", 
            #                    format(hoy,"%d-%m-%Y"),". ","Ajustando el modelo en base a casos reportados")
@@ -292,7 +292,7 @@ hr(),
            # p(" - Seleccionar un ",
            #   actionLink("mostrarEscenarios", "escenario pre-definido"),":"),
            radioButtons("tipo_config",
-                        label = "Con esta plataforma interactiva es posible:",
+                        label = i18n$t("Con esta plataforma interactiva es posible:"),
                         choices = c("Personalizar la proyección y crear un escenario nuevo." = "nuevo",
                                     "Seleccionar un escenario pre-definido" = "predefinido"),
                         selected = "",
@@ -352,7 +352,7 @@ hr(),
            ),
     ),
     column(6,
-           wellPanel(h5("R0 según escenario vigente en proyección:"),
+           wellPanel(h5(i18n$t("R0 según escenario vigente en proyección:")),
                      dygraphOutput("g_R_actual", 
                                    width = "100%", height = "200px"))
     )
@@ -360,7 +360,7 @@ hr(),
   br(),
   hr(),
 
-  h4("Gráficos de resultados"),
+  h4(i18n$t("Gráficos de resultados")),
   fluidRow(
     column(12,
            Grafica("graficos") 
@@ -914,7 +914,7 @@ observeEvent(input$pais,{
     owd_pais <- owd_data %>% filter(iso_code==input$pais, as.Date(date) == (hoy-1))
     output$inf_acum <- renderText({ fnum(ifelse(owd_pais$total_cases==0, "S/D", owd_pais$total_cases)) })
     output$muertes_acum <- renderText({ fnum(ifelse(owd_pais$total_deaths==0,"S/D", owd_pais$total_deaths)) })
-    output$e0 <- renderText(paste({ fnum(owd_pais$life_expectancy) }, " años"))
+    output$e0 <- renderText(paste({ fnum(owd_pais$life_expectancy) }, i18n$t(" años")))
     output$test_acum <- renderText({ fnum(ifelse(is.na(owd_pais$total_tests_per_thousand),
                                                  "S/D", owd_pais$total_tests_per_thousand*1000),0) })
     output$new_tests <- renderText({ fnum(ifelse(is.na(owd_pais$new_tests),
@@ -937,7 +937,7 @@ observeEvent(input$pais,{
     incProgress(.4)
     
     # presenta país
-    output$pais <- renderText({ paste0("Proyecciones de ",
+    output$pais <- renderText({ paste0(i18n$t("Proyecciones de "),
                                        poblacion_data$label[poblacion_data$pais==input$pais][1]) })
     
     pais_actual_label <<- as.character(poblacion_data$label[poblacion_data$pais==input$pais][1])
@@ -1143,7 +1143,7 @@ observeEvent(input$pais,{
                              label = rep("Intervención",length(fechaIntervencionesTrigger)), labelLoc = "bottom", 
                              color = "grey", strokePattern = "dotted")
       }
-      dy %>% dyEvent(x = hoy, label = "Hoy", labelLoc = "top", 
+      dy %>% dyEvent(x = hoy, label = i18n$t("Hoy"), labelLoc = "top", 
                      color = "grey", strokePattern = "dashed")
     })
     

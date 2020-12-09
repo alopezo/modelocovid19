@@ -116,7 +116,49 @@
         "es": "prueba",
         "en": "Newly infected",
         "pt": "Infectados diariamente"
+      },
+      {
+        "es": "Proyecciones de ",
+        "en": "Projections of ",
+        "pt": "Projecções de "
+      },
+      {
+        "es": "La fecha de última actualización de datos es el",
+        "en": "Latest update",
+        "pt": "Actualização mais recente"
+      },
+      {
+        "es": " años",
+        "en": " years",
+        "pt": " anos"
+      },
+      {
+        "es": "Con esta plataforma interactiva es posible:",
+        "en": "With this interactive app it is possible to:",
+        "pt": "Com esta plataforma interactiva, é possível:"
+      },
+      {
+        "es": "R0 según escenario vigente en proyección:",
+        "en": "R0 according to current scenario in projection:",
+        "pt": "R0 de acordo com o cenário actual em projecção:"
+      },
+      {
+        "es": "Hoy",
+        "en": "Today",
+        "pt": "Hoje"
+      },
+      {
+        "es": "Gráficos de resultados",
+        "en": "Results plots",
+        "pt": "Gráficos de resultados"
+      },
+      {
+        "es": "Los resultados esperados según la proyección son los siguientes:",
+        "en": "The expected results according to the projection are",
+        "pt": "Os resultados esperados de acordo com a projecção são"
       }
+      
+      
       
    
       
