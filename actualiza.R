@@ -13,8 +13,8 @@ library(zoo)
 library(EpiEstim)
 
 #### países/juris a actualizar ####
-setwd("C:/Users/Adrian/Desktop/branchPRY")
-hoy <<- diaActualizacion <<- as.Date("2020-11-17")
+#setwd("C:/Users/Adrian/Desktop/branchPRY")
+hoy <<- diaActualizacion <<- as.Date("2020-12-01")
 paises_actualizar <- c("PRY","PRY_ASU","PRY_CEN")
 
 ##### carga población y oms data  ####
