@@ -21,12 +21,14 @@ library(sp)
 library(tinytex)
 library(raster)
 
+setwd("C:/Users/Adrian/Desktop/branchPRY")
+
 #subNac <<- "no"
 subNacUrl <<- c("ARG_2","ARG_3","ARG_6","ARG_7","ARG_50","ARG_18","ARG_6_756", "ARG_6_826")
 versionModelo <<- "2.6"
 
 # funs --------------------------------------------------------------------
-hoy <<- as.Date("2020-11-27")
+hoy <<- as.Date("2020-11-17")
 default <<- FALSE
 # setwd("appTest - Cod")
 source("modulos.R", encoding = "UTF-8")
@@ -123,33 +125,37 @@ ui <- fluidPage(
   
   fluidRow( align = "center",
             tags$head(tags$style(HTML(".selectize-input.pais {height: 45px; width: 500px; font-size: 30px;}"))),
-            selectInput(inputId = "pais","",selected = "ARG", width = "400px",
-                        c("Argentina" = "ARG",
-                          "Bahamas" = "BHS",
-                          "Barbados" = "BRB",
-                          "Belize" = "BLZ",
-                          "Bolivia" = "BOL",
-                          "Brasil" = "BRA",
-                          "Chile" = "CHL",
-                          "Colombia" = "COL",
-                          "Costa Rica" = "CRI",
-                          "El Salvador" = "SLV",
-                          "Ecuador" = "ECU",
-                          "Guatemala" = "GTM",
-                          "Guyana" = "GUY",
-                          "Haití" = "HTI",
-                          "Honduras" = "HND",
-                          "Jamaica" = "JAM",
-                          "Mexico" = "MEX",
-                          "Nicaragua" = "NIC",
-                          "Panamá" = "PAN",
+            selectInput(inputId = "pais","",selected = "PRY", width = "400px",
+                         c(
+                        # "Argentina" = "ARG",
+                        #   "Bahamas" = "BHS",
+                        #   "Barbados" = "BRB",
+                        #   "Belize" = "BLZ",
+                        #   "Bolivia" = "BOL",
+                        #   "Brasil" = "BRA",
+                        #   "Chile" = "CHL",
+                        #   "Colombia" = "COL",
+                        #   "Costa Rica" = "CRI",
+                        #   "El Salvador" = "SLV",
+                        #   "Ecuador" = "ECU",
+                        #   "Guatemala" = "GTM",
+                        #   "Guyana" = "GUY",
+                        #   "Haití" = "HTI",
+                        #   "Honduras" = "HND",
+                        #   "Jamaica" = "JAM",
+                        #   "Mexico" = "MEX",
+                        #   "Nicaragua" = "NIC",
+                        #   "Panamá" = "PAN",
                           "Paraguay" = "PRY",
-                          "Perú" = "PER",
-                          "República Dominicana" = "DOM",
-                          "Suriname" = "SUR",
-                          "Trinidad y Tobago" = "TTO",
-                          "Uruguay" = "URY",
-                          "Venezuela" = "VEN"
+                          "Asunción" = "PRY_ASU",
+                          "Departamento Central" = "PRY_CEN"
+                        # ,
+                        #   "Perú" = "PER",
+                        #   "República Dominicana" = "DOM",
+                        #   "Suriname" = "SUR",
+                        #   "Trinidad y Tobago" = "TTO",
+                        #   "Uruguay" = "URY",
+                        #   "Venezuela" = "VEN"
                         ))
   ),
   fluidRow(
@@ -263,8 +269,8 @@ ui <- fluidPage(
                               input.pais != 'ARG_6_756' &&
                               input.pais != 'ARG_6_826'",
                             leafletOutput("mymap", width = "90%", height = 330)) ,
-           bsTooltip("mymap", "Mapa de calor: Defunciones acumuladas cada millón de habitantes al día de ayer:",
-                     "right", options = list(container = "body"))
+           # bsTooltip("mymap", "Mapa de calor: Defunciones acumuladas cada millón de habitantes al día de ayer:",
+           #           "right", options = list(container = "body"))
     )
   ),
   br(),
@@ -980,12 +986,12 @@ server <- function(input, output, session) {
       incProgress(.3)
       
       #zoom new country in map
-      leafletProxy("mymap") %>%
-        setView(lng = coords[coords$pais==input$pais,"lng"],
-                lat = coords[coords$pais==input$pais,"lat"],
-                zoom = ifelse(input$pais %in% c("ARG_18", "ARG_7", "ARG_50"), 6,
-                              ifelse(input$pais == "ARG_2", 10, 3.5))
-        )
+      # leafletProxy("mymap") %>%
+      #   setView(lng = coords[coords$pais==input$pais,"lng"],
+      #           lat = coords[coords$pais==input$pais,"lat"],
+      #           zoom = ifelse(input$pais %in% c("ARG_18", "ARG_7", "ARG_50"), 6,
+      #                         ifelse(input$pais == "ARG_2", 10, 3.5))
+      #   )
       
       # Estrategias Base, reinicia con cada país
       estrategia_inicial <<- data.frame(
@@ -1732,24 +1738,19 @@ server <- function(input, output, session) {
   observe( if (input$pais %!in% subNacUrl) {
     
     output$mymap <- renderLeaflet({
-      mytext <- paste(
-        round(map_data@data$cum_deaths_millon,1),
-        " c/Mill.Hab.",
-        sep="") %>%
-        lapply(htmltools::HTML)
-      pal <- colorBin("YlOrRd", map_data@data$cum_deaths_millon)
-      leaflet(map_data,
-              options = leafletOptions(attributionControl=FALSE,
-                                       zoomControl = FALSE,
-                                       zoomControl = FALSE,
-                                       minZoom = 3, maxZoom = 4)) %>%
-        addProviderTiles(providers$CartoDB.Positron) %>%
-        addPolygons(stroke = F, fillOpacity = .5, smoothFactor = .5, 
-                    color = ~pal(cum_deaths_millon),
-                    label = mytext) %>% 
-        leaflet::addLegend("bottomright", pal = pal, values = ~cum_deaths_millon, opacity = .6, 
-                           title = "Muertes Acum. </br>
-                         c/Mill. hab.")
+      leaflet(
+        
+        if (input$pais=="PRY")
+        {raster::aggregate(map_data)} else
+        if (input$pais=="PRY_ASU")  
+        {subset(map_data,map_data@data$DPTO=="00")} else
+        if (input$pais=="PRY_CEN")  
+        {subset(map_data,map_data@data$DPTO=="11")}
+        else {map_data}, options = leafletOptions(zoomControl = FALSE)
+        ) %>%
+                 
+           addTiles() %>%
+           addPolygons(stroke = T, weight=0.3)
     })
   }
   else {
