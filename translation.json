@@ -238,15 +238,142 @@
         "es": "R0 asociados a políticas de intervención: seleccionando niveles de restricción para cada mes de un menú de opciones simplificado.",
         "en": "Define by:",
         "pt": "Definir por:"
+      },
+      {
+        "es": "Recursos sanitarios",
+        "en": "Health Resources",
+        "pt": "Recursos sanitários"
+      },
+      {
+        "es": "Determine los recursos de camas críticas y ventiladores, y el porcentaje destinado a covid-19:",
+        "en": "Determine critical bed and ventilator resources and the percentage allocated to covid-19:",
+        "pt": "Determinar os recursos críticos do leito e do ventilador e a percentagem atribuída à covid-19:"
+      },
+      {
+        "es": "Cantidad de camas críticas",
+        "en": "Number of critical beds",
+        "pt": "Número de camas críticas"
+      },
+      {
+        "es": "Cantidad de ventiladores",
+        "en": "Number of ventilators",
+        "pt": "Número de ventiladores"
+      },
+      {
+        "es": "Médicos/as camas UCI",
+        "en": "Physicians for intensive care beds",
+        "pt": "Médicos para camas de cuidados intensivos"
+      },
+      {
+        "es": "Enfermeras/os camas UCI",
+        "en": "Nurses for intensive care beds",
+        "pt": "Enfermeras/os para camas de cuidados intensivos"
+      },
+      {
+        "es": "Porcentaje de camas críticas <br/> destinadas a COVID:",
+        "en": "Percentage of critical beds <br/> destined to COVID",
+        "pt": "Percentagem de camas críticas <br/> destinadas à COVID:"
+      },
+      {
+        "es": "Tasa de días de uso de ventiladores <br/> por días de uso de cama crítica:",
+        "en": "Rate of fan use days <br/> per critical bed use days",
+        "pt": "Taxa de dias de uso do ventilador <br/> por dias de uso crítico da cama"
+      },
+      {
+        "es": "Fuente: IECS. Datos recolectados y validados a partir de fuentes de cada país/jurisdicción.",
+        "en": "Source: IECS. Data collected and validated from sources in each country/jurisdiction.",
+        "pt": "Fonte: IECS. Dados recolhidos e validados a partir de fontes em cada país/jurisdição."
+      },
+      {
+        "es": "Epidemiología",
+        "en": "Epidemiology",
+        "pt": "Epidemiologia"
+      },
+      {
+        "es": "Las proyecciones fueron realizadas con los siguientes parámetros.",
+        "en": "The projections were made with the following parameters.",
+        "pt": "As projecções foram feitas com os seguintes parâmetros."
+      },
+      {
+        "es": "Puede editar los mismos para una nueva proyección:",
+        "en": "You can edit them for a new projection:",
+        "pt": "Pode editá-los para uma nova projecção:"
+      },
+      {
+        "es": "Parámetro",
+        "en": "Parameter",
+        "pt": "parâmetro"
+      },
+      {
+        "es": "Fuente",
+        "en": "Source",
+        "pt": "Fonte"
+      },
+      {
+        "es": "Período preinfeccioso promedio (días)",
+        "en": "Average pre-infectious period (days)",
+        "pt": "Período Médio Pré-Infeccioso (dias)"
+      },
+      {
+        "es": "Duración media de la infecciosidad (días)",
+        "en": "Average duration of infectivity (days)",
+        "pt": "Duração média da infecciosidade (dias)"
+      },
+      {
+        "es": "Porcentaje de casos críticos",
+        "en": "Percentage of critical cases",
+        "pt": "Percentagem de casos críticos"
+      },
+      {
+        "es": "Días de hospitalización para casos críticos",
+        "en": "Inpatient days for critical cases",
+        "pt": "Dias de Hospitalização de Cuidados Críticos"
+      },
+      {
+        "es": "Días UCI para casos críticos",
+        "en": "Critic care hospitalization days",
+        "pt": "Dias de cuidados intensivos"
+      },
+      {
+        "es": "Tasa de letalidad (IFR). En porcentaje (%)",
+        "en": "Infectious fatality rate (per houndred)",
+        "pt": "Taxa de letalidade (IFR). Em percentagem (%)"
+      },
+      {
+        "es": "Sensibilidad de escenarios",
+        "en": "Sensitivity of scenarios",
+        "pt": "Sensibilidade dos cenários"
+      },
+      {
+        "es": "Análisis basado en ",
+        "en": "Analysis based on ",
+        "pt": "Análise baseada em "
+      },
+      {
+        "es": " considerando IFR tomado como referencia.",
+        "en": " considering IFR taken as a reference.",
+        "pt": " considerando o IFR tomado como referência."
+      },
+      {
+        "es": "No aplica",
+        "en": "No applicable",
+        "pt": " considerando o IFR tomado como referência."
+      },
+      {
+        "es": "<br/>- Epidemiología",
+        "en": "<br/>- Epidemiology",
+        "pt": "<br/>- Epidemiologia"
+      },
+      {
+        "es": "<br/>- Recursos Sanitarios",
+        "en": "<br/>- Health Resources",
+        "pt": "<br/>- Recursos de Saúde"
       }
-      
-       
-    
-   
-      
-      
-      
-    
+
+
+
+
+
     
     ]
 }

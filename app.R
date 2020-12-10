@@ -658,8 +658,8 @@ hr(),
               
           
         ),
-        tabPanel("Recursos sanitarios",
-              h5("Determine los recursos de camas críticas y ventiladores, y el porcentaje destinado a covid-19:"),
+        tabPanel(i18n$t("Recursos sanitarios"),
+              h5(i18n$t("Determine los recursos de camas críticas y ventiladores, y el porcentaje destinado a covid-19:")),
               br(),
               fluidRow(
                 column(3, align="center",
@@ -686,21 +686,21 @@ hr(),
                 ),
                 column(2, "")
               ),
-              h5(em("Fuente: IECS. Datos recolectados y validados a partir de fuentes de cada país/jurisdicción.")),
+              h5(em(i18n$t("Fuente: IECS. Datos recolectados y validados a partir de fuentes de cada país/jurisdicción."))),
               br(),
         ),
-        tabPanel("Epidemiología",
-               h5("Las proyecciones fueron realizadas con los siguientes parámetros.",
-                  "Puede editar los mismos para una nueva proyección:"),
+        tabPanel(i18n$t("Epidemiología"),
+               h5(i18n$t("Las proyecciones fueron realizadas con los siguientes parámetros."),
+                  i18n$t("Puede editar los mismos para una nueva proyección:")),
                fluidRow(
                  column(10,
                    wellPanel(
                      fluidRow( 
                        style='margin-bottom:5px;border-bottom:1px solid;',
                        column(6,
-                              "Parámetro"),
+                              i18n$t("Parámetro")),
                        column(6,
-                              "Fuente")),
+                              i18n$t("Fuente"))),
                      fluidRow( 
                       # style='margin-bottom:5px;border:1px solid; padding: 2px;color:#7F7F7F;',
                       column(6,
@@ -721,10 +721,10 @@ hr(),
                              uiOutput("Valuepi3")),
                       column(6,
                              br(),br(),
-                             "Análisis basado en ",
+                             i18n$t("Análisis basado en "),
                              tags$a(href="https://jamanetwork.com/journals/jama/fullarticle/2762130", 
                                     "Wu et al.(2020) Ref: 1.27 (0.89-1.64)IC95%",target="_blank"),
-                             " considerando IFR tomado como referencia."),
+                             i18n$t(" considerando IFR tomado como referencia.")),
                               ),
                     fluidRow( 
                       column(6,
@@ -752,13 +752,13 @@ hr(),
                              uiOutput("Valuepi8")),
                       column(6,
                              br(),br(),
-                             "No aplica")),
+                             i18n$t("No aplica"))),
                     fluidRow( 
                       column(6,
                              uiOutput("Valuepi7")),
                       column(6,
                              br(),br(),
-                             "No aplica")),
+                             i18n$t("No aplica"))),
                     ),
                   ),
                ),
@@ -1040,44 +1040,44 @@ observeEvent(input$pais,{
     
     # controles epi
     output$Valuepi1 <- renderUI({
-      numericInput(inputId = "PerPreinfProm",label = "Período preinfeccioso promedio (días)",
+      numericInput(inputId = "PerPreinfProm",label = i18n$t("Período preinfeccioso promedio (días)"),
                        value = tablaInputs$Valor[tablaInputs$Input=="Periodo preinfeccioso promedio (dias)"], 
                        width = "90%",min = 4.83,max = 6.85,step = .01)
     })
     output$Valuepi2 <- renderUI({
-      numericInput(inputId = "DurMediaInf",label = "Duración media de la infecciosidad (días)",
+      numericInput(inputId = "DurMediaInf",label = i18n$t("Duración media de la infecciosidad (días)"),
                        value = tablaInputs$Valor[tablaInputs$Input=="Duracion media de la infecciosidad (dias)"], 
                        width = "90%",min = 1.12,max = 10.5,step = .01)
     })
     output$Valuepi3 <- renderUI({
-      numericInput(inputId = "PorcCasosCrit",label = "Porcentaje de casos críticos",
+      numericInput(inputId = "PorcCasosCrit",label = i18n$t("Porcentaje de casos críticos"),
                        value = tablaInputs$Valor[tablaInputs$Input=="Porcentaje de casos criticos"], 
                        width = "90%",min = 0.89,max = 1.64,step = .01)
     })
     output$Valuepi4 <- renderUI({
-      numericInput(inputId = "DíasHospCrit",label = "Días de hospitalización para casos críticos",
+      numericInput(inputId = "DíasHospCrit",label = i18n$t("Días de hospitalización para casos críticos"),
                        value = tablaInputs$Valor[tablaInputs$Input=="Dias de hospitalizacion para casos criticos"], 
                        width = "90%",min = 9,max = 20,step = 1)
     })
     output$Valuepi5 <- renderUI({
-      numericInput(inputId = "DíasUCICrit",label = "Días UCI para casos críticos",
+      numericInput(inputId = "DíasUCICrit",label = i18n$t("Días UCI para casos críticos"),
                        value = tablaInputs$Valor[tablaInputs$Input=="Dias de la UCI para casos criticos"], 
                        width = "90%",min = 4,max = 135,step = 1)
     })
     output$Valuepi6 <- renderUI({
-      numericInput(inputId = "IFR",label = "Tasa de letalidad (IFR). En porcentaje (%)",
+      numericInput(inputId = "IFR",label = i18n$t("Tasa de letalidad (IFR). En porcentaje (%)"),
                        value = as.numeric(
                                   as.character(
                                     tablaInputs$Valor[tablaInputs$Input=="Tasa de letalidad (IFR)"]))*100, 
                        width = "90%",min = 0.05,max = 0.78,step = .001)
     })
     output$Valuepi7 <- renderUI({
-      numericInput(inputId = "variacion_escenario",label = "Sensibilidad de escenarios",
+      numericInput(inputId = "variacion_escenario",label = i18n$t("Sensibilidad de escenarios"),
                        value = .25, 
                        width = "90%",min = .05,max = .5,step = .05)
     })
     output$Valuepi8 <- renderUI({
-      numericInput(inputId = "prop_susceptible",label = "Población susceptible al inicio. En porcentaje (%)",
+      numericInput(inputId = "prop_susceptible",label = i18n$t("Población susceptible al inicio. En porcentaje (%)"),
                    value = prop_susceptible$x * 100, 
                    width = "90%",min = 50,max = 100,step = 10)
     })
@@ -1085,28 +1085,28 @@ observeEvent(input$pais,{
     # controles de rrhh
     output$CC_set <- renderUI({
       numericInputIcon(inputId = "CC_set",
-                       label = "Cantidad de camas críticas", 
+                       label = i18n$t("Cantidad de camas críticas"), 
                        value = camasCriticas,
                        icon = icon("procedures","fa-5x"), width = "90%")
     })
     output$Vent_set <- renderUI({
-      numericInputIcon(inputId = "Vent_set",label = "Cantidad de ventiladores", 
+      numericInputIcon(inputId = "Vent_set",label = i18n$t("Cantidad de ventiladores"), 
                        value = ventiladores,
                        icon = icon("star-of-life","fa-5x"), width = "90%")
     })
     output$Med_set <- renderUI({
-      numericInputIcon(inputId = "Med_set",label = "Médicos/as camas UCI", 
+      numericInputIcon(inputId = "Med_set",label = i18n$t("Médicos/as camas UCI"), 
                        value = medicosCamasUCI,
                        icon = icon("user-md","fa-5x"), width = "90%")
     })
     output$Enf_set <- renderUI({
-      numericInputIcon(inputId = "Enf_set",label = "Enfermeras/os camas UCI", 
+      numericInputIcon(inputId = "Enf_set",label = i18n$t("Enfermeras/os camas UCI"), 
                        value = enfermerasCamasUCI,
                        icon = icon("plus-square","fa-5x"), width = "90%")
     })
     output$Porc_crit <- renderUI({
       knobInput(inputId = "Porc_crit",
-                label = HTML("Porcentaje de camas críticas <br/> destinadas a COVID:"),
+                label = HTML(i18n$t("Porcentaje de camas críticas <br/> destinadas a COVID:")),
                 value = round(porcentajeDisponibilidadCamasCOVID * 100,0),
                 min = 0, max = 100,post = "%",
                 displayPrevious = TRUE, width = "80%", height = "80%",
@@ -1116,7 +1116,7 @@ observeEvent(input$pais,{
     })
     output$Vent_por_CC <- renderUI({
       knobInput(inputId = "Vent_por_CC",
-                label = HTML("Tasa de días de uso de ventiladores <br/> por días de uso de cama crítica:"),
+                label = HTML(i18n$t("Tasa de días de uso de ventiladores <br/> por días de uso de cama crítica:")),
                 value = round(ventiladoresCamaCritica * 100,0),
                 min = 0, max = 100,post = "%",
                 displayPrevious = TRUE, width = "80%", height = "80%",
@@ -1169,8 +1169,8 @@ observeEvent(input$pais,{
     if(sum(proy_politicas$x, proy_rrhh$x, proy_epi$x)>0){
       HTML(paste0(i18n$t("Se han modificado parámetros de:"),
                   ifelse(proy_politicas$x==1,i18n$t("<br/>- Políticas de intervención"),""),
-                  ifelse(proy_epi$x==1,"<br/>- Epidemiología",""),
-                  ifelse(proy_rrhh$x==1,"<br/>- Recursos Sanitarios",""))
+                  ifelse(proy_epi$x==1,i18n$t("<br/>- Epidemiología"),""),
+                  ifelse(proy_rrhh$x==1,i18n$t("<br/>- Recursos Sanitarios"),""))
       )
     }
     
