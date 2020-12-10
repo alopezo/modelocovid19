@@ -368,8 +368,53 @@
         "es": "<br/>- Recursos Sanitarios",
         "en": "<br/>- Health Resources",
         "pt": "<br/>- Recursos de Saúde"
+      },
+      {
+        "es": "Sin medidas",
+        "en": "No measures",
+        "pt": "Nenhuma medida"
+      },
+      {
+        "es": "Medidas mínimas",
+        "en": "Minimum measures",
+        "pt": "Medidas mínimas"
+      },
+      {
+        "es": "Agregado de restricciones de reuniones y distanciamiento social",
+        "en": "Added restrictions on meetings and social distancing",
+        "pt": "Acrescentou restrições às reuniões e ao distanciamento social"
+      },
+      {
+        "es": "Agregado de cierre de negocios y escuelas; uso estricto y extendido de tapabocas, ampliación del testeo y rastreo de contactos",
+        "en": "Added Business and school closing; strict and extended use of mouthpieces, expanded testing and contact tracking",
+        "pt": "Agregado de fecho de empresas e escolas; utilização rigorosa e alargada de bocais, testes alargados e rastreio de contactos"
+      },
+      {
+        "es": "Cuarentena total",
+        "en": "Total lockdown",
+        "pt": "Confinamento total"
+      },
+      {
+        "es": "* El último valor ingresado se prolongará hasta el final de la proyección",
+        "en": "* The last value entered will be extended until the end of the projection",
+        "pt": "* O último valor introduzido será prolongado até ao fim da projecção"
+      },
+      {
+        "es": "R0 según intervenciones",
+        "en": "R0 according to interventions",
+        "pt": "R0 de acordo com as intervenções"
+      },
+      {
+        "es": "Comienzo",
+        "en": "Start",
+        "pt": "Início"
+      },
+      {
+        "es": "Final",
+        "en": "End",
+        "pt": "Final"
       }
-
-    
+      
+      
     ]
 }

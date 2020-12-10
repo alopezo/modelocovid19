@@ -480,16 +480,16 @@ hr(),
                          ),
                          fluidRow( style="margin-bottom: 10px; margin-top: 5px;",
                            column(1, align="center",
-                                  tags$span("Sin medidas")),
+                                  tags$span(i18n$t("Sin medidas"))),
                            column(2, align="center",
-                                  tags$span("Medidas mínimas")),
+                                  tags$span(i18n$t("Medidas mínimas"))),
                            column(3, align="center",
-                                  tags$span("Agregado de restricciones de reuniones y distanciamiento social")),
+                                  tags$span(i18n$t("Agregado de restricciones de reuniones y distanciamiento social"))),
                            column(4, align="center",
-                                  tags$span("Agregado de cierre de negocios y escuelas; uso estricto y extendido de tapabocas, ampliación del testeo y rastreo de contactos")),
+                                  tags$span(i18n$t("Agregado de cierre de negocios y escuelas; uso estricto y extendido de tapabocas, ampliación del testeo y rastreo de contactos"))),
                                   # bsTooltip("escuelas", "Cierre de escuelas y aislamiento selectivo",options = list(container = "body")),
                            column(1, align="center",
-                                  tags$span("Cuarentena total")),
+                                  tags$span(i18n$t("Cuarentena total"))),
                          ),
                          fluidRow( style="margin-bottom: 10px;",
                          column(1,actionButton("r11",  HTML("<b>3,7</b>"),
@@ -518,7 +518,7 @@ hr(),
                          timevisOutput("mytime"),
                          fluidRow(
                            column(12,
-                                  em("* El último valor ingresado se prolongará hasta el final de la proyección",
+                                  em(i18n$t("* El último valor ingresado se prolongará hasta el final de la proyección"),
                                      style="float:right; font-size=9px;")
                            )
                          ),
@@ -531,7 +531,7 @@ hr(),
                        )
                      ),
                     column(5,
-                       wellPanel(h5("R0 según intervenciones"),
+                       wellPanel(h5(i18n$t("R0 según intervenciones")),
                            dygraphOutput("rgraph_timeline", 
                                width = "100%", height = "200px"),
                             DTOutput("table")
@@ -1018,7 +1018,7 @@ observeEvent(input$pais,{
                     t(c(resumenResultados[c(10,7,8,9,11),3])),
                     t(c(resumenResultados[c(15,13,16,14,17),3]))) %>% as.data.frame() %>%  
                     mutate(Indicador = c("Nuevas Infecciones","Nuevas Defunciones","Camas","Ventiladores")) %>%
-                    setNames(c("Fecha pico", "Cantidad pico","Días hasta el pico","% saturación","Primer día saturación","Indicador")) %>% 
+                    setNames(c(i18n$t("Fecha pico"), "Cantidad pico","Días hasta el pico","% saturación","Primer día saturación","Indicador")) %>% 
                     dplyr::select(6,1:5)
     
     # tabla Resultados. Solo muestra
@@ -1332,7 +1332,7 @@ observeEvent(input$pais,{
   # visualiza tabla
   output$table <- renderDT({
     datatable(estrategia_acum$data[,2:4] %>% 
-              setNames(c("R","Comienzo", "Final")), 
+              setNames(c("R",i18n$t("Comienzo"), i18n$t("Final"))), 
               rownames = F,
               editable = list(target = 'cell'),
               options = list(lengthChange = FALSE,
