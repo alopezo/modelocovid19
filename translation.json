@@ -119,8 +119,8 @@
       },
       {
         "es": "Proyecciones de ",
-        "en": "Projections of ",
-        "pt": "Projecções de "
+        "en": "Projections for ",
+        "pt": "Projeções para"
       },
       {
         "es": "La fecha de última actualización de datos es el",
@@ -369,10 +369,6 @@
         "en": "<br/>- Health Resources",
         "pt": "<br/>- Recursos de Saúde"
       }
-
-
-
-
 
     
     ]

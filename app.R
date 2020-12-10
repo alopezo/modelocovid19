@@ -57,7 +57,7 @@ ui <- fluidPage(
   theme = shinytheme("flatly"),
   tags$head(HTML('<link rel="icon", href="ISO-IECS.png", type="image/png" />')),
   tags$head(includeHTML("www/google-analytics.html")),
-  titlePanel(windowTitle = i18n$t("IECS: Proyecciones COVID-19"), title = ""),
+  titlePanel(windowTitle = gsub("<.*?>", "", i18n$t("IECS: Proyecciones COVID-19")), title = ""),
   fluidRow(
     column(3,
            fluidRow(
