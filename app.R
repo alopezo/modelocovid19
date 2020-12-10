@@ -275,7 +275,7 @@ hr(),
   fluidRow(
     column(6,
            # h4(em(textOutput("default_o_no"))),
-           p("La fecha de última actualización de datos es el", format(hoy,"%d-%m-%Y"),"."),
+           p(i18n$t("La fecha de última actualización de datos es el"), format(hoy,"%d-%m-%Y"),"."),
            # conditionalPanel("input$pais %in% paises_distintos",
            #                  p("La fecha de última actualización de datos es el", 
            #                    format(hoy,"%d-%m-%Y"),". ","Ajustando el modelo en base a casos reportados")
@@ -292,7 +292,7 @@ hr(),
            # p(" - Seleccionar un ",
            #   actionLink("mostrarEscenarios", "escenario pre-definido"),":"),
            radioButtons("tipo_config",
-                        label = "Con esta plataforma interactiva es posible:",
+                        label = i18n$t("Con esta plataforma interactiva es posible:"),
                         choices = c("Personalizar la proyección y crear un escenario nuevo." = "nuevo",
                                     "Seleccionar un escenario pre-definido" = "predefinido"),
                         selected = "",
@@ -352,7 +352,7 @@ hr(),
            ),
     ),
     column(6,
-           wellPanel(h5("R0 según escenario vigente en proyección:"),
+           wellPanel(h5(i18n$t("R0 según escenario vigente en proyección:")),
                      dygraphOutput("g_R_actual", 
                                    width = "100%", height = "200px"))
     )
@@ -360,7 +360,7 @@ hr(),
   br(),
   hr(),
 
-  h4("Gráficos de resultados"),
+  h4(i18n$t("Gráficos de resultados")),
   fluidRow(
     column(12,
            Grafica("graficos") 
@@ -371,21 +371,21 @@ hr(),
 
 # Tabla Resultados --------------------------------------------------------
   h4(textOutput("titulo_tabla_resultados", inline=TRUE)),
-  h5("Los resultados esperados según la proyección son los siguientes:"),
+  h5(i18n$t("Los resultados esperados según la proyección son los siguientes:")),
   fluidRow( class = "text-center",
     column(12,
              DTOutput("tableResults", width = 1000))
     ),
     fluidRow( 
       column(12,
-             downloadButton("report", "Reporte")
+             downloadButton("report", i18n$t("Reporte"))
   )),
   hr(),
 
 # Parámetros --------------------------------------------------------------
   
   # tabs
-  h3("Parámetros"),
+  h3(i18n$t("Parámetros")),
 
     fluidRow(
     column(12,
@@ -396,7 +396,7 @@ hr(),
                     )
            ),
            div(
-               actionButton("updateResults", "Actualizar resultados"),
+               actionButton("updateResults", i18n$t("Actualizar resultados")),
                
                htmlOutput("carrito"),
                
@@ -420,30 +420,30 @@ hr(),
        .vis-item.r1  {color: #222426;background-color:",colores[11] ,";}")),
 
     tabsetPanel(id="params",
-        tabPanel("Intervenciones de Salud Pública",
+        tabPanel(i18n$t("Intervenciones de Salud Pública"),
                  tags$head(tags$style("#R_hoy{color: black;
                                  font-size: 20px;
                                  font-style: italic;
                                  }")
                  ),
                  h5(em(HTML(paste0(textOutput("R_hoy", inline=TRUE),
-                                   " en ",
+                                   i18n$t(" en "),
                                    textOutput("pais2", inline=TRUE),
-                                   " según ",
+                                   i18n$t(" según "),
                                    tags$a(href="https://www.iecs.org.ar/wp-content/uploads/Modelo-COVID_metodologia.pdf",
-                                          "metodología adoptada",target="_blank"),
-                                   ". Otras estimaciones ",
+                                          i18n$t("metodología adoptada"),target="_blank"),
+                                   i18n$t(". Otras estimaciones "),
                                    tags$a(href="https://epiforecasts.io/covid/reports.html#Americas", 
-                                          "disponibles.",target="_blank"))))),
-                 h5(em(HTML(paste0("Lo anterior equivale a ",
+                                          i18n$t("disponibles."),target="_blank"))))),
+                 h5(em(HTML(paste0(i18n$t("Lo anterior equivale a "),
                                    textOutput("R0_hoy", inline = T), ".")))),
-                 h5(em(HTML(paste0("Los días de duplicación de casos reportados se estiman en ",
+                 h5(em(HTML(paste0(i18n$t("Los días de duplicación de casos reportados se estiman en "),
                                    textOutput("dias_dupl", inline = T))))),
             br(),
             fluidRow(
               column(7,
                    radioButtons("tipo_interv",
-                            label = "Definir mediante:",
+                            label = i18n$t("Definir mediante:"),
                             choices = c("R0 asociados a políticas de intervención: seleccionando niveles de restricción para cada mes 
                                         de un menú de opciones simplificado." = "politicas",
                                         "Ingreso de R0 específicos: especificando el nivel de R0 para cada período, ajustable a meses, 
@@ -914,7 +914,7 @@ observeEvent(input$pais,{
     owd_pais <- owd_data %>% filter(iso_code==input$pais, as.Date(date) == (hoy-1))
     output$inf_acum <- renderText({ fnum(ifelse(owd_pais$total_cases==0, "S/D", owd_pais$total_cases)) })
     output$muertes_acum <- renderText({ fnum(ifelse(owd_pais$total_deaths==0,"S/D", owd_pais$total_deaths)) })
-    output$e0 <- renderText(paste({ fnum(owd_pais$life_expectancy) }, " años"))
+    output$e0 <- renderText(paste({ fnum(owd_pais$life_expectancy) }, i18n$t(" años")))
     output$test_acum <- renderText({ fnum(ifelse(is.na(owd_pais$total_tests_per_thousand),
                                                  "S/D", owd_pais$total_tests_per_thousand*1000),0) })
     output$new_tests <- renderText({ fnum(ifelse(is.na(owd_pais$new_tests),
@@ -965,7 +965,7 @@ observeEvent(input$pais,{
     
     # textos para ui -----------------------------------------------------------
     
-    output$titulo_tabla_resultados <-renderText({  paste0("Tabla de resultados (", poblacion_data$label[poblacion_data$pais==input$pais][1],")") })
+    output$titulo_tabla_resultados <-renderText({  paste0(i18n$t("Tabla de resultados ("), poblacion_data$label[poblacion_data$pais==input$pais][1],")") })
     output$poblacion <- renderText({ fnum(poblacion_data$value[poblacion_data$pais==input$pais][1]) })
     output$poblacion65mas <- renderText({ paste0(fnum(poblacion_data$value[poblacion_data$pais==input$pais][2]),"%") })
     output$camasCriticas <- renderText({ as.character(camasCriticas) })
@@ -1143,7 +1143,7 @@ observeEvent(input$pais,{
                              label = rep("Intervención",length(fechaIntervencionesTrigger)), labelLoc = "bottom", 
                              color = "grey", strokePattern = "dotted")
       }
-      dy %>% dyEvent(x = hoy, label = "Hoy", labelLoc = "top", 
+      dy %>% dyEvent(x = hoy, label = i18n$t("Hoy"), labelLoc = "top", 
                      color = "grey", strokePattern = "dashed")
     })
     
@@ -1167,8 +1167,8 @@ observeEvent(input$pais,{
   observe(
   output$carrito <- renderText({
     if(sum(proy_politicas$x, proy_rrhh$x, proy_epi$x)>0){
-      HTML(paste0("Se han modificado parámetros de:",
-                  ifelse(proy_politicas$x==1,"<br/>- Políticas de intervención",""),
+      HTML(paste0(i18n$t("Se han modificado parámetros de:"),
+                  ifelse(proy_politicas$x==1,i18n$t("<br/>- Políticas de intervención"),""),
                   ifelse(proy_epi$x==1,"<br/>- Epidemiología",""),
                   ifelse(proy_rrhh$x==1,"<br/>- Recursos Sanitarios",""))
       )
