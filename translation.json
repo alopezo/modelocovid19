@@ -413,7 +413,15 @@
         "es": "Final",
         "en": "End",
         "pt": "Final"
+      },
+      {
+        "es": "Población susceptible al inicio. En porcentaje (%)",
+        "en": "Susceptible population at the beginning. In percentage (%)",
+        "pt": "População susceptível no início. Em percentagem (%)"
       }
+      
+      
+      
       
       
     ]
