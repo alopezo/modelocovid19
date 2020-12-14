@@ -138,6 +138,21 @@
         "pt": "Com esta plataforma interactiva, é possível:"
       },
       {
+        "es": "Personalizar la proyección y crear un escenario nuevo.",
+        "en": "Customize the projection parameters, creating a new scenario.",
+        "pt": "Personalize os parâmetros de projeção, criando um novo cenário."
+      },
+      {
+        "es": "Seleccionar un escenario pre-definido.",
+        "en": "Select a pre-defined scenario.",
+        "pt": "Selecione um cenário pré-definido."
+      },
+      {
+        "es": "Configure los parámetros del nuevo escenario aquí.",
+        "en": "Configure the parameters of the new scenario here.",
+        "pt": "Configure os parâmetros do novo cenário aqui."
+      },
+      {
         "es": "R0 según escenario vigente en proyección:",
         "en": "R0 according to current scenario in projection:",
         "pt": "R0 de acordo com o cenário actual em projecção:"

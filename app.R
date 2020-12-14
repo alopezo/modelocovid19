@@ -49,6 +49,18 @@ tiempoInicio <- Sys.time()
 colores = c("#FF2929","#FF4D27","#FF7025","#FF9424","#FFB822","#FFDB20",
             "#FFFF1E","#C7FF22","#8FFF26","#56FF29","#1EFF2D")
 
+# translation
+scenarioSelectList = list()
+scenarioSelectList[[paste0(i18n$t("Políticas con nivel de rigurosidad estimado actual (escenario por defecto)"))]] <- "constanteR_cori"
+
+scenarioSelectList2 = list(
+  "Políticas con nivel de rigurosidad estimado actual (escenario por defecto)" = "constanteR_cori",
+  "Políticas con nivel de rigurosidad constante, R0 1,3. (Ej. apertura de negocios y escuelas)" = "constante1,3",
+  "Política adaptativa basada en ocupación de camas, cuarentena al llegar al 50%" = "trigger50",
+  "Política adaptativa basada en ocupación de camas, cuarentena al llegar al 70%" = "trigger70",
+  "Política valvular intermitente, alterna cuarentena y disminución de restricciones en ciclos mensuales" = "valvular1"
+)
+
 # App ---------------------------------------------------------------------
 
 ui <- fluidPage(
@@ -293,13 +305,16 @@ hr(),
            #   actionLink("mostrarEscenarios", "escenario pre-definido"),":"),
            radioButtons("tipo_config",
                         label = i18n$t("Con esta plataforma interactiva es posible:"),
-                        choices = c("Personalizar la proyección y crear un escenario nuevo." = "nuevo",
-                                    "Seleccionar un escenario pre-definido" = "predefinido"),
-                        selected = "",
+                        choiceNames = list(
+                          i18n$t("Personalizar la proyección y crear un escenario nuevo."), 
+                          i18n$t("Seleccionar un escenario pre-definido.")
+                          ),
+                        choiceValues = list("nuevo","predefinido"),
+                        selected = "predefinido",
                         width = "100%"),
            conditionalPanel("input.tipo_config=='nuevo'",
                             column(11, offset=1,
-                                   tags$a(href="#params", "Configure los parámetros del nuevo escenario aquí")
+                                   tags$a(href="#params", i18n$t("Configure los parámetros del nuevo escenario aquí."))
                             )
                             
            ),
@@ -307,13 +322,14 @@ hr(),
                             column(11, offset=1,
                                    selectInput(inputId = "escenarioPredefinido","",selected = "constanteR_cori",
                                                width="100%",
-                                               c(
-                                                 "Políticas con nivel de rigurosidad estimado actual (escenario por defecto)" = "constanteR_cori",
-                                                 "Políticas con nivel de rigurosidad constante, R0 1,3. (Ej. apertura de negocios y escuelas)" = "constante1,3",
-                                                 "Política adaptativa basada en ocupación de camas, cuarentena al llegar al 50%" = "trigger50",
-                                                 "Política adaptativa basada en ocupación de camas, cuarentena al llegar al 70%" = "trigger70",
-                                                 "Política valvular intermitente, alterna cuarentena y disminución de restricciones en ciclos mensuales" = "valvular1"
-                                               )
+                                               choices = c("constanteR_cori", "constante1,3", "trigger50", "trigger70", "valvular1") %>% 
+                                                 stats::setNames(c("Políticas con nivel de rigurosidad estimado actual (escenario por defecto)", 
+                                                                   "Políticas con nivel de rigurosidad constante, R0 1,3. (Ej. apertura de negocios y escuelas)",
+                                                                   "Política adaptativa basada en ocupación de camas, cuarentena al llegar al 50%",
+                                                                   "Política adaptativa basada en ocupación de camas, cuarentena al llegar al 70%",
+                                                                   "Política valvular intermitente, alterna cuarentena y disminución de restricciones en ciclos mensuales"
+                                                                   )
+                                                                 )
                                    ),
                                    conditionalPanel("input.escenarioPredefinido=='constanteR_cori'",
                                                     htmlOutput("R_hoy_predef")
@@ -784,18 +800,48 @@ server <- function(input, output, session) {
     {
       print(paste("Language change!","es"))
       update_lang(session,"es")
+      updateSelectInput(session, inputId = "escenarioPredefinido",
+                        choices = c("constanteR_cori", "constante1,3", "trigger50", "trigger70", "valvular1") %>% 
+                          stats::setNames(c("Políticas con nivel de rigurosidad estimado actual (escenario por defecto)", 
+                                            "Políticas con nivel de rigurosidad constante, R0 1,3. (Ej. apertura de negocios y escuelas)",
+                                            "Política adaptativa basada en ocupación de camas, cuarentena al llegar al 50%",
+                                            "Política adaptativa basada en ocupación de camas, cuarentena al llegar al 70%",
+                                            "Política valvular intermitente, alterna cuarentena y disminución de restricciones en ciclos mensuales"
+                            )
+                          )
+      )
     }
   )
   onclick("ingles", 
     {
       print(paste("Language change!","en"))
       update_lang(session,"en")
+      updateSelectInput(session, inputId = "escenarioPredefinido",
+        choices = c("constanteR_cori", "constante1,3", "trigger50", "trigger70", "valvular1") %>% 
+          stats::setNames(c("Policies with current estimated stringency level (default scenario)", 
+                          "Policies with a constant level of rigor, R0 1.3. (Eg. Opening of businesses and schools)",
+                          "Adaptive policy based on bed occupancy, quarantine upon reaching 50%",
+                          "Adaptive policy based on bed occupancy, quarantine upon reaching 70%",
+                          "Intermittent valve policy, alternating quarantine and reduction of restrictions in monthly cycles"
+                            )
+                        )
+      )
     }
   )
   onclick("portugues", 
      {
        print(paste("Language change!","pt"))
        update_lang(session,"pt")
+       updateSelectInput(session, inputId = "escenarioPredefinido",
+                         choices = c("constanteR_cori", "constante1,3", "trigger50", "trigger70", "valvular1") %>% 
+                           stats::setNames(c("Políticas com nível de rigor estimado atual (cenário padrão)", 
+                                             "Políticas com um nível de rigor constante, R0 1.3. (Ex .: abertura de empresas e escolas)",
+                                             "Política adaptativa com base na ocupação do leito, quarentena ao atingir 50%",
+                                             "Política adaptativa com base na ocupação do leito, quarentena ao atingir 70%",
+                                             "Política de válvula intermitente, quarentena alternada e redução de restrições nos ciclos mensais"
+                              )
+                           )
+       )
      }
   )
   
