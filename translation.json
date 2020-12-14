@@ -433,10 +433,84 @@
         "es": "Población susceptible al inicio. En porcentaje (%)",
         "en": "Susceptible population at the beginning. In percentage (%)",
         "pt": "População susceptível no início. Em percentagem (%)"
+      },
+      {
+        "es": "Seleccione nivel de detalle para el ingreso de datos: ",
+        "en": "Select level of detail for data entry: ",
+        "pt": "Seleccionar nível de detalhe para introdução de dados: "
+      },
+      {
+        "es": "Herramientas",
+        "en": "Tools",
+        "pt": "Ferramentas"
+      },
+      {
+        "es": "Puede configurar el parámetro del número básico de reproducción mediante estos atajos. Especificando una estrategia, los niveles esperados de R0, y el período de aplicación puede generar un patrón de parámetros con pocos clicks.",
+        "en": "You can set the basic playback number setting using these shortcuts. By specifying a strategy, the expected levels of R0, and the application period you can generate a parameter pattern with a few clicks.",
+        "pt": "É possível definir o parâmetro de número básico de reprodução usando estes atalhos. Ao especificar uma estratégia, os níveis esperados de R0, e o período de aplicação, é possível gerar um padrão de parâmetros com alguns cliques."
+      },
+      {
+        "es": "Seleccione estrategia:",
+        "en": "Select strategy:",
+        "pt": "Seleccionar estratégia:"
+      },
+      {
+        "es": "Desde:",
+        "en": "From:",
+        "pt": "A partir de:"
+      },
+      {
+        "es": "Hasta:",
+        "en": "To:",
+        "pt": "Para:"
+      },
+      {
+        "es": "Actualizar parámetros",
+        "en": "Update parameters",
+        "pt": "Manter parâmetros"
+      },
+      {
+        "es": "Configure un R0 al momento de alcanzar un porcentaje de saturación deseado.",
+        "en": "Set an R0 when a desired percentage of saturation is reached.",
+        "pt": "Definir um R0 quando é atingida uma percentagem de saturação desejada."
+      },
+      {
+        "es": "Porcentaje de saturación de camas UCI destinadas a COVID que gatilla la intervención:",
+        "en": "Percentage of ICU bed saturation for IDOCs that triggers the intervention:",
+        "pt": "Percentagem de saturação do leito da UCI para IDOCs que desencadeia a intervenção:"
+      },
+      {
+        "es": "R0 de base de Proyección:",
+        "en": "Projection base R0:",
+        "pt": "Base de projecção R0:"
+      },
+      {
+        "es": "R0 de Intervención:",
+        "en": "Intervention R0:",
+        "pt": "R0 para Intervenção:"
+      },
+      {
+        "es": "Días de intervención",
+        "en": "Intervention days",
+        "pt": "Dias de intervenção"
+      },
+      {
+        "es": "Versión ",
+        "en": "Version ",
+        "pt": "Versão "
+      },
+      {
+        "es": "Nuevos infectados estimados totales por día (",
+        "en": "Version ",
+        "pt": "Versão "
       }
       
       
       
+      
+      
+      
+  
       
       
     ]

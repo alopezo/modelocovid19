@@ -566,7 +566,7 @@ hr(),
                          3,
                          radioGroupButtons(
                            inputId = "periodos",
-                           label = "Seleccione nivel de detalle para el ingreso de datos: ",
+                           label = i18n$t("Seleccione nivel de detalle para el ingreso de datos: "),
                            choices = c("Mes", "Quincena", "Semana")
                          ),
                          conditionalPanel(" input.periodos == 'Mes' ",
@@ -585,13 +585,9 @@ hr(),
                            br(),
                            column(
                              12,
-                             h4("Herramientas"),
-                             p("Puede configurar el parámetro del número básico de 
-                       reproducción mediante estos atajos. Especificando 
-                       una estrategia, los niveles esperados de R0, y 
-                       el período de aplicación puede generar un patrón
-                       de parámetros con pocos clicks."),
-                             selectInput("atajo", "Seleccione estrategia:",
+                             h4(i18n$t("Herramientas")),
+                             p(i18n$t("Puede configurar el parámetro del número básico de reproducción mediante estos atajos. Especificando una estrategia, los niveles esperados de R0, y el período de aplicación puede generar un patrón de parámetros con pocos clicks.")),
+                             selectInput("atajo", i18n$t("Seleccione estrategia:"),
                                          c("Constante" = "co",
                                            "Valvular Intermitente" = "vi",
                                            "Reducción gradual de restricciones" = "rg"
@@ -604,13 +600,13 @@ hr(),
                                 sliderInput("sliderRangoAtajo", label = "R0", min = 0.5, max = 4, 
                                             value = c(1.1, 1.5))
                              ),
-                             selectInput("inicioAtajo", "Desde:",
+                             selectInput("inicioAtajo", i18n$t("Desde:"),
                                          c("Inicio" = "inicio")),
-                             selectInput("finAtajo", "hasta:",
+                             selectInput("finAtajo", i18n$t("Hasta:"),
                                          c("Fin" = "fin")),
                              actionButton("aplicarAtajo", 
                                           icon = icon("arrow-left"),
-                                          "Actualizar parámetros"),
+                                          i18n$t("Actualizar parámetros")),
                            )
                          ),
                        ),
@@ -633,7 +629,7 @@ hr(),
                       column(12,
                        fluidRow(
                          column(12,
-                              h4("Configure un R0 al momento de alcanzar un porcentaje de saturación deseado.",
+                              h4(i18n$t("Configure un R0 al momento de alcanzar un porcentaje de saturación deseado."),
                                  tags$span(id="info_trigger", icon("info-circle"), 
                                            style=("margin-left:5px;")))
                               )),
@@ -641,7 +637,7 @@ hr(),
                       fluidRow(
                         column(4,
                                  knobInput("trigger_Porc_crit",
-                                           label = "Porcentaje de saturación de camas UCI destinadas a COVID que gatilla la intervención:",
+                                           label = i18n$t("Porcentaje de saturación de camas UCI destinadas a COVID que gatilla la intervención:"),
                                            value = 70,
                                            min = 0, max = 100,post = "%",
                                            displayPrevious = TRUE, width = "100%", height = "90%",
@@ -655,14 +651,14 @@ hr(),
                                
                                sliderInput(
                                   "trigger_R_inter",
-                                  "R0 de Intervención:", 
+                                  i18n$t("R0 de Intervención:"), 
                                   value = 1,
                                   min = .5,
                                   max = 4)
                                ),
                         column(4,
                                numericInputIcon(inputId = "Dias_interv",
-                                                label = "Días de intervención", 
+                                                label = i18n$t("Días de intervención"), 
                                                 value = 30,
                                                 icon = icon("calendar-alt","fa-3x"), size = "lg")
                               
@@ -783,12 +779,7 @@ hr(),
     hr(),
     fluidRow( class = "text-center",
               p(style = "margin-bottom: 2px; font-size: 15px;  color: #67c97c;", 
-                HTML(paste0("<i>","Versión ", versionModelo, ". Esta herramienta presenta 
-                    resultados basados en modelos 
-                    y estimaciones, su utilización para la toma de decisiones
-                    queda bajo responsabilidad del usuario.
-                    <br>Contacto:</i> <a href=\"mailto:ciips@iecs.org.ar?
-                    subject='Modelo COVID-19'\">ciips@iecs.org.ar</a>")))
+                HTML(paste0("<i>",i18n$t("Versión "), versionModelo, ". Esta herramienta presenta resultados basados en modelos y estimaciones, su utilización para la toma de decisiones queda bajo responsabilidad del usuario.<br>Contacto:</i> <a href=\"mailto:ciips@iecs.org.ar? subject='Modelo COVID-19'\">ciips@iecs.org.ar</a>")))
     )
 )
 
@@ -1758,7 +1749,7 @@ observeEvent(input$pais,{
   output$trigger_R_base_ui <- renderUI({
     sliderInput(
       "trigger_R_base",
-      "R0 de base de Proyección:", 
+      i18n$t("R0 de base de Proyección:"), 
       value =  r_cori,
       min = .5,
       max = 4)
