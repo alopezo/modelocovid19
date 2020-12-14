@@ -80,7 +80,7 @@ Grafica <- function(id, label = "Nada") {
     radioGroupButtons(
       inputId = ns("que_infecc"),
       label = "",
-      choices = c("Diarias","Acumuladas"),
+      choices = c("Diarias","Acumuladas","Edades"),
       selected = "Diarias",
       status = "success",
       checkIcon = list(yes = icon("check"))
@@ -209,7 +209,7 @@ graficando <- function(input, output, session) {
   # output$min_graf_SEIR <- renderText({str_to_sentence(as.character(rango_data[1]))})
   # output$max_graf_SEIR <- renderText({str_to_sentence(as.character(rango_data[2]))})
   
-  color_dyg = c("#3a3a3b","#ff9191","#8ae691")
+  color_dyg = c("#3a3a3b","#ff9191","#8ae691","#d95f02", "#7570b3","#1b9e77")
   
   
   ##### Infecciones
@@ -219,7 +219,10 @@ graficando <- function(input, output, session) {
       df <- cbind(modeloSimulado %>% dplyr::select(fecha, i = i_5d_ma),
                   modeloSimulado_hi %>% dplyr::select(i2 = i_5d_ma),
                   modeloSimulado_low %>% dplyr::select(i3 = i_5d_ma)) 
-      labels = c("Nuevos Inf.","Peor escenario","Mejor escenario")
+      df <- merge(df,dataEcdc %>% dplyr::select(dateRep,new_cases), by.x="fecha", by.y="dateRep", all.x=TRUE)
+      df$new_cases[is.na(df$new_cases)==TRUE] <- 0
+      
+      labels = c("Nuevos Inf.","Peor escenario","Mejor escenario", "Casos diarios reportados")
       addPopover(session, 
                  "info_I", "Nuevos infectados estimados totales por día", 
                  content = paste0("El número de nuevos infectados estimados totales 
@@ -229,7 +232,7 @@ graficando <- function(input, output, session) {
                  trigger = 'click')
       output$titulo_infecciones <-renderText({  paste0("Nuevos infectados estimados totales por día (", 
                                                        poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
-    }else{
+    } else if (input$que_infecc=="Acumuladas"){
       df <- cbind(modeloSimulado %>% mutate(I = I+R) %>% dplyr::select(fecha, i = I),
                   modeloSimulado_hi %>% mutate(I = I+R) %>% dplyr::select(i2 = I),
                   modeloSimulado_low %>% mutate(I = I+R) %>% dplyr::select(i3 = I))
@@ -243,17 +246,34 @@ graficando <- function(input, output, session) {
                  trigger = 'click')
       output$titulo_infecciones <-renderText({  paste0("Infectados estimados acumulados (", 
                                                        poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
+    } else if (input$que_infecc=="Edades"){
+      df <- cbind(modeloSimulado %>% dplyr::select(fecha, i = incid_00_19),
+                  modeloSimulado %>% dplyr::select(i2 = incid_20_59),
+                  modeloSimulado %>% dplyr::select(i3 = incid_60_mas))
+      labels = c("60 años y más","20 a 59 años","Menos de 20")
+      addPopover(session, 
+                 "info_I", "Infectados estimados acumulados por grupos de edad", 
+                 content = paste0("El número de infectados acumulados 
+                              incluye los detectados y los no detectados 
+                              (no testeados), independientemente de si luego
+                               fueron recuperados o muertos"),  
+                 trigger = 'click')
+      output$titulo_infecciones <-renderText({  paste0("Infectados estimados acumulados por grupos de edad (", 
+                                                       poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
     }
     if(trigger_on_app==1){df <- df %>% dplyr::select(fecha, i)}
-    dg <- xts(df[,-1], order.by=as.Date(df[,1]))
     
+    dg <- xts(df[,-1], order.by=as.Date(df[,1]))
+    #browser()
     output$g_i <- renderDygraph({
+      
+      if(input$que_infecc=="Diarias")
+      {
       dy <- dygraph(dg, group = "grupo") %>% 
-        dySeries(c(names(dg[,c(1)])), label = labels[1], strokeWidth = 3,  color = color_dyg[1]) %>%
-        dyOptions(drawGrid = FALSE, labelsKMB=F,
-                  maxNumberWidth=10, rightGap=100, digitsAfterDecimal=0) %>% 
-        dyAxis("y", label = labels[1], 
-               valueRange = c(0, max(dg)*1.1)) %>% 
+        dySeries(c(names(dg[,c(1)])), label = labels[1], strokeWidth = 3,  color = if (input$que_infecc=="Edades") {color=color_dyg[4]} else {color=color_dyg[1]})  %>% 
+        dySeries(c(names(dg[,c(4)])), label = labels[4], stepPlot = T, fillGraph = TRUE, color = "#c3c3c7") %>%
+        dyOptions(drawGrid = FALSE, labelsKMB=F,maxNumberWidth=10, rightGap=100, digitsAfterDecimal=0)  %>%  dyAxis("y", label = labels[1], 
+               valueRange = c(0, max(dg)*1.1)) %>% dyOptions(stackedGraph = (input$que_infecc=="Edades")) %>% 
         dyHighlight(highlightCircleSize = 5, 
                     highlightSeriesBackgroundAlpha = 1,
                     hideOnMouseOut = FALSE) %>% 
@@ -261,12 +281,38 @@ graficando <- function(input, output, session) {
         dyLegend(width = 400) %>% 
         dyEvent(x = hoy, label = "Hoy", labelLoc = "bottom", 
                 color = "grey", strokePattern = "dashed")
+      }
+      else
+      {
+        dy <- dygraph(dg[,-4], group = "grupo") %>% 
+          dySeries(c(names(dg[,c(1)])), label = labels[1], strokeWidth = 3,  color = if (input$que_infecc=="Edades") {color=color_dyg[4]} else {color=color_dyg[1]})  %>% 
+          dyOptions(drawGrid = FALSE, labelsKMB=F,maxNumberWidth=10, rightGap=100, digitsAfterDecimal=0)  %>%  dyAxis("y", label = labels[1], 
+                                                                                                                      valueRange = c(0, max(dg)*1.1)) %>% dyOptions(stackedGraph = (input$que_infecc=="Edades")) %>% 
+          dyHighlight(highlightCircleSize = 5, 
+                      highlightSeriesBackgroundAlpha = 1,
+                      hideOnMouseOut = FALSE) %>% 
+          dyRangeSelector(height = 40, strokeColor = "", dateWindow = range_graf_select)%>% 
+          dyLegend(width = 400) %>% 
+          dyEvent(x = hoy, label = "Hoy", labelLoc = "bottom", 
+                  color = "grey", strokePattern = "dashed")
+      }
+      
       if(trigger_on_app==0){
+        if (input$que_infecc=="Edades")
+        {
+          dy <- dy %>% 
+            dySeries(c(names(dg[,c(2)])), label = labels[2], strokeWidth = 3,
+                     color = color_dyg[5]) %>%
+            dySeries(c(names(dg[,c(3)])), label = labels[3], strokeWidth = 3,
+                     color = color_dyg[6])  
+        } else
+        {  
         dy <- dy %>% 
           dySeries(c(names(dg[,c(2)])), label = labels[2], strokeWidth = 1,
                  strokePattern = "dashed",  color = color_dyg[2]) %>%
           dySeries(c(names(dg[,c(3)])), label = labels[3], strokeWidth = 1,
-                   strokePattern = "dashed",  color = color_dyg[3])
+                     strokePattern = "dashed",  color = color_dyg[3])
+        }
       }
       if(trigger_on_app==1 & !is.null(fechaIntervencionesTrigger)){
         for(i in 1:length(fechaIntervencionesTrigger)){

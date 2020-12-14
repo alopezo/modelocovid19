@@ -21,12 +21,14 @@ library(sp)
 library(tinytex)
 library(raster)
 
+setwd("C:/Users/Adrian/Desktop/Edades")
 #subNac <<- "no"
 subNacUrl <<- c("ARG_2","ARG_3","ARG_6","ARG_7","ARG_50","ARG_18","ARG_6_756", "ARG_6_826")
+paisesEdad <<- c("ARG") 
 versionModelo <<- "2.6"
 
 # funs --------------------------------------------------------------------
-hoy <<- as.Date("2020-11-27")
+hoy <<- as.Date("2020-11-17")
 default <<- FALSE
 # setwd("appTest - Cod")
 source("modulos.R", encoding = "UTF-8")
@@ -35,6 +37,7 @@ source("modulos.R", encoding = "UTF-8")
 load("DatosIniciales/Map.RData")
 load("DatosIniciales/oms_data.RData")
 load("DatosIniciales/owd_data.RData")
+load("DatosIniciales/ifr_age.RData")
 
 # para loop sliders
 cantidadMeses = 12
@@ -780,8 +783,33 @@ ui <- fluidPage(
 
 ########### server
 server <- function(input, output, session) {
+
+  observeEvent(input$pais, {
+
+    if (input$pais %in% paisesEdad)
+    {
+      newchoices <<- c("Diarias","Acumuladas","Edades")
+    }
+    else
+    {
+      newchoices <<- c("Diarias","Acumuladas")
+    }
+
+    updateRadioGroupButtons(
+      session = session,
+      inputId = "graficos-que_infecc",
+      choices = newchoices,
+      selected = "Diarias",
+      status = "success",
+      checkIcon = list(yes = icon("check"))
+
+    )
+    print(input)
+    })
+
+
   
-  # url me dice si quiere ir a subnacional argentino
+    # url me dice si quiere ir a subnacional argentino
   observe({
     if(
       str_detect(session$clientData$url_pathname, "argentina")==T

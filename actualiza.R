@@ -6,20 +6,26 @@
 
 # librerías
 library(tidyverse)
+library(tidyr)
 library(readxl)
 library(sqldf)
 library(readxl)
 library(zoo)
 library(EpiEstim)
 
+
+
+setwd("C:/Users/Adrian/Desktop/Edades")
 #### países/juris a actualizar ####
 
-hoy <<- diaActualizacion <<- as.Date("2020-11-27")
+hoy <<- diaActualizacion <<- as.Date("2020-12-05")
 paises_actualizar <- c("ARG","BOL","CRI","SLV","ECU","GTM",
-                        "HND","JAM","PAN","PRY","DOM","CHL","NIC",
-                        "URY","BRA","PER","MEX","COL", "BHS",
-                        "BRB","BLZ","GUY","HTI","SUR","TTO","VEN",
-                        "ARG_18", "ARG_2", "ARG_6", "ARG_7", "ARG_50", "ARG_3", "ARG_6_826","ARG_6_756")
+                       "HND","JAM","PAN","PRY","DOM","CHL","NIC",
+                       "URY","BRA","PER","MEX","COL", "BHS",
+                       "BRB","BLZ","GUY","HTI","SUR","TTO","VEN",
+                       "ARG_18", "ARG_2", "ARG_6", "ARG_7", "ARG_50", "ARG_3", "ARG_6_826","ARG_6_756")
+
+paisesEdad <<- c("ARG")
 
 ##### carga población y oms data  ####
 load("DatosIniciales/poblacion_data.RData")
@@ -27,7 +33,10 @@ source("oms_data.R", encoding = "UTF-8")
 
 ##### descarga ultimos datos de msal  ####
 urlMsal <- 'https://sisa.msal.gov.ar/datos/descargas/covid-19/files/Covid19Casos.csv'
-#download.file(urlMsal, "Covid19Casos.csv")
+download.file(urlMsal, "Covid19Casos.csv")
+
+urlEcdc <- "https://opendata.ecdc.europa.eu/covid19/casedistribution/csv"
+download.file(urlEcdc, "dataEcdc.csv")
 
 #### casos/muertes y parámetros para cada país ####
 input=list()
@@ -37,8 +46,30 @@ input$pais = p
 if (substr(input$pais,1,3)=="ARG"){
   
   dataMsal<-read.csv("Covid19Casos.csv", fileEncoding = "UTF-8")
-  dataMsal<-dataMsal %>% filter(clasificacion_resumen=="Confirmado")
-
+  dataMsal<-dataMsal %>% filter(clasificacion_resumen=="Confirmado" & is.na(edad)==F)
+  dataMsal<-dataMsal %>% mutate(grupedad = case_when(
+                                              edad_años_meses=="Meses" | 
+                                              edad_años_meses=="Años" & edad >= 1 & edad <= 9 ~ "gr_00_09",
+                                              edad_años_meses=="Años" & edad >= 10 & edad <= 14 ~ "gr_10_14",
+                                              edad_años_meses=="Años" & edad >= 15 & edad <= 19 ~ "gr_15_19",
+                                              edad_años_meses=="Años" & edad >= 20 & edad <= 24 ~ "gr_20_24",
+                                              edad_años_meses=="Años" & edad >= 25 & edad <= 29 ~ "gr_25_29",
+                                              edad_años_meses=="Años" & edad >= 30 & edad <= 34 ~ "gr_30_34",
+                                              edad_años_meses=="Años" & edad >= 35 & edad <= 39 ~ "gr_35_39",
+                                              edad_años_meses=="Años" & edad >= 40 & edad <= 44 ~ "gr_40_44",
+                                              edad_años_meses=="Años" & edad >= 45 & edad <= 49 ~ "gr_45_49",
+                                              edad_años_meses=="Años" & edad >= 50 & edad <= 54 ~ "gr_50_54",
+                                              edad_años_meses=="Años" & edad >= 55 & edad <= 59 ~ "gr_55_59",
+                                              edad_años_meses=="Años" & edad >= 60 & edad <= 64 ~ "gr_60_64",
+                                              edad_años_meses=="Años" & edad >= 65 & edad <= 69 ~ "gr_65_69",
+                                              edad_años_meses=="Años" & edad >= 70 & edad <= 74 ~ "gr_70_74",
+                                              edad_años_meses=="Años" & edad >= 75 & edad <= 79 ~ "gr_75_79",
+                                              edad_años_meses=="Años" & edad >= 80 & edad <= 84 ~ "gr_80_84",
+                                              edad_años_meses=="Años" & edad >= 85 & edad <= 89 ~ "gr_85_89",
+                                              edad_años_meses=="Años" & edad >= 90 & edad <= 150 ~ "gr_90_mas")
+  )
+  
+  dataMsal <- dataMsal %>% filter(is.na(edad)==FALSE)
   dataMsalARG<-dataMsal
   dataMsalARG$residencia_provincia_id<-"0"
   dataMsalARG$residencia_provincia_nombre<-"Argentina"
@@ -75,56 +106,100 @@ if (substr(input$pais,1,3)=="ARG"){
   dataMsal<-union_all(dataMsal,dataMsal_6_756)
   dataMsal<-union_all(dataMsal,dataMsal_6_826)
   
-  dataMsal<-sqldf('
-     select distinct "cases" as tipo,
-     fecha_diagnostico as dateRep,
-     residencia_provincia_nombre as countriesAndTerritories,
-     "ARG_" || residencia_provincia_id as countryterritoryCode,
-     sum(case
-       when clasificacion_resumen="Confirmado" then 1 else 0 end) as count
-     from dataMsal
-     where fecha_diagnostico <> "" and residencia_provincia_nombre <> "SIN ESPECIFICAR"
-     group by fecha_diagnostico,
-     residencia_provincia_nombre
-union all
-     select distinct "deaths" as tipo,
-     fecha_fallecimiento as dateRep,
-     residencia_provincia_nombre as countriesAndTerritories,
-     "ARG_" || residencia_provincia_id as countryterritoryCode,
-     sum(case
-       when clasificacion_resumen="Confirmado" then 1 else 0 end and fallecido="SI") as count
-     from dataMsal
-     where fecha_diagnostico <> "" and residencia_provincia_nombre <> "SIN ESPECIFICAR"
-     group by fecha_fallecimiento,
-     residencia_provincia_nombre
-     ')
-   
-  
+dataMsal$spread <- 1
+dataMsal <-  spread(dataMsal, grupedad, spread, fill = 0, convert = FALSE, drop = TRUE, sep = NULL)
+
+#hacer count de casos y muertes  
+dataMsal <- 
+  union_all(
+    dataMsal %>% dplyr::filter(clasificacion_resumen=="Confirmado" & fecha_diagnostico>="2020-03-01") %>%
+                 dplyr::group_by(dateRep=fecha_diagnostico,countryterritoryCode=paste0("ARG_",residencia_provincia_id))  %>%
+                 dplyr::summarise(count=n(),
+                                  gr_00_09=sum(gr_00_09),
+                                  gr_10_14=sum(gr_10_14),
+                                  gr_15_19=sum(gr_15_19),
+                                  gr_20_24=sum(gr_20_24),
+                                  gr_25_29=sum(gr_25_29),
+                                  gr_30_34=sum(gr_30_34),
+                                  gr_35_39=sum(gr_35_39),
+                                  gr_40_44=sum(gr_40_44),
+                                  gr_45_49=sum(gr_45_49),
+                                  gr_50_54=sum(gr_50_54),
+                                  gr_55_59=sum(gr_55_59),
+                                  gr_60_64=sum(gr_60_64),
+                                  gr_65_69=sum(gr_65_69),
+                                  gr_70_74=sum(gr_70_74),
+                                  gr_75_79=sum(gr_75_79),
+                                  gr_80_84=sum(gr_80_84),
+                                  gr_85_89=sum(gr_85_89),
+                                  gr_90_  =sum(gr_90_mas)
+                                  ) %>%
+                 dplyr::mutate(tipo="cases")%>%
+                 dplyr::arrange(countryterritoryCode,dateRep),
+    
+    dataMsal %>% dplyr::filter(fallecido=="SI" & clasificacion_resumen=="Confirmado" & fecha_diagnostico>="2020-03-01") %>%
+                 dplyr::group_by(dateRep=fecha_fallecimiento,countryterritoryCode=paste0("ARG_",residencia_provincia_id))  %>%
+                 dplyr::summarise(count=n(),
+                                  gr_00_09=sum(gr_00_09),
+                                  gr_10_14=sum(gr_10_14),
+                                  gr_15_19=sum(gr_15_19),
+                                  gr_20_24=sum(gr_20_24),
+                                  gr_25_29=sum(gr_25_29),
+                                  gr_30_34=sum(gr_30_34),
+                                  gr_35_39=sum(gr_35_39),
+                                  gr_40_44=sum(gr_40_44),
+                                  gr_45_49=sum(gr_45_49),
+                                  gr_50_54=sum(gr_50_54),
+                                  gr_55_59=sum(gr_55_59),
+                                  gr_60_64=sum(gr_60_64),
+                                  gr_65_69=sum(gr_65_69),
+                                  gr_70_74=sum(gr_70_74),
+                                  gr_75_79=sum(gr_75_79),
+                                  gr_80_84=sum(gr_80_84),
+                                  gr_85_89=sum(gr_85_89),
+                                  gr_90_  =sum(gr_90_mas)) %>%
+      dplyr::mutate(tipo="deaths")%>%
+      dplyr::arrange(countryterritoryCode,dateRep)
+  )
+
   dataMsal$countryterritoryCode[dataMsal$countryterritoryCode=="ARG_0"] <- "ARG"
   combinaciones=list(unique(dataMsal$tipo),
-                   seq(as.Date(first(dataMsal$dateRep)),as.Date(last(dataMsal$dateRep)),by=1),
+                   seq(as.Date(min(dataMsal$dateRep)),as.Date(max(dataMsal$dateRep)),by=1),
                    unique(dataMsal$countryterritoryCode))
+  
+
   
   df_full<-data.frame(expand.grid(combinaciones)) %>% arrange(Var1,Var2) 
   
   colnames(df_full) <- c("tipo","dateRep","countryterritoryCode")
   
-  dataMsal<-merge(df_full, dataMsal, all.x = TRUE) %>% arrange(tipo,countriesAndTerritories,dateRep)
+  dataMsal<-merge(df_full, dataMsal, all.x = TRUE)
   dataMsal<-dataMsal %>% arrange(dateRep, countryterritoryCode)
   dataMsal$count[is.na(dataMsal$count)]<-0
-  dataMsal$countriesAndTerritories <- NULL
   dataMsal$tipo <- as.character(dataMsal$tipo) 
   dataMsal$dateRep <- as.character(dataMsal$dateRep) 
   dataMsal$countryterritoryCode <- as.character(dataMsal$countryterritoryCode)
-  
   dataMsal<-dataMsal %>% filter(countryterritoryCode == input$pais & dateRep<=diaActualizacion)
+  dataMsal<- merge(dataMsal %>% filter(tipo=="cases"),dataMsal %>% filter(tipo=="deaths"), by=c("dateRep"))
+  cn <- str_replace(colnames(dataMsal),'.x','_cases')
+  cn <- str_replace(cn,'.y','_deaths')
+  colnames(dataMsal) <- cn
+  dataMsal$tipo_cases <- NULL
+  dataMsal$tipo_deaths <- NULL
+  dataMsal$count_deathsterritoryCode_deaths <- NULL 
+  colnames(dataMsal)[2] <-"countryterritoryCode" 
+  dataMsal$count_deathsterritoryCode.y <- NULL
+  dataMsal$cases <- dataMsal$count_cases
+  dataMsal$deaths <- dataMsal$count_deaths
+  dataMsal$count_cases <- NULL
+  dataMsal$count_deaths <- NULL
   
-  dataMsal<-spread(dataMsal, tipo, count) %>% filter(dateRep!="") %>% arrange(countryterritoryCode, dateRep)
+  #dataMsal<-spread(dataMsal, tipo, count) %>% filter(dateRep!="") %>% arrange(countryterritoryCode, dateRep)
   dataMsal$dateRep<-as.Date(dataMsal$dateRep)
   dataMsal[is.na(dataMsal)] <- 0
-  dataMsal<-dataMsal %>% group_by(countryterritoryCode) %>% dplyr::mutate(total_cases=cumsum(cases),total_deaths=cumsum(deaths))
+  dataMsal<-dataMsal %>% dplyr::group_by(countryterritoryCode) %>% dplyr::mutate(total_cases=cumsum(cases),total_deaths=cumsum(deaths))
   
-  dataEcdc<-data.frame(dataMsal %>% dplyr::select(dateRep,countryterritoryCode,new_cases=cases,new_deaths=deaths,total_cases,total_deaths))
+  dataEcdc<-data.frame(dataMsal %>% dplyr::mutate(new_cases=cases,new_deaths=deaths))
   dataEcdc<-dataEcdc[,-2]
   dataEcdc<-dataEcdc %>% dplyr::filter(dateRep>="2020-03-01") 
   rm(dataMsal)
@@ -137,9 +212,11 @@ union all
 } else
   
 {
-  dataEcdc <- read.csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv", 
-                       na.strings = "", fileEncoding = "UTF-8-BOM")
 
+  dataEcdc <- read.csv("dataEcdc.csv", fileEncoding = "UTF-8-BOM")
+
+  
+  
   dataEcdc$dateRep <- as.Date(dataEcdc$dateRep, format = "%d/%m/%Y")
   dataEcdc$dateRep <- format(dataEcdc$dateRep, "%Y-%m-%d")
   dataEcdc<-dataEcdc %>% filter(dateRep<=Sys.Date())
@@ -330,4 +407,19 @@ print(input$pais)
 source("owd_data.R", encoding = "UTF-8")
 source("map_set.R", encoding = "UTF-8")
 
-
+# 
+# library(ggplot2)
+# data <- data.frame(fecha=rep(modeloSimulado$fecha,3),
+#                    edad=c(rep("Menores de 20",nrow(modeloSimulado)),
+#                           rep("Menores de 20 a 59",nrow(modeloSimulado)),
+#                           rep("Menores de 60 y más",nrow(modeloSimulado))),
+#                    casos=c(modeloSimulado$incid_00_19,modeloSimulado$incid_20_59,modeloSimulado$incid_60_mas))
+# data$casos[is.na(data$casos)==T] <- 0
+# 
+# plot <-
+# ggplot(data, aes(x=fecha, y=casos, fill=edad)) +
+#   geom_area() + geom_vline(xintercept=hoy)
+# library(plotly)
+# ggplotly(plot)
+# 
+# view(modeloSimulado$i_5d_ma)
