@@ -785,6 +785,30 @@ hr(),
 
 ########### server
 server <- function(input, output, session) {
+
+  observeEvent(input$pais, {
+    
+    if (input$pais %in% paisesEdad)
+    {
+      newchoices <<- c("Diarias","Acumuladas","Edades")
+    }
+    else
+    {
+      newchoices <<- c("Diarias","Acumuladas")
+    }
+    
+    updateRadioGroupButtons(
+      session = session,
+      inputId = "graficos-que_infecc",
+      choices = newchoices,
+      selected = "Diarias",
+      status = "success",
+      checkIcon = list(yes = icon("check"))
+      
+    )
+    print(input)
+  })
+  
   
 # cambio de lenguaje
   onclick("castellano", 

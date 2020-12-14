@@ -6,7 +6,7 @@ library(dplyr)
 
 # vector paises
 paises <-c("ARG","BOL","BRA","CHL","COL","CRI","SLV",
-           "ECU","GTM","HND","JAM","MEX","PAN","PRY","PER","DOM","URY","ARG_2","ARG_18","ARG_3","ARG_7", "ARG_50", "ARG_6_756",
+           "ECU","GTM","HND","JAM","MEX","PAN","PRY","PER","DOM","URY","ARG_2","ARG_18","ARG_3","ARG_7", "ARG_50", "ARG_6_756", "ARG_6_826", "ARG_6",
            "BHS", "BRB", "BLZ", "GUY", "HTI", "NIC", "SUR", "TTO", "VEN")
 
 # get data
@@ -28,7 +28,7 @@ owd_data <- read.csv("https://covid.ourworldindata.org/data/owid-covid-data.csv"
 
 #agrega datos subnacionales de Argentina
 
-dataMsal<-read.csv("AppTest - Cod/Covid19Casos.csv", encoding = "UTF-8")
+dataMsal<-read.csv("Covid19Casos.csv", encoding = "UTF-8")
 dataMsal<-dataMsal %>% dplyr::filter(fecha_diagnostico>="2020-03-01") 
 dataMsal<-dataMsal %>% filter(clasificacion_resumen=="Confirmado")
 
@@ -39,6 +39,10 @@ dataMsalARG$residencia_provincia_nombre<-"Argentina"
 dataMsal_6_756<-dataMsal %>% dplyr::filter(residencia_provincia_id==6 & residencia_departamento_id==756)
 dataMsal_6_756$residencia_provincia_id<-"6_756"
 dataMsal_6_756$residencia_provincia_nombre<-"Buenos Aires - Partido de San Isidro"
+
+dataMsal_6_826<-dataMsal %>% dplyr::filter(residencia_provincia_id==6 & residencia_departamento_id==826)
+dataMsal_6_826$residencia_provincia_id<-"6_826"
+dataMsal_6_826$residencia_provincia_nombre<-"Buenos Aires - Partido de Trenque Lauquen"
 
 
 
@@ -103,6 +107,7 @@ dataMsal<-union_all(dataMsal,dataMsalAmba)
 dataMsal<-union_all(dataMsal,dataMsalAmbaPBA)
 dataMsal<-union_all(dataMsal,dataMsalARG)
 dataMsal<-union_all(dataMsal,dataMsal_6_756)
+dataMsal<-union_all(dataMsal,dataMsal_6_826)
 
 dataMsal<-sqldf('
      select distinct "cases" as tipo,
@@ -190,7 +195,7 @@ dataMsal<-
     life_expectancy
   )
 dataMsal$date<-as.character(dataMsal$date)
-dataMsal<-dataMsal %>% filter(date<='2020-11-01')
+dataMsal<-dataMsal %>% filter(date<='2020-11-27')
 dataMsal$location[dataMsal$iso_code=="ARG_2"]<-"Argentina - Ciudad Autónoma de Buenos Aires"
 dataMsal$population[dataMsal$iso_code=="ARG_2"]<-3075643
 dataMsal$aged_65_older[dataMsal$iso_code=="ARG_2"]<-16.43
@@ -220,12 +225,13 @@ rm(dataMsalAmba)
 rm(dataMsalAmbaPBA)
 rm(dataMsalARG)
 rm(dataMsal_6_756)
+rm(dataMsal_6_826)
 rm(combinaciones)
 rm(df_full)
 
 # guarda input folder
 # setwd("appTest")
-save(owd_data, file =  "AppTest - Cod/DatosIniciales/owd_data.RData")
+save(owd_data, file =  "DatosIniciales/owd_data.RData")
 
 # graphs
 # gt <- owd_data %>% filter(as.Date(date) > as.Date("2020-03-01")) %>% 

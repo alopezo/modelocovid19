@@ -1,9 +1,10 @@
 library(tidyverse)
 library(rgdal)
 library(leaflet)
+library(raster)
 
 # map y labels ---------------------------------------------------------------------
-load("appTest - Cod/DatosIniciales/owd_data.RData")
+load("DatosIniciales/owd_data.RData")
 LA_data <- owd_data %>%
                   group_by(iso_code) %>%
                   dplyr::summarise(cum_cases_millon = round(sum(new_cases,na.rm = T)/max(population)*1e6,2),
@@ -12,9 +13,9 @@ LA_data <- owd_data %>%
                   as.data.frame()
 
 # shapes países
-download.file("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip", "appTest - Cod/WorldMap/countries.zip")
-unzip(zipfile = "appTest - Cod/WorldMap/countries.zip", exdir = "appTest - Cod/WorldMap")
-World <- readOGR(dsn="appTest - Cod/WorldMap", layer="ne_10m_admin_0_countries",encoding = 'UTF-8')
+download.file("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip", "WorldMap/countries.zip")
+unzip(zipfile = "WorldMap/countries.zip", exdir = "WorldMap")
+World <- readOGR(dsn="WorldMap", layer="ne_10m_admin_0_countries",encoding = 'UTF-8')
 
 LA <- subset(World, ADM0_A3 %in%  c("ARG","BOL","CRI","SLV","ECU","GTM",
                                     "HND","JAM","PAN","PRY","DOM","CHL",
@@ -23,9 +24,9 @@ LA <- subset(World, ADM0_A3 %in%  c("ARG","BOL","CRI","SLV","ECU","GTM",
 LA@data <- LA@data[,c("ADM0_A3","NAME")]
 
 # shapes provs
-download.file("https://www.indec.gob.ar/ftp/cuadros/territorio/codgeo/Codgeo_Pais_x_prov_datos.zip", "appTest - Cod/WorldMap/provinciasArg.zip")
-unzip(zipfile = "appTest - Cod/WorldMap/provinciasArg.zip", exdir = "appTest - Cod/WorldMap")
-Provs <- readOGR("appTest - Cod/WorldMap/pxpciadatosok.shp", encoding = 'UTF-8')
+download.file("https://www.indec.gob.ar/ftp/cuadros/territorio/codgeo/Codgeo_Pais_x_prov_datos.zip", "WorldMap/provinciasArg.zip")
+unzip(zipfile = "WorldMap/provinciasArg.zip", exdir = "WorldMap")
+Provs <- readOGR("WorldMap/pxpciadatosok.shp", encoding = 'UTF-8')
 Provs <- subset(Provs, link %in% c("18","02","50"))
 
 
@@ -66,6 +67,24 @@ coords$lat[coords$pais=="ARG_18"] = -28.983072
 coords$lng[coords$pais=="ARG_2"] = -58.437710
 coords$lat[coords$pais=="ARG_2"] = -34.598576
 
+download.file("https://www.indec.gob.ar/ftp/cuadros/territorio/codgeo/Codgeo_Pais_x_dpto_con_datos.zip", "WorldMap/departamentosArg.zip")
+unzip(zipfile = "WorldMap/departamentosArg.zip", exdir = "WorldMap")
+Deptos <- readOGR("WorldMap/pxdptodatosok.shp", encoding = 'UTF-8')
+
+deptosAmba<-c(28,35,91,98,119,126,134,245,252,260,266,270,274,329,364,
+              371,408,410,412,427,441,434,490,497,515,525,539,560,568,
+              638,648,658,749,756,760,778,805,840,861,882)
+
+ambaMap <- aggregate(subset(Deptos, 
+                            link %in% paste0("06",str_pad(deptosAmba,3,"left","0")) |
+                              codpcia=="02"))
+
+ambaProvMap <- aggregate(subset(Deptos, 
+                                link %in% paste0("06",str_pad(deptosAmba,3,"left","0"))))
+
+cabaMap <- aggregate(subset(Deptos, 
+                            codpcia=="02"))
+
 
 # test
 # leaflet(map_data,
@@ -75,6 +94,10 @@ coords$lat[coords$pais=="ARG_2"] = -34.598576
 #   addPolygons(stroke = F)
 
 # save
-save(map_data, coords, file =  "appTest - Cod/DatosIniciales/Map.RData")
+save(map_data,
+     Deptos,
+     coords, 
+     ambaMap, 
+     ambaProvMap, file =  "DatosIniciales/Map.RData")
 
 
