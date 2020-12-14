@@ -192,7 +192,7 @@ Grafica <- function(id, label = "Nada") {
 }
 
 
-graficando <- function(input, output, session) {
+graficando <- function(input, output, session, i18n) {
   
   rango_data = paste0(month(range(modeloSimulado$fecha),label = T,abbr = F),"-",
                       year(range(modeloSimulado$fecha)))
@@ -224,13 +224,13 @@ graficando <- function(input, output, session) {
       
       labels = c("Nuevos Inf.","Peor escenario","Mejor escenario", "Casos diarios reportados")
       addPopover(session, 
-                 "info_I", "Nuevos infectados estimados totales por día", 
+                 "info_I", i18n$t("Nuevos infectados estimados totales por día"), 
                  content = paste0("El número de nuevos infectados estimados totales 
                               por día incluye los detectados y los no detectados 
                               (no testeados). Esto se calcula según el modelo SEIR 
                               ajustado para todo el período de la proyección."),  
                  trigger = 'click')
-      output$titulo_infecciones <-renderText({  paste0("Nuevos infectados estimados totales por día (", 
+      output$titulo_infecciones <-renderText({  paste0(i18n$t("Nuevos infectados estimados totales por día")," (", 
                                                        poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
     } else if (input$que_infecc=="Acumuladas"){
       df <- cbind(modeloSimulado %>% mutate(I = I+R) %>% dplyr::select(fecha, i = I),

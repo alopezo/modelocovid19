@@ -782,7 +782,16 @@ hr(),
     hr(),
     fluidRow( class = "text-center",
               p(style = "margin-bottom: 2px; font-size: 15px;  color: #67c97c;", 
-                HTML(paste0("<i>",i18n$t("Versión "), versionModelo, ". Esta herramienta presenta resultados basados en modelos y estimaciones, su utilización para la toma de decisiones queda bajo responsabilidad del usuario.<br>Contacto:</i> <a href=\"mailto:ciips@iecs.org.ar? subject='Modelo COVID-19'\">ciips@iecs.org.ar</a>")))
+                HTML(paste0(
+                  "<i>",i18n$t("Versión "), versionModelo, 
+                  ". ",
+                  i18n$t("Esta herramienta presenta resultados basados en modelos y estimaciones, su utilización para la toma de decisiones queda bajo responsabilidad del usuario."),
+                  "<br>",
+                  i18n$t("Contacto"),
+                  ":</i> <a href=\"mailto:ciips@iecs.org.ar? subject='Modelo COVID-19'\">ciips@iecs.org.ar</a>"
+                  )
+                )
+              )
     )
 )
 
@@ -818,52 +827,44 @@ server <- function(input, output, session) {
     {
       print(paste("Language change!","es"))
       update_lang(session,"es")
-      updateSelectInput(session, inputId = "escenarioPredefinido",
-                        choices = c("constanteR_cori", "constante1,3", "trigger50", "trigger70", "valvular1") %>% 
-                          stats::setNames(c("Políticas con nivel de rigurosidad estimado actual (escenario por defecto)", 
-                                            "Políticas con nivel de rigurosidad constante, R0 1,3. (Ej. apertura de negocios y escuelas)",
-                                            "Política adaptativa basada en ocupación de camas, cuarentena al llegar al 50%",
-                                            "Política adaptativa basada en ocupación de camas, cuarentena al llegar al 70%",
-                                            "Política valvular intermitente, alterna cuarentena y disminución de restricciones en ciclos mensuales"
-                            )
-                          )
-      )
+      i18n$set_translation_language("es")
+      callModule(graficando, "graficos", i18n = i18n)
+      updateInputs()
     }
   )
   onclick("ingles", 
     {
       print(paste("Language change!","en"))
       update_lang(session,"en")
-      updateSelectInput(session, inputId = "escenarioPredefinido",
-        choices = c("constanteR_cori", "constante1,3", "trigger50", "trigger70", "valvular1") %>% 
-          stats::setNames(c("Policies with current estimated stringency level (default scenario)", 
-                          "Policies with a constant level of rigor, R0 1.3. (Eg. Opening of businesses and schools)",
-                          "Adaptive policy based on bed occupancy, quarantine upon reaching 50%",
-                          "Adaptive policy based on bed occupancy, quarantine upon reaching 70%",
-                          "Intermittent valve policy, alternating quarantine and reduction of restrictions in monthly cycles"
-                            )
-                        )
-      )
+      i18n$set_translation_language("en")
+      callModule(graficando, "graficos", i18n = i18n)
+      updateInputs()
     }
   )
   onclick("portugues", 
      {
        print(paste("Language change!","pt"))
        update_lang(session,"pt")
-       updateSelectInput(session, inputId = "escenarioPredefinido",
-                         choices = c("constanteR_cori", "constante1,3", "trigger50", "trigger70", "valvular1") %>% 
-                           stats::setNames(c("Políticas com nível de rigor estimado atual (cenário padrão)", 
-                                             "Políticas com um nível de rigor constante, R0 1.3. (Ex .: abertura de empresas e escolas)",
-                                             "Política adaptativa com base na ocupação do leito, quarentena ao atingir 50%",
-                                             "Política adaptativa com base na ocupação do leito, quarentena ao atingir 70%",
-                                             "Política de válvula intermitente, quarentena alternada e redução de restrições nos ciclos mensais"
-                              )
-                           )
-       )
+       i18n$set_translation_language("pt")
+       callModule(graficando, "graficos", i18n = i18n)
+       updateInputs()
      }
   )
   
-
+# Update selectInputs
+  updateInputs <- function() {
+    updateSelectInput(session, inputId = "escenarioPredefinido",
+                      choices = c("constanteR_cori", "constante1,3", "trigger50", "trigger70", "valvular1") %>% 
+                        stats::setNames(c(i18n$t("Políticas con nivel de rigurosidad estimado actual (escenario por defecto)"), 
+                                          "Policies with a constant level of rigor, R0 1.3. (Eg. Opening of businesses and schools)",
+                                          "Adaptive policy based on bed occupancy, quarantine upon reaching 50%",
+                                          "Adaptive policy based on bed occupancy, quarantine upon reaching 70%",
+                                          "Intermittent valve policy, alternating quarantine and reduction of restrictions in monthly cycles"
+                        )
+                        )
+    )
+  }
+  
 # url me dice si quiere ir a subnacional argentino
 observe({
   if(str_detect(session$clientData$url_pathname, "argentina")==T){
@@ -1051,7 +1052,7 @@ observeEvent(input$pais,{
   
     # grafica
     # browser()
-    callModule(graficando, "graficos")
+    callModule(graficando, "graficos", i18n = i18n)
   
     incProgress(.3)
     

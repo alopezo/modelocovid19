@@ -500,9 +500,19 @@
         "pt": "Versão "
       },
       {
-        "es": "Nuevos infectados estimados totales por día (",
-        "en": "Version ",
-        "pt": "Versão "
+        "es": "Nuevos infectados estimados totales por día",
+        "en": "Estimated total new infected per day",
+        "pt": "Total estimado de novos infectados por dia"
+      },
+      {
+        "es": "Esta herramienta presenta resultados basados en modelos y estimaciones, su utilización para la toma de decisiones queda bajo responsabilidad del usuario.",
+        "en": "This tool presents results based on models and estimates, its use for decision making is the responsibility of the user.",
+        "pt": "Esta ferramenta apresenta resultados baseados em modelos e estimativas, a sua utilização para a tomada de decisão é da responsabilidade do utilizador."
+      },
+      {
+        "es": "Políticas con nivel de rigurosidad estimado actual (escenario por defecto)",
+        "en": "Policies with current estimated stringency level (default scenario)",
+        "pt": "Políticas com nível de rigor estimado atual (cenário padrão)"
       }
       
       
