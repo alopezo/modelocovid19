@@ -19,8 +19,11 @@ library(kableExtra)
 library(knitr)
 library(sp)
 library(tinytex)
-library(shiny.i18n)
+library(raster)
 
+#subNac <<- "no"
+subNacUrl <<- c("ARG_2","ARG_3","ARG_6","ARG_7","ARG_50","ARG_18","ARG_6_756", "ARG_6_826")
+paisesEdad <<- c("ARG") 
 versionModelo <<- "2.6"
 
 # funs --------------------------------------------------------------------
