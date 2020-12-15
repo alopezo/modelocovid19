@@ -13,9 +13,6 @@ library(readxl)
 library(zoo)
 library(EpiEstim)
 
-
-
-setwd("C:/Users/Adrian/Desktop/Edades")
 #### países/juris a actualizar ####
 
 hoy <<- diaActualizacion <<- as.Date("2020-12-05")

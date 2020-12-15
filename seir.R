@@ -10,7 +10,7 @@ seir <- function(tipo = "A", actualiza = F,
                  compartimentos = F,
                  variacion = 0,
                  porc_detectado = .2,
-                 hoy_date = "2020-09-18",
+                 hoy_date = hoy,
                  R0_usuario = Rusuario, 
                  lag = 17, cantidadDiasProyeccion = 600,
                  ifr = tasaLetalidadAjustada, 
@@ -88,11 +88,55 @@ seir <- function(tipo = "A", actualiza = F,
       i = rollmean(i_raw, 5, fill = 0)
       i[(hoy-1):hoy] = c(mean(i_raw[(hoy-3):hoy]),mean(i_raw[(hoy-2):hoy])) #cambiaría esto, frena
       i = c(i[(lag+1):hoy],rep(0,lag))
-    } else{
+      
+      # muertes por grupos de edad
+      load("DatosIniciales/ifr_age.RData")
+      i_raw = d_obs_smooth/ifr_inv
+      i = rollmean(i_raw, 5, fill = 0)
+      i[(hoy-1):hoy] = c(mean(i_raw[(hoy-3):hoy]),mean(i_raw[(hoy-2):hoy])) #cambiaría esto, frena
+      i = c(i[(lag+1):hoy],rep(0,lag))
+      
+      if (input$pais %in% paisesEdad)
+              {for (grupo in unique(ifr_age$grupedad))
+                {
+                  assign(paste0("i_",grupo),eval(parse(text=paste0("data$",grupo,"_deaths/ifr_age$ifr[ifr_age$grupedad==grupo]"))))
+                }
+              
+      # sumo grupos quinquenales para tener casos en 3 grupos
+      i00_19 = i_gr_00_09 + i_gr_10_14 + i_gr_15_19
+      i20_59 = i_gr_20_24 + i_gr_25_29 + i_gr_30_34 + i_gr_35_39 + i_gr_40_44 + i_gr_45_49 + i_gr_50_54 + i_gr_55_59
+      i60_mas = i_gr_60_64 + i_gr_65_69 + i_gr_70_74 + i_gr_75_79 + i_gr_80_84 + i_gr_85_89 + i_gr_90_
+      
+      # suavizo
+      i_00_19_smooth <- c(predict(loess(i00_19[1:(hoy-lag)]~seq(1,(hoy-lag)),span=.5)),rep(0,lag))
+      i_20_59_smooth <- c(predict(loess(i20_59[1:(hoy-lag)]~seq(1,(hoy-lag)),span=.5)),rep(0,lag)) 
+      i_60_mas_smooth <- c(predict(loess(i60_mas[1:(hoy-lag)]~seq(1,(hoy-lag)),span=.5)),rep(0,lag)) 
+      
+      # elimino negativos
+      i_00_19_smooth[i_00_19_smooth<0] <- 0
+      i_20_59_smooth[i_20_59_smooth<0] <- 0
+      i_60_mas_smooth[i_60_mas_smooth<0] <- 0
+      
+      # estimo proporciones para cada grupo de edad para proyectar
+      md_00_19 <- sum(i_00_19_smooth[(hoy-lag):(hoy-lag-9)])
+      md_20_59 <- sum(i_20_59_smooth[(hoy-lag):(hoy-lag-9)])
+      md_60_mas <- sum(i_60_mas_smooth[(hoy-lag):(hoy-lag-9)])
+      prop_00_19 <- md_00_19/(md_00_19+md_20_59+md_60_mas)
+      prop_20_59 <- md_20_59/(md_00_19+md_20_59+md_60_mas)
+      prop_60_mas <- md_60_mas/(md_00_19+md_20_59+md_60_mas)
+      
+      # expando a casos con IFR general
+      i_00_19_aj <- i_00_19_smooth/(i_00_19_smooth+i_20_59_smooth+i_60_mas_smooth)*i
+      i_20_59_aj <- i_20_59_smooth/(i_00_19_smooth+i_20_59_smooth+i_60_mas_smooth)*i
+      i_60_mas_aj <- i_60_mas_smooth/(i_00_19_smooth+i_20_59_smooth+i_60_mas_smooth)*i
+      i_total_aj <- i_00_19_aj+i_20_59_aj+i_60_mas_aj
+      }
+      } else{
       i_raw = data$new_cases / porc_detectado
       i = rollmean(i_raw, 5, fill = 0)
       i[(hoy-1):hoy] = c(mean(i_raw[(hoy-3):hoy]),mean(i_raw[(hoy-2):hoy]))
       i=predict(loess(i~seq(1,nrow(data)),span=.5))
+    
     }
  
   # para trigger
@@ -128,6 +172,10 @@ seir <- function(tipo = "A", actualiza = F,
           
         }else if(t %in% (hoy-lag+1):(hoy-1)){
           i[t]  = E[t-1]/duracionE
+          if (input$pais %in% paisesEdad)
+                {i_00_19_aj[t]  = E[t-1]/duracionE*prop_00_19
+                 i_20_59_aj[t]  = E[t-1]/duracionE*prop_20_59
+                 i_60_mas_aj[t]  = E[t-1]/duracionE*prop_60_mas}
           E[t]  = E[t-1] + I[t-1] * R0[t] * Sprop[t-1] /duracionI - E[t-1]/duracionE
           }
         }
@@ -164,6 +212,10 @@ seir <- function(tipo = "A", actualiza = F,
       
       # desde hoy
       i[t]  = E[t-1]/duracionE
+      if (input$pais %in% paisesEdad)
+              {i_00_19_aj[t]  = E[t-1]/duracionE*prop_00_19
+               i_20_59_aj[t]  = E[t-1]/duracionE*prop_20_59
+               i_60_mas_aj[t]  = E[t-1]/duracionE*prop_60_mas}
       E[t]  = E[t-1] + I[t-1] * R0[t] * Sprop[t-1]/duracionI - E[t-1]/duracionE
     }
     
@@ -191,9 +243,18 @@ seir <- function(tipo = "A", actualiza = F,
     BC_sat[t] = BC[t]/(camasCC*porc_covid)
   }
   
+  
+  
   # selecciona q devolver
-  result <- tibble(fecha = seq(inicio_date, fin_date, by="day"),
+  
+  if (input$pais %in% paisesEdad)
+    
+          {result <- tibble(fecha = seq(inicio_date, fin_date, by="day"),
                    i_5d_ma = i,
+                   incid_00_19 = i_00_19_aj,
+                   incid_20_59 = i_20_59_aj,
+                   incid_60_mas = i_60_mas_aj,
+                   i_total = i_00_19_aj+i_20_59_aj+i_60_mas_aj,
                    i = c(i_raw, rep(NA,fin-hoy)),
                    R = R, I=I, E=E, S=S, Sprop = Sprop,
                    RtEstimado = round(R0,2),
@@ -218,8 +279,42 @@ seir <- function(tipo = "A", actualiza = F,
                    HHRR.SAT.generalNurses = HHRR.generalNurses / (enfCamasGG * porc_covid),
                    HHRR.SAT.criticCareNurses = HHRR.criticCareNurses / (enfCamasUCI * porc_covid),
                    HHRR.SAT.generalPhysican = HHRR.generalPhysicans / (medCamasGG * porc_covid),
-                   HHRR.SAT.criticCarePhysicans = HHRR.criticCarePhysicans / (medCamasUCI * porc_covid))
-
+                   HHRR.SAT.criticCarePhysicans = HHRR.criticCarePhysicans / (medCamasUCI * porc_covid)
+                   )
+          } else {
+            result <- tibble(fecha = seq(inicio_date, fin_date, by="day"),
+                             i_5d_ma = i,
+                             incid_00_19 = NA,
+                             incid_20_59 = NA,
+                             incid_60_mas = NA,
+                             i = c(i_raw, rep(NA,fin-hoy)),
+                             R = R, I=I, E=E, S=S, Sprop = Sprop,
+                             RtEstimado = round(R0,2),
+                             R0Usuario = round(R0,2),
+                             muertesDiariasReal = c(d_obs,rep(NA,fin-hoy)),
+                             muertesDiariasProyeccion = c(d_obs,d[-c(1:hoy)]),
+                             muertesAcumuladasReal = cumsum(d),
+                             muertesAcumuladasProyeccion = D,
+                             muertes_smooth = d,
+                             casosCriticos = Ic,
+                             casosSeveros = Ig,
+                             HHRR.generalBeds = casosSeveros + casosCriticos * (1-porc_uci),
+                             HHRR.criticCareBeds = casosCriticos * porc_uci,
+                             HHRR.ventilators = HHRR.criticCareBeds * ventsCC,
+                             HHRR.generalNurses = HHRR.generalBeds / camasGGEnfDia,
+                             HHRR.criticCareNurses = HHRR.criticCareBeds / camasUCIEnfDia,
+                             HHRR.generalPhysicans = HHRR.generalBeds / camasGGMedDia,
+                             HHRR.criticCarePhysicans = HHRR.criticCareBeds / camasUCIMedDia,
+                             HHRR.SAT.generalBeds = HHRR.generalBeds / (camasGG * porc_covid),
+                             HHRR.SAT.criticCareBeds = HHRR.criticCareBeds / (camasCC * porc_covid),
+                             HHRR.SAT.ventilators = HHRR.ventilators / (vent * porc_covid),
+                             HHRR.SAT.generalNurses = HHRR.generalNurses / (enfCamasGG * porc_covid),
+                             HHRR.SAT.criticCareNurses = HHRR.criticCareNurses / (enfCamasUCI * porc_covid),
+                             HHRR.SAT.generalPhysican = HHRR.generalPhysicans / (medCamasGG * porc_covid),
+                             HHRR.SAT.criticCarePhysicans = HHRR.criticCarePhysicans / (medCamasUCI * porc_covid)  
+                              )
+          }  
+            
   # devuelve modelosimulados
   results <- list(modeloSimulado = result)
   results[["fechatrigger"]] <- as.Date(fechaIntervencionesTrigger)
@@ -539,4 +634,3 @@ crea_tabla_inputs <- function(){
                     porcentajeDisponibilidadCamasCOVID * 100)
                 )
 }
-

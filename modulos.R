@@ -222,13 +222,13 @@ graficando <- function(input, output, session, i18n) {
       df <- merge(df,dataEcdc %>% dplyr::select(dateRep,new_cases), by.x="fecha", by.y="dateRep", all.x=TRUE)
       df$new_cases[is.na(df$new_cases)==TRUE] <- 0
       
-      labels = c("Nuevos Inf.","Peor escenario","Mejor escenario", "Casos diarios reportados")
+      labels = c(i18n$t("Nuevos Inf."),
+                 i18n$t("Peor escenario"),
+                 i18n$t("Mejor escenario"), 
+                 i18n$t("Casos diarios reportados"))
       addPopover(session, 
                  "info_I", i18n$t("Nuevos infectados estimados totales por día"), 
-                 content = paste0("El número de nuevos infectados estimados totales 
-                              por día incluye los detectados y los no detectados 
-                              (no testeados). Esto se calcula según el modelo SEIR 
-                              ajustado para todo el período de la proyección."),  
+                 content = paste0(i18n$t("El número de nuevos infectados estimados totales por día incluye los detectados y los no detectados (no testeados). Esto se calcula según el modelo SEIR ajustado para todo el período de la proyección.")),  
                  trigger = 'click')
       output$titulo_infecciones <-renderText({  paste0(i18n$t("Nuevos infectados estimados totales por día")," (", 
                                                        poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
@@ -236,7 +236,7 @@ graficando <- function(input, output, session, i18n) {
       df <- cbind(modeloSimulado %>% mutate(I = I+R) %>% dplyr::select(fecha, i = I),
                   modeloSimulado_hi %>% mutate(I = I+R) %>% dplyr::select(i2 = I),
                   modeloSimulado_low %>% mutate(I = I+R) %>% dplyr::select(i3 = I))
-      labels = c("Infectados acumulados","Peor escenario","Mejor escenario")
+      labels = c(i18n$t("Infectados acumulados"),i18n$t("Peor escenario"),i18n$t("Mejor escenario"))
       addPopover(session, 
                  "info_I", "Infectados estimados acumulados a cada día", 
                  content = paste0("El número de infectados acumulados 
@@ -244,13 +244,15 @@ graficando <- function(input, output, session, i18n) {
                               (no testeados), independientemente de si luego
                                fueron recuperados o muertos"),  
                  trigger = 'click')
-      output$titulo_infecciones <-renderText({  paste0("Infectados estimados acumulados (", 
+      output$titulo_infecciones <-renderText({  paste0(i18n$t("Infectados estimados acumulados ("), 
                                                        poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
     } else if (input$que_infecc=="Edades"){
       df <- cbind(modeloSimulado %>% dplyr::select(fecha, i = incid_00_19),
                   modeloSimulado %>% dplyr::select(i2 = incid_20_59),
                   modeloSimulado %>% dplyr::select(i3 = incid_60_mas))
-      labels = c("60 años y más","20 a 59 años","Menos de 20")
+      labels = c(i18n$t("60 años y más"),
+                 i18n$t("20 a 59 años"),
+                 i18n$t("Menos de 20"))
       addPopover(session, 
                  "info_I", "Infectados estimados acumulados por grupos de edad", 
                  content = paste0("El número de infectados acumulados 
@@ -258,7 +260,7 @@ graficando <- function(input, output, session, i18n) {
                               (no testeados), independientemente de si luego
                                fueron recuperados o muertos"),  
                  trigger = 'click')
-      output$titulo_infecciones <-renderText({  paste0("Infectados estimados acumulados por grupos de edad (", 
+      output$titulo_infecciones <-renderText({  paste0(i18n$t("Infectados estimados acumulados por grupos de edad ("), 
                                                        poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
     }
     if(trigger_on_app==1){df <- df %>% dplyr::select(fecha, i)}
@@ -336,14 +338,15 @@ graficando <- function(input, output, session, i18n) {
                   m_real = modeloSimulado$muertesDiariasReal)
       
 
-      labels = c("Defunciones Diarias","Peor escenario","Mejor escenario","Reportadas")
+      labels = c(i18n$t("Defunciones Diarias"),
+                 i18n$t("Peor escenario"),
+                 i18n$t("Mejor escenario"),
+                 i18n$t("Reportadas"))
       addPopover(session,
-                 "info_D", "Nuevas defunciones estimadas por día",
-                 content = paste0("El número de defunciones estimado para
-                              cada día del período proyectado, según
-                              el modelo SEIR ajustado."),
+                 "info_D", i18n$t("Nuevas defunciones estimadas por día"),
+                 content = paste0(i18n$t("El número de defunciones estimado para cada día del período proyectado, según el modelo SEIR ajustado.")),
                  trigger = 'click')
-      output$titulo_defunciones <-renderText({  paste0("Nuevas defunciones estimadas por día (", poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
+      output$titulo_defunciones <-renderText({  paste0(i18n$t("Nuevas defunciones estimadas por día ("), poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
 
     }
 
@@ -355,14 +358,14 @@ graficando <- function(input, output, session, i18n) {
       df[which(as.Date(modeloSimulado$fecha)<hoy), 3] = NA
       df[which(as.Date(modeloSimulado$fecha)<hoy), 4] = NA
 
-      labels = c("Defunciones Acumuladas","Peor escenario","Mejor escenario","Reportadas")
+      labels = c(i18n$t("Defunciones Acumuladas"),i18n$t("Peor escenario"),i18n$t("Mejor escenario"),i18n$t("Reportadas"))
       addPopover(session,
                  "info_D_acum", "Defunciones estimadas Acumuladas",
                  content = paste0("El número de defunciones estimado
                               que se se acumula a cada día, según
                               el modelo SEIR ajustado."),
                  trigger = 'click')
-      output$titulo_defunciones <-renderText({  paste0("Defunciones acumuladas estimadas (", poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
+      output$titulo_defunciones <-renderText({  paste0(i18n$t("Defunciones acumuladas estimadas ("), poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
     }
 
     df[which(as.Date(modeloSimulado$fecha)<hoy), 3] = NA
@@ -412,24 +415,20 @@ graficando <- function(input, output, session, i18n) {
                   modeloSimulado_hi %>% dplyr::select(v2 = HHRR.criticCareBeds),
                   modeloSimulado_low %>% dplyr::select(v3 = HHRR.criticCareBeds)) %>% 
         dplyr::rename(Fecha=1) %>% as.data.frame()
-      labels = c("Camas Críticas","Peor escenario","Mejor escenario")
+      labels = c(i18n$t("Camas Críticas"),
+                 i18n$t("Peor escenario"),
+                 i18n$t("Mejor escenario"))
       addPopover(session, 
-                 "info_C", "Utilización de camas de uso crítico - UCI", 
-                 content = paste0("El número de camas de uso crítico
-                              requeridas para cada día de la proyección. 
-                              La ocupación se calcula
-                              comparando con los parámetros de capacidad
-                              especificados para cada país, que pueden 
-                              modificarse en esta herramienta para
-                              recalcular los resultados."), 
+                 "info_C", i18n$t("Utilización de camas de uso crítico - UCI"), 
+                 content = paste0(i18n$t("El número de camas de uso crítico requeridas para cada día de la proyección. La ocupación se calcula comparando con los parámetros de capacidad especificados para cada país, que pueden modificarse en esta herramienta para recalcular los resultados.")), 
                  trigger = 'click')
-      output$titulo_camas_vents <-renderText({  paste0("Camas UCI: utilización diaria estimada (", poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
+      output$titulo_camas_vents <-renderText({  paste0(i18n$t("Camas UCI: utilización diaria estimada ("), poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
     } else if(input$que_rrhh == "Ventiladores") {
       df <- cbind(modeloSimulado %>% dplyr::select(fecha, v = HHRR.ventilators),
                   modeloSimulado_hi %>% dplyr::select(v2 = HHRR.ventilators),
                   modeloSimulado_low %>% dplyr::select(v3 = HHRR.ventilators)) %>% 
         dplyr::rename(Fecha=1) %>% as.data.frame()
-      labels = c("Ventiladores","Peor escenario","Mejor escenario")
+      labels = c(i18n$t("Ventiladores"),i18n$t("Peor escenario"),i18n$t("Mejor escenario"))
       addPopover(session, 
                  "info_V", "Utilización de Ventiladores / Respiradores", 
                  content = paste0("El número de dispositivos de soporte respiratorio
@@ -440,7 +439,7 @@ graficando <- function(input, output, session, i18n) {
                               modificarse en esta herramienta para
                               recalcular los resultados."), 
                  trigger = 'click')
-      output$titulo_camas_vents <-renderText({  paste0("Ventiladores: utilización diaria estimada (", poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
+      output$titulo_camas_vents <-renderText({  paste0(i18n$t("Ventiladores: utilización diaria estimada ("), poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
   } else if(input$que_rrhh == "Médicos") {
     df <- cbind(modeloSimulado %>% dplyr::select(fecha, v = HHRR.criticCarePhysicans),
                 modeloSimulado_hi %>% dplyr::select(v2 = HHRR.criticCarePhysicans),
@@ -448,22 +447,16 @@ graficando <- function(input, output, session, i18n) {
       dplyr::rename(Fecha=1) %>% as.data.frame()
     labels = c("Médicas/os","Peor escenario","Mejor escenario")
     addPopover(session, 
-               "info_V", "Médicas/os en cuidados críticos: dedicación diaria", 
-               content = paste0("El número de médicos/as
-                                requeridos para cada día de la proyección. 
-                              La ocupación se calcula
-                              comparando con los parámetros de capacidad
-                              especificados para cada país, que pueden 
-                              modificarse en esta herramienta para
-                              recalcular los resultados."), 
+               "info_V", i18n$t("Médicas/os en cuidados críticos: dedicación diaria"), 
+               content = paste0(i18n$t("El número de médicos/as requeridos para cada día de la proyección. La ocupación se calcula comparando con los parámetros de capacidad especificados para cada país, que pueden modificarse en esta herramienta para recalcular los resultados.")), 
                trigger = 'click')
-    output$titulo_camas_vents <-renderText({  paste0("Médicas/os en cuidados críticos: dedicación diaria (", poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
+    output$titulo_camas_vents <-renderText({  paste0(i18n$t("Médicas/os en cuidados críticos: dedicación diaria ("), poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
   } else if(input$que_rrhh == "Enfermeras") {
     df <- cbind(modeloSimulado %>% dplyr::select(fecha, v = HHRR.criticCareNurses),
                 modeloSimulado_hi %>% dplyr::select(v2 = HHRR.criticCareNurses),
                 modeloSimulado_low %>% dplyr::select(v3 = HHRR.criticCareNurses)) %>% 
       dplyr::rename(Fecha=1) %>% as.data.frame()
-    labels = c("Enfermeras/os","Peor escenario","Mejor escenario")
+    labels = c(i18n$t("Enfermeras/os"),i18n$t("Peor escenario"),i18n$t("Mejor escenario"))
     addPopover(session, 
                "info_V", "Enfermeras/os en cuidados críticos: dedicación diaria", 
                content = paste0("El número de enfermeros/as
@@ -474,7 +467,7 @@ graficando <- function(input, output, session, i18n) {
                                 modificarse en esta herramienta para
                                 recalcular los resultados."), 
                trigger = 'click')
-    output$titulo_camas_vents <-renderText({  paste0("Enfermeras/os en cuidados críticos: dedicación diaria (", poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
+    output$titulo_camas_vents <-renderText({  paste0(i18n$t("Enfermeras/os en cuidados críticos: dedicación diaria ("), poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
   }
     
     if(trigger_on_app==1){df <- df %>% dplyr::select(1:2)}

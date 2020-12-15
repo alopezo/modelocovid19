@@ -513,15 +513,193 @@
         "es": "Políticas con nivel de rigurosidad estimado actual (escenario por defecto)",
         "en": "Policies with current estimated stringency level (default scenario)",
         "pt": "Políticas com nível de rigor estimado atual (cenário padrão)"
+      },
+      {
+        "es": "Infectados estimados acumulados (",
+        "en": "Estimated accumulated infections (",
+        "pt": "Estimativa de infecções acumuladas ("
+      }
+      ,
+      {
+        "es": "Infectados estimados acumulados por grupos de edad (",
+        "en": "Estimated accumulated infections by age group (",
+        "pt": "Estimativa de infecções acumuladas por grupo etário ("
+      }
+      ,
+      {
+        "es": "60 años y más",
+        "en": "60 years and older",
+        "pt": "60 anos e mais"
+      }
+      ,
+      {
+        "es": "20 a 59 años",
+        "en": "20 to 59 years old",
+        "pt": "20 a 59 anos de idade"
+      },
+      {
+        "es": "Menos de 20",
+        "en": "Less than 20",
+        "pt": "Menos de 20"
+      },
+      {
+        "es": "Nuevos Inf.",
+        "en": "Newly infected",
+        "pt": "Recém-infectados"
+      }
+      ,
+      {
+        "es": "Peor escenario",
+        "en": "Worst scenario",
+        "pt": "Pior cenário"
+      }
+      ,
+      {
+        "es": "Mejor escenario",
+        "en": "Best scenario",
+        "pt": "Melhor cenário"
+      }
+      ,
+      {
+        "es": "Casos diarios reportados",
+        "en": "Daily reported cases",
+        "pt": "Casos diários reportados"
+      },
+      {
+        "es": "El número de nuevos infectados estimados totales por día incluye los detectados y los no detectados (no testeados). Esto se calcula según el modelo SEIR ajustado para todo el período de la proyección.",
+        "en": "The total estimated number of new infections per day includes those detected and those not detected (not tested). This is calculated according to the SEIR model adjusted for the entire projection period.",
+        "pt": "O número total estimado de novas infecções por dia inclui as que foram detectadas e as que não foram detectadas (não testadas). Isto é calculado de acordo com o modelo SEIR ajustado para todo o período de projecção."
+      },
+      {
+        "es": "Nuevas defunciones estimadas por día (",
+        "en": "New estimated deaths per day (",
+        "pt": "Novas mortes estimadas por dia ("          
+      }
+      ,
+      {
+        "es": "Defunciones Diarias",
+        "en": "Daily Deaths",
+        "pt": "Mortes diárias"          
+      }
+      ,
+      {
+        "es": "Reportadas",
+        "en": "Reported",
+        "pt": "Reportadas"          
+      }
+      ,
+      {
+        "es": "Gráfico de R0",
+        "en": "R0 plot",
+        "pt": "Gráfico de R0"          
+      },
+      {
+        "es": "Nuevas defunciones estimadas por día",
+        "en": "New estimated deaths per day",
+        "pt": "Novas mortes estimadas por dia"          
+      },
+      {
+        "es": "El número de defunciones estimado para cada día del período proyectado, según el modelo SEIR ajustado.",
+        "en": "The number of deaths estimated for each day of the projected period, according to the adjusted SEIR model.",
+        "pt": "O número estimado de mortes para cada dia do período projectado, de acordo com o modelo SEIR ajustado."          
+      },
+      {
+        "es": "Fecha pico",
+        "en": "Peak day",
+        "pt": "Data de pico"
+      },
+      {
+        "es": "Camas UCI: utilización diaria estimada (",
+        "en": "Intensive care beds: estimated daily use (",
+        "pt": "Camas de cuidados intensivos: utilização diária estimada ("
+      },
+      {
+        "es": "Camas Críticas",
+        "en": "Intensive care beds",
+        "pt": "Camas de cuidados intensivos"
+      },
+      {
+        "es": "Utilización de camas de uso crítico - UCI",
+        "en": "Use of critical care beds",
+        "pt": "Utilização de camas de cuidados críticos"
+      },
+      {
+        "es": "El número de camas de uso crítico requeridas para cada día de la proyección. La ocupación se calcula comparando con los parámetros de capacidad especificados para cada país, que pueden modificarse en esta herramienta para recalcular los resultados.",
+        "en": "The number of critical use beds required for each day of the screening. The occupancy is calculated by comparing it to the capacity parameters specified for each country, which can be modified in this tool to recalculate the results.",
+        "pt": "O número de camas de uso crítico necessárias para cada dia de rastreio. A ocupação é calculada por comparação com os parâmetros de capacidade especificados para cada país, que podem ser modificados nesta ferramenta para recalcular os resultados."
+      },
+      {
+        "es": "Defunciones acumuladas estimadas (",
+        "en": "Estimated cumulative deaths (",
+        "pt": "Mortes acumuladas estimadas ("
+      },
+      {
+        "es": "Ventiladores: utilización diaria estimada (",
+        "en": "Ventilators: estimated daily use (",
+        "pt": "Ventiladores: utilização diária estimada ("
+      },
+      {
+        "es": "Infectados acumulados",
+        "en": "Accumulated infections",
+        "pt": "Infectado Acumulado"
+      },
+      {
+        "es": "Defunciones Acumuladas",
+        "en": "Accumulated deaths",
+        "pt": "Mortes Acumuladas"
+      },
+      {
+        "es": "Ventiladores",
+        "en": "Ventilators",
+        "pt": "Ventiladores"
+      },
+      {
+        "es": "Médicas/os en cuidados críticos: dedicación diaria (",
+        "en": "Critical care physicians: daily dedication (",
+        "pt": "Médicos de cuidados intensivos: dedicação diária ("
+      },
+      {
+        "es": "El número de médicos/as requeridos para cada día de la proyección. La ocupación se calcula comparando con los parámetros de capacidad especificados para cada país, que pueden modificarse en esta herramienta para recalcular los resultados.",
+        "en": "The number of doctors required for each day of the screening. The occupancy is calculated by comparing it to the capacity parameters specified for each country, which can be modified in this tool to recalculate the results.",
+        "pt": "O número de médicos necessários para cada dia de rastreio. A ocupação é calculada por comparação com os parâmetros de capacidade especificados para cada país, que podem ser modificados nesta ferramenta para recalcular os resultados."
+      },
+      {
+        "es": "Enfermeras/os en cuidados críticos: dedicación diaria (",
+        "en": "Critical care nurses: daily dedication (",
+        "pt": "Enfermeiros de cuidados intensivos: dedicação diária ("
+      },
+      {
+        "es": "Enfermeras/os",
+        "en": "Nurses",
+        "pt": "Enfermeiros"
       }
       
       
       
       
       
+
       
-  
       
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    
+    
+    
+
+             
+                  
+                 
       
     ]
 }
