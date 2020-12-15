@@ -864,6 +864,14 @@ server <- function(input, output, session) {
                         )
                         )
     )
+    updateSelectInput(session, inputId = "atajo",
+                      choices = c("co", "vi", "rg") %>% 
+                        stats::setNames(c(i18n$t("Constante"), 
+                                          "Valvular Intermitente",
+                                          "Reducción gradual de restricciones"
+                        )
+                      )
+    )
   }
   
 # url me dice si quiere ir a subnacional argentino
@@ -1099,8 +1107,6 @@ observeEvent(input$pais,{
                                  columnDefs = list(list(className = 'dt-center', targets = 0:5))),
                   style = 'bootstrap', class = 'table-bordered')
     })
-    
-    
     
     incProgress(.1)
     
@@ -1963,7 +1969,7 @@ observeEvent(input$updateResults, ignoreInit = T,{
     incProgress(.5)
     
     # grafica 
-    callModule(graficando, "graficos")
+    callModule(graficando, "graficos", i18n = i18n)
     incProgress(.2)
     
     # textos
@@ -2166,7 +2172,7 @@ observeEvent(input$aplicarEscenario | input$EscenarioActual, ignoreInit = T,{
   incProgress(.5)
   
   # grafica 
-  callModule(graficando, "graficos")
+  callModule(graficando, "graficos", i18n = i18n)
   
   incProgress(.2)
   
