@@ -110,7 +110,8 @@ Grafica <- function(id, label = "Nada") {
     radioGroupButtons(
       inputId = ns("que_defs"),
       label = "",
-      choices = c("Diarias","Acumuladas"),
+      choiceNames = list("Diarias","Acumuladas"),
+      choiceValues = list("Diarias","Acumuladas"),
       selected = "Diarias",
       status = "success",
       checkIcon = list(yes = icon("check"))

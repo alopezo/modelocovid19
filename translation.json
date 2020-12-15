@@ -251,8 +251,8 @@
       ,
       {
         "es": "R0 asociados a políticas de intervención: seleccionando niveles de restricción para cada mes de un menú de opciones simplificado.",
-        "en": "Define by:",
-        "pt": "Definir por:"
+        "en": "R0 associated with intervention policies: selecting restriction levels for each month from a simplified menu of options.",
+        "pt": "R0 associado às políticas de intervenção: seleccionar níveis de restrição para cada mês a partir de um menu simplificado de opções."
       },
       {
         "es": "Recursos sanitarios",
@@ -372,7 +372,12 @@
       {
         "es": "No aplica",
         "en": "No applicable",
-        "pt": " considerando o IFR tomado como referência."
+        "pt": "Não aplicável"
+      },
+      {
+        "es": "No Aplica",
+        "en": "No Applicable",
+        "pt": "Não Aplicável"
       },
       {
         "es": "<br/>- Epidemiología",
@@ -677,9 +682,157 @@
         "es": "Constante",
         "en": "Constant",
         "pt": "Constante"
+      },
+      {
+        "es": "Políticas con nivel de rigurosidad constante, R0 1,3. (Ej. apertura de negocios y escuelas)",
+        "en": "Policies with a constant level of stringency, R0 1.3. (e.g. opening of businesses and schools)",
+        "pt": "Políticas com um nível constante de rigor, R0 1.3 (por exemplo, abertura de empresas e escolas)"
+      },
+      {
+        "es": "Política adaptativa basada en ocupación de camas, cuarentena al llegar al 50%",
+        "en": "Adaptive policy based on bed occupancy, quarantine upon reaching 50%",
+        "pt": "Política adaptativa baseada na ocupação de camas, quarentena ao atingir 50%."
+      },
+      {
+        "es": "Política adaptativa basada en ocupación de camas, cuarentena al llegar al 70%",
+        "en": "Adaptive policy based on bed occupancy, quarantine upon reaching 70%",
+        "pt": "Política adaptativa baseada na ocupação de camas, quarentena quando 70% é atingida"
+      },
+      {
+        "es": "Política valvular intermitente, alterna cuarentena y disminución de restricciones en ciclos mensuales",
+        "en": "Intermittent valve policy, alternating quarantine and relaxation of restrictions in monthly cycles",
+        "pt": "Política de válvulas intermitentes, quarentena alternada e flexibilização das restrições em ciclos mensais"
+      }
+      ,
+      {
+        "es": "Este escenario se basa en la estimación vigente Rt=",
+        "en": "This scenario is based on the current estimate Rt=",
+        "pt": "Este cenário é baseado na estimativa actual Rt="
+      }
+      ,
+      {
+        "es": "Este escenario tiene un R0 constante de 1,3 durante toda el período de proyección. Un ejemplo de este nivel de restricción son las medidas de distanciamiento social con apertura de negocios y escuelas con protocolos definidos.",
+        "en": "This scenario has a constant R0 of 1.3 throughout the projection period. An example of this level of constraint is social distancing measures with opening of businesses and schools with defined protocols.",
+        "pt": "Este cenário tem uma constante R0 de 1,3 ao longo de todo o período de projecção. Um exemplo deste nível de constrangimento são as medidas de distanciamento social com aberturas de empresas e escolas com protocolos definidos."
+      },
+      {
+        "es": "Este escenario tiene un R0 base de 1,3 y cuando se alcanza el 50% de ocupación de camas de cuidados intensivos se inicia una cuarentena estricta con R0 de 1,0. La cuarentena se prolonga por 30 días y se renueva si el nivel de ocupación aún no bajó del 50%. Al lograrse el descenso deseado se levantan las restricciones y se vuelve al escenario base de un R0 de 1,3.",
+        "en": "This scenario has a base R0 of 1.3 and when 50% of intensive care bed occupancy is reached, strict quarantine is initiated with R0 of 1.0. The quarantine is prolonged for 30 days and renewed if the occupancy level is still not below 50%. When the desired decrease is achieved, the restrictions are lifted and the base scenario of an R0 of 1.3 is returned.",
+        "pt": "Este cenário tem uma base R0 de 1,3 e quando se atinge 50% de ocupação de camas de cuidados intensivos, é iniciada uma quarentena rigorosa com R0 de 1,0. A quarentena é prolongada por 30 dias e renovada se o nível de ocupação ainda não tiver descido abaixo dos 50%. Quando a diminuição desejada é alcançada, as restrições são levantadas e o cenário de base de um R0 de 1,3 é devolvido."
+      },
+      {
+        "es": "Este escenario tiene un R0 base de 1,3 y cuando se alcanza el 70% de ocupación de camas de cuidados intensivos se inicia una cuarentena estricta con R0 de 1,0. La cuarentena se prolonga por 30 días y se renueva si el nivel de ocupación aún no bajó del 70%. Al lograrse el descenso deseado se levantan las restricciones y se vuelve al escenario base de un R0 de 1,3.",
+        "en": "This scenario has a base R0 of 1.3 and when 70% of intensive care bed occupancy is reached, strict quarantine is initiated with R0 of 1.0. The quarantine is prolonged for 30 days and renewed if the occupancy level is still not below 70%. When the desired decrease is achieved, the restrictions are lifted and the base scenario of an R0 of 1.3 is returned.",
+        "pt": "Este cenário tem uma base R0 de 1,3 e quando se atinge 70% da ocupação de camas de cuidados intensivos, inicia-se uma quarentena rigorosa com R0 de 1,0. A quarentena é prolongada por 30 dias e renovada se o nível de ocupação não for ainda inferior a 70%. Quando a diminuição desejada é alcançada, as restrições são levantadas e o cenário de base de um R0 de 1,3 é devolvido."
+      },
+      {
+        "es": "Este escenario alterna a lo largo de todo el período proyectado períodos de 30 días con políticas restrictivas que resultan en un R0 de 1,1, y 30 días con políticas mas relajadas que resultan en un r0 de 1.3.",
+        "en": "This scenario alternates throughout the projected period 30-day periods with restrictive policies resulting in an R0 of 1.1, and 30 days with more relaxed policies resulting in an R0 of 1.3.",
+        "pt": "Este cenário alterna ao longo do período projectado períodos de 30 dias com políticas restritivas resultando num R0 de 1,1, e 30 dias com políticas mais relaxadas resultando num R0 de 1,3."
+      },
+      {
+        "es": "Nuevas Infecciones",
+        "en": "New Infections",
+        "pt": "Novas Infecções"
+      },
+      {
+        "es": "Nuevas Defunciones",
+        "en": "New Deaths",
+        "pt": "Novos Mortos"
+      },
+      {
+        "es": "Camas",
+        "en": "Beds",
+        "pt": "Camas"
+      },
+      {
+        "es": "Cantidad pico",
+        "en": "Peak quantity",
+        "pt": "Pico de quantidade"
+      },
+      {
+        "es": "Días hasta el pico",
+        "en": "Days to the peak",
+        "pt": "Dias para o pico"
+      },
+      {
+        "es": "% saturación",
+        "en": "% saturation",
+        "pt": "% saturação"
+      },
+      {
+        "es": "Primer día saturación",
+        "en": "First day saturation",
+        "pt": "Saturação no primeiro dia"
+      },
+      {
+        "es": "Indicador",
+        "en": "Indicator",
+        "pt": "Indicador"
+      },
+      {
+        "es": "Ingreso de R0 específicos: especificando el nivel de R0 para cada período, ajustable a meses, quincenas o semanas, con herramientas avanzadas.",
+        "en": "Specific R0 input: specifying the R0 level for each period, adjustable to months, fortnights or weeks, with advanced tools.",
+        "pt": "Entrada específica R0: especificar o nível R0 para cada período, ajustável a meses, quinzenas ou semanas, com ferramentas avançadas."
+      },
+      {
+        "es": "Configurar intervenciones gatilladas por la ocupación de camas en UCI (Adaptive triggering)",
+        "en": "Configure interventions triggered by ICU bed occupation (Adaptive triggering)",
+        "pt": "Configurar intervenções desencadeadas pela ocupação do leito da UCI (Desencadeamento adaptativo)"
+      },
+      {
+        "es": "Proyectando...",
+        "en": "Projecting...",
+        "pt": "Projectar..."
+      },
+      {
+        "es": "Máximo valor alcanzado el",
+        "en": "Maximum value reached on",
+        "pt": "Valor máximo alcançado em"
+      },
+      {
+        "es": "Capacidad no sobrepasada",
+        "en": "Capacity not exceeded",
+        "pt": "Capacidade não excedid"
+      },
+      {
+        "es": "Diarias",
+        "en": "Capacity not exceeded",
+        "pt": "Capacidade não excedid"
       }
       
       
+      
+      
+      
+      
+      
+
+
+
+      
+      
+      
+      
+      
+    
+      
+      
+      
+      
+      
+      
+
+
+
+
+
+      
+      
+      
+      
+                                          
+                                          
       
       
       

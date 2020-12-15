@@ -339,30 +339,16 @@ hr(),
                                                     htmlOutput("R_hoy_predef")
                                    ),
                                    conditionalPanel("input.escenarioPredefinido=='constante1,3'",
-                                                    p("Este escenario tiene un R0 constante de 1,3 durante toda el período
-                              de proyección. Un ejemplo de este nivel de restricción son las medidas
-                              de distanciamiento social con apertura de negocios y escuelas con
-                              protocolos definidos.")
+                                                    p(i18n$t("Este escenario tiene un R0 constante de 1,3 durante toda el período de proyección. Un ejemplo de este nivel de restricción son las medidas de distanciamiento social con apertura de negocios y escuelas con protocolos definidos."))
                                    ),
                                    conditionalPanel("input.escenarioPredefinido=='trigger50'",
-                                                    p("Este escenario tiene un R0 base de 1,3 y cuando se alcanza el 50% de
-                              ocupación de camas de cuidados intensivos se inicia una cuarentena
-                              estricta con R0 de 1,0. La cuarentena se prolonga por 30 días y se renueva si el
-                              nivel de ocupación aún no bajó del 50%. Al lograrse el descenso deseado se
-                              levantan las restricciones y se vuelve al escenario base de un R0 de 1,3.")
+                                                    p(i18n$t("Este escenario tiene un R0 base de 1,3 y cuando se alcanza el 50% de ocupación de camas de cuidados intensivos se inicia una cuarentena estricta con R0 de 1,0. La cuarentena se prolonga por 30 días y se renueva si el nivel de ocupación aún no bajó del 50%. Al lograrse el descenso deseado se levantan las restricciones y se vuelve al escenario base de un R0 de 1,3."))
                                    ),
                                    conditionalPanel("input.escenarioPredefinido=='trigger70'",
-                                                    p("Este escenario tiene un R0 base de 1,3 y cuando se alcanza el 70% de
-                              ocupación de camas de cuidados intensivos se inicia una cuarentena
-                              estricta con R0 de 1,0. La cuarentena se prolonga por 30 días y se renueva si el
-                              nivel de ocupación aún no bajó del 70%. Al lograrse el descenso deseado se
-                              levantan las restricciones y se vuelve al escenario base de un R0 de 1,3.")
+                                                    p(i18n$t("Este escenario tiene un R0 base de 1,3 y cuando se alcanza el 70% de ocupación de camas de cuidados intensivos se inicia una cuarentena estricta con R0 de 1,0. La cuarentena se prolonga por 30 días y se renueva si el nivel de ocupación aún no bajó del 70%. Al lograrse el descenso deseado se levantan las restricciones y se vuelve al escenario base de un R0 de 1,3."))
                                    ),
                                    conditionalPanel("input.escenarioPredefinido=='valvular1'",
-                                                    p("Este escenario tiene alterna a lo largo de todo el período
-                              proyectado períodos de 30 días con políticas restrictivas que resultan
-                              en un R0 de 1,1, y 30 días con políticas mas relajadas que resultan en
-                              un r0 de 1.3.")
+                                                    p(i18n$t("Este escenario alterna a lo largo de todo el período proyectado períodos de 30 días con políticas restrictivas que resultan en un R0 de 1,1, y 30 días con políticas mas relajadas que resultan en un r0 de 1.3."))
                                    ),
                                    fluidRow(
                                       actionButton("aplicarEscenario", "Aplicar escenario",
@@ -464,11 +450,12 @@ hr(),
               column(7,
                    radioButtons("tipo_interv",
                             label = i18n$t("Definir mediante:"),
-                            choices = c("R0 asociados a políticas de intervención: seleccionando niveles de restricción para cada mes 
-                                        de un menú de opciones simplificado." = "politicas",
-                                        "Ingreso de R0 específicos: especificando el nivel de R0 para cada período, ajustable a meses, 
-                                        quincenas o semanas, con herramientas avanzadas." = "R0",
-                                        "Configurar intervenciones gatilladas por la ocupación de camas en UCI (Adaptive triggering)"="trigger"),
+                            choiceNames = list(i18n$t("R0 asociados a políticas de intervención: seleccionando niveles de restricción para cada mes de un menú de opciones simplificado."),
+                                               i18n$t("Ingreso de R0 específicos: especificando el nivel de R0 para cada período, ajustable a meses, quincenas o semanas, con herramientas avanzadas."),
+                                               i18n$t("Configurar intervenciones gatilladas por la ocupación de camas en UCI (Adaptive triggering)")),
+                            choiceValues = list("politicas",
+                                                "R0",
+                                                "trigger"),
                             selected = "",
                             width = "100%")
                    )
@@ -798,7 +785,7 @@ hr(),
 
 ########### server
 server <- function(input, output, session) {
-
+  
   observeEvent(input$pais, {
     
     if (input$pais %in% paisesEdad)
@@ -831,6 +818,7 @@ server <- function(input, output, session) {
       i18n$set_translation_language("es")
       callModule(graficando, "graficos", i18n = i18n)
       updateInputs()
+      cambio<<-"es"
     }
   )
   onclick("ingles", 
@@ -840,6 +828,7 @@ server <- function(input, output, session) {
       i18n$set_translation_language("en")
       callModule(graficando, "graficos", i18n = i18n)
       updateInputs()
+      cambio<<-"en"
     }
   )
   onclick("portugues", 
@@ -849,6 +838,7 @@ server <- function(input, output, session) {
        i18n$set_translation_language("pt")
        callModule(graficando, "graficos", i18n = i18n)
        updateInputs()
+       cambio<<-"pt"
      }
   )
   
@@ -857,10 +847,11 @@ server <- function(input, output, session) {
     updateSelectInput(session, inputId = "escenarioPredefinido",
                       choices = c("constanteR_cori", "constante1,3", "trigger50", "trigger70", "valvular1") %>% 
                         stats::setNames(c(i18n$t("Políticas con nivel de rigurosidad estimado actual (escenario por defecto)"), 
-                                          "Policies with a constant level of rigor, R0 1.3. (Eg. Opening of businesses and schools)",
-                                          "Adaptive policy based on bed occupancy, quarantine upon reaching 50%",
-                                          "Adaptive policy based on bed occupancy, quarantine upon reaching 70%",
-                                          "Intermittent valve policy, alternating quarantine and reduction of restrictions in monthly cycles"
+                                          i18n$t("Políticas con nivel de rigurosidad constante, R0 1,3. (Ej. apertura de negocios y escuelas)"),
+                                          i18n$t("Política adaptativa basada en ocupación de camas, cuarentena al llegar al 50%"),
+                                          i18n$t("Política adaptativa basada en ocupación de camas, cuarentena al llegar al 70%"),
+                                          i18n$t("Política valvular intermitente, alterna cuarentena y disminución de restricciones en ciclos mensuales")
+                      
                         )
                         )
     )
@@ -1030,7 +1021,7 @@ observeEvent(input$pais,{
                      fnum(r_cori, 3)) })
     output$R_hoy_predef <- renderText({
       paste0(
-        "Este escenario se basa en la estimación vigente Rt=",  
+        i18n$t("Este escenario se basa en la estimación vigente Rt="),  
         fnum(rt_cori, 3),
         ", siendo equivalente a un R0=",
         fnum(r_cori, 3),
@@ -1087,14 +1078,22 @@ observeEvent(input$pais,{
   
     # guardo resultados
     tabla_resultados_reporte$tabla =  rbind(
-                    t(c(resumenResultados[c(2,1,3),3],"No Aplica","No Aplica")),
-                    t(c(resumenResultados[c(5,4,6),3],"No Aplica","No Aplica")),
+                    t(c(resumenResultados[c(2,1,3),3],i18n$t("No Aplica"),i18n$t("No Aplica"))),
+                    t(c(resumenResultados[c(5,4,6),3],i18n$t("No Aplica"),i18n$t("No Aplica"))),
                     t(c(resumenResultados[c(10,7,8,9,11),3])),
                     t(c(resumenResultados[c(15,13,16,14,17),3]))) %>% as.data.frame() %>%  
-                    mutate(Indicador = c("Nuevas Infecciones","Nuevas Defunciones","Camas","Ventiladores")) %>%
-                    setNames(c(i18n$t("Fecha pico"), "Cantidad pico","Días hasta el pico","% saturación","Primer día saturación","Indicador")) %>% 
+                    mutate(Indicador = c(i18n$t("Nuevas Infecciones"),
+                                         i18n$t("Nuevas Defunciones"),
+                                         i18n$t("Camas"),
+                                         i18n$t("Ventiladores"))) %>%
+                    setNames(c(i18n$t("Fecha pico"), 
+                               i18n$t("Cantidad pico"),
+                               i18n$t("Días hasta el pico"),
+                               i18n$t("% saturación"),
+                               i18n$t("Primer día saturación"),
+                               i18n$t("Indicador"))) %>% 
                     dplyr::select(6,1:5)
-    
+
     # tabla Resultados. Solo muestra
     output$tableResults <- renderDT({
       tResult <- tabla_resultados_reporte$tabla
@@ -1862,6 +1861,7 @@ observeEvent(input$pais,{
     })
   
 # New Projection ----------------------------------------------------------
+
 observeEvent(input$updateResults, ignoreInit = T,{
   
   # browser()
@@ -1871,7 +1871,7 @@ observeEvent(input$updateResults, ignoreInit = T,{
       # browser()
     
       # proyecta
-      withProgress(message = "Proyectando...",{
+      withProgress(message = i18n$t("Proyectando..."),{
 
       # proy politicas o R0 cambia Rusuario
         if(proy_politicas$x==1 & !is.null(input$tipo_interv)){
@@ -1918,10 +1918,7 @@ observeEvent(input$updateResults, ignoreInit = T,{
           diasHospCasosCriticos <- ifelse(is.null(input$DíasHospCrit),diasHospCasosCriticos,input$DíasHospCrit)
           diasUCICasosCriticos <- ifelse(is.null(input$DíasUCICrit),diasUCICasosCriticos,input$DíasUCICrit)
           tasaLetalidadAjustada <- ifelse(is.null(input$IFR),tasaLetalidadAjustada,input$IFR/100)
-          print("el usuario puso:")
-          print(input$IFR)
-          print("el modelo computo:")
-          print(tasaLetalidadAjustada)
+        
           ventiladoresCamaCritica <- ifelse(is.null(input$Vent_por_CC),
                                             ventiladoresCamaCritica,input$Vent_por_CC/100)
           # solo lo cambio si se emtió en epi (devuelve null si entra en la pestaña)
@@ -1991,6 +1988,7 @@ observeEvent(input$updateResults, ignoreInit = T,{
     })  
     
     # para informe
+    
     tabla_resultados_reporte$tabla =  rbind(
                 t(c(resumenResultados[c(2,1,3),3],"No Aplica","No Aplica")),
                 t(c(resumenResultados[c(5,4,6),3],"No Aplica","No Aplica")),
@@ -1998,12 +1996,21 @@ observeEvent(input$updateResults, ignoreInit = T,{
                 t(c(resumenResultados[c(15,13,16,14,17),3]))) %>% as.data.frame() %>%  
                 mutate(Indicador = c("Nuevas Infecciones","Nuevas Defunciones",
                                      "Camas","Ventiladores")) %>%
-                setNames(c("Fecha pico", "Cantidad pico","Días hasta el pico",
-                           "% saturación","Primer día saturación","Indicador")) %>% 
+                setNames(c(i18n$t("Fecha pico"), 
+                           i18n$t("Cantidad pico"),
+                           i18n$t("Días hasta el pico"),
+                           i18n$t("% saturación"),
+                           i18n$t("Primer día saturación"),
+                           i18n$t("Indicador"))) %>% 
                 dplyr::select(6,1:5) 
-    
+    tabla_resultados_reporte$tabla[,5] <- str_replace(tabla_resultados_reporte$tabla[,5],"No Aplica",i18n$t("No Aplica"))
+    tabla_resultados_reporte$tabla[,4] <- str_replace_all(tabla_resultados_reporte$tabla[,4],"Máximo valor alcanzado el",i18n$t("Máximo valor alcanzado el"))
+    tabla_resultados_reporte$tabla[,6] <- str_replace(tabla_resultados_reporte$tabla[,6],"No Aplica",i18n$t("No Aplica"))
+    tabla_resultados_reporte$tabla[,6] <- str_replace(tabla_resultados_reporte$tabla[,6],"Capacidad no sobrepasada",i18n$t("Capacidad no sobrepasada"))
     # tabla Resultados
     output$tableResults <- renderDT({
+      
+      
       tResult <- tabla_resultados_reporte$tabla
         datatable(tResult %>% as.data.frame(), 
                 rownames = F,
@@ -2253,6 +2260,7 @@ observeEvent(input$aplicarEscenario | input$EscenarioActual, ignoreInit = T,{
   shinyjs::runjs('document.getElementById("inicio").scrollIntoView();')
 
   })
+  
 })
   
 # reporte -----------------------------------------------------------------
