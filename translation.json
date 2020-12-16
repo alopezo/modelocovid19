@@ -824,7 +824,55 @@
         "es": "Seleccione el segmento visible del período completo de proyección",
         "en": "Select the visible segment of the entire projection period",
         "pt": "Selecione o segmento visível de todo o período de projeção"
+      },
+      {
+        "es": "Mes",
+        "en": "Month",
+        "pt": "Mes"
+      },
+      {
+        "es": "Valvular Intermitente",
+        "en": "Intermittent Valve",
+        "pt": "Válvula Intermitente"
+      },
+      {
+        "es": "Reducción gradual de restricciones",
+        "en": "Gradual reduction of restrictions",
+        "pt": "Redução gradual das restrições"
+      },
+      {
+        "es": "Tabla de R0",
+        "en": "R0 table",
+        "pt": "Tabela de R0"
+      },
+      {
+        "es": "Fecha desde",
+        "en": "Date from",
+        "pt": "Data de"
+      },
+      {
+        "es": "Fecha hasta",
+        "en": "Date to",
+        "pt": "Data para"
+      },
+      {
+        "es": "Quincena",
+        "en": "Fortnight",
+        "pt": "Quinzena"
+      },
+      {
+        "es": "Semana",
+        "en": "Week",
+        "pt": "Semana"
       }
+      
+      
+      
+      
+      
+      
+      
+      
       
       
       

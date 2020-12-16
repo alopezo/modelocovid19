@@ -604,12 +604,12 @@ hr(),
                        column(
                          4,
                          wellPanel(
-                           "Gráfico de R0",
+                           i18n$t("Gráfico de R0"),
                            br(),br(),
                            dygraphOutput("rgraph", width = "100%", height = "250px") 
                          ),
                          wellPanel(
-                           "Tabla de R0",
+                           i18n$t("Tabla de R0"),
                            DTOutput("tablaFechas")  
                          )
                        )
@@ -813,36 +813,68 @@ server <- function(input, output, session) {
   onclick("castellano", 
     {
       # print(paste("Language change!","es"))
-      update_lang(session,"es")
-      i18n$set_translation_language("es")
-      updateInputs()
-      delay(1000, updateTabla())
-      callModule(graficando, "graficos", i18n = i18n)
-      cambio<<-"es"
+      withProgress(message = "Cambiando a español", {
+          update_lang(session,"es")
+          i18n$set_translation_language("es")
+          delay(2000,readSliders(input,output))
+          updateColnames()
+          incProgress(.5)
+          delay(1000, updateInputs())
+          delay(1000, updateTabla())
+          incProgress(.3)
+          delay(1000, updateMapa())
+          callModule(graficando, "graficos", i18n = i18n)
+          incProgress(.2)
+      })
     }
   )
   onclick("ingles", 
     {
       # print(paste("Language change!","en"))
-      update_lang(session,"en")
-      i18n$set_translation_language("en")
-      updateInputs()
-      delay(1000, updateTabla())
-      callModule(graficando, "graficos", i18n = i18n)
-      cambio<<-"en"
+      withProgress(message = "Changing to english", {
+          update_lang(session,"en")
+          i18n$set_translation_language("en")
+          delay(2000,readSliders(input,output))
+          updateColnames()
+          incProgress(.5)
+          delay(1000, updateInputs())
+          delay(1000, updateTabla())
+          incProgress(.3)
+          delay(1000, updateMapa())
+          callModule(graficando, "graficos", i18n = i18n)
+          incProgress(.2)
+      })
     }
   )
   onclick("portugues", 
      {
        # print(paste("Language change!","pt"))
-       update_lang(session,"pt")
-       i18n$set_translation_language("pt")
-       updateInputs()
-       delay(1000, updateTabla())
-       callModule(graficando, "graficos", i18n = i18n)
-       cambio<<-"pt"
+           withProgress(message = "Mudar para português", {
+           update_lang(session,"pt")
+           i18n$set_translation_language("pt")
+           delay(2000,readSliders(input,output))
+           updateColnames()
+           incProgress(.5)
+           delay(1000, updateInputs())
+           delay(1000, updateTabla())
+           incProgress(.3)
+           delay(1000, updateMapa())
+           callModule(graficando, "graficos", i18n = i18n)
+           incProgress(.2)
+           })
      }
   )
+  
+  
+# update mapa
+  updateMapa <- function() {
+  leafletProxy("mymap") %>%
+    setView(lng = coords[coords$pais==input$pais,"lng"],
+            lat = coords[coords$pais==input$pais,"lat"],
+            zoom = ifelse(input$pais %in% c("ARG_18", "ARG_7", "ARG_50"), 6,
+                          ifelse(input$pais == "ARG_2", 10, 3.5))
+    )
+                }
 # Update tabla
   updateTabla <- function() {
     tabla_resultados_reporte$tabla =  rbind(
@@ -875,7 +907,14 @@ server <- function(input, output, session) {
                                columnDefs = list(list(className = 'dt-center', targets = 0:5))),
                 style = 'bootstrap', class = 'table-bordered')
     })
+  
   }
+  
+updateColnames <- function ()
+  {
+  columnas <<- c(i18n$t("Mes"),i18n$t("Fecha desde"), i18n$t("Fecha hasta"),i18n$t("R0"))
+  }
+
 # Update selectInputs
   updateInputs <- function() {
     updateSelectInput(session, inputId = "escenarioPredefinido",
@@ -892,8 +931,8 @@ server <- function(input, output, session) {
     updateSelectInput(session, inputId = "atajo",
                       choices = c("co", "vi", "rg") %>% 
                         stats::setNames(c(i18n$t("Constante"), 
-                                          "Valvular Intermitente",
-                                          "Reducción gradual de restricciones"
+                                          i18n$t("Valvular Intermitente"),
+                                          i18n$t("Reducción gradual de restricciones")
                         )
                       )
     )
@@ -933,6 +972,13 @@ server <- function(input, output, session) {
       selected = "Camas",
       status = "success",
       checkIcon = list(yes = icon("check"))
+    )
+    updateRadioGroupButtons(
+      session = session,
+      inputId = "periodos",
+      choiceNames = list(i18n$t("Mes"),i18n$t("Quincena"),i18n$t("Semana")),
+      choiceValues = list("Mes","Quincena","Semana"),
+      selected = "Mes"
     )
   }
   
@@ -1128,9 +1174,9 @@ observeEvent(input$pais,{
     incProgress(.3)
     
     # zoom new country in map
-    leafletProxy("mymap") %>% 
-      setView(lng = coords[coords$pais==input$pais,"lng"], 
-              lat = coords[coords$pais==input$pais,"lat"], 
+    leafletProxy("mymap") %>%
+      setView(lng = coords[coords$pais==input$pais,"lng"],
+              lat = coords[coords$pais==input$pais,"lat"],
               zoom = ifelse(input$pais %in% c("ARG_18", "ARG_7", "ARG_50"), 6,
                             ifelse(input$pais == "ARG_2", 10, 3.5))
               )
@@ -1736,6 +1782,7 @@ observeEvent(input$pais,{
   readSliders <- function(input, output) {
     # habilita proy si paso mas de n segundos, salteando las llamadas iniciales del readSliders
     # al setear valores de inicio
+    updateColnames()
     elapsed <- difftime(Sys.time(),tiempoInicio,units="secs")
     # print(elapsed);
     if (elapsed > 90) {
@@ -1757,7 +1804,7 @@ observeEvent(input$pais,{
         )
       }
       datam = matrix(datosPoliticas, ncol = 4, byrow=TRUE)
-      colnames(datam) <- c("Mes","Fecha desde", "Fecha hasta","R0")
+      colnames(datam) <- columnas
       estrategia_R0$data <- datam
       output$tablaFechas <- renderDT({
         datatable(datam,rownames = F,
@@ -1788,7 +1835,7 @@ observeEvent(input$pais,{
         }
       }
       datam = matrix(datosPoliticas, ncol = 4, byrow=TRUE)
-      colnames(datam) <- c("Mes","Fecha desde", "Fecha hasta","R0")
+      colnames(datam) <- columnas
       estrategia_R0$data <- datam
       output$tablaFechas <- renderDT({
         datatable(datam,rownames = F,
@@ -1823,7 +1870,7 @@ observeEvent(input$pais,{
         }
     }
     datam = matrix(datosPoliticas, ncol = 4, byrow=TRUE)
-    colnames(datam) <- c("Mes","Fecha desde", "Fecha hasta","R0")
+    colnames(datam) <- columnas
     estrategia_R0$data <- datam
     output$tablaFechas <- renderDT({
       datatable(datam,rownames = F,
@@ -1864,6 +1911,7 @@ observeEvent(input$pais,{
                  input$Dias_interv | input$trigger_R_base_ui | input$tipo_interv=='trigger', 
                ignoreInit = T,{
                  # browser()
+        updateColnames()
         proy_politicas$x = 1
   })
   
