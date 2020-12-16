@@ -816,6 +816,7 @@ server <- function(input, output, session) {
       update_lang(session,"es")
       i18n$set_translation_language("es")
       updateInputs()
+      delay(1000, updateTabla())
       callModule(graficando, "graficos", i18n = i18n)
       cambio<<-"es"
     }
@@ -826,6 +827,7 @@ server <- function(input, output, session) {
       update_lang(session,"en")
       i18n$set_translation_language("en")
       updateInputs()
+      delay(1000, updateTabla())
       callModule(graficando, "graficos", i18n = i18n)
       cambio<<-"en"
     }
@@ -836,11 +838,44 @@ server <- function(input, output, session) {
        update_lang(session,"pt")
        i18n$set_translation_language("pt")
        updateInputs()
+       delay(1000, updateTabla())
        callModule(graficando, "graficos", i18n = i18n)
        cambio<<-"pt"
      }
   )
-    
+# Update tabla
+  updateTabla <- function() {
+    tabla_resultados_reporte$tabla =  rbind(
+      t(c(resumenResultados[c(2,1,3),3],i18n$t("No Aplica"),i18n$t("No Aplica"))),
+      t(c(resumenResultados[c(5,4,6),3],i18n$t("No Aplica"),i18n$t("No Aplica"))),
+      t(c(resumenResultados[c(10,7,8,9,11),3])),
+      t(c(resumenResultados[c(15,13,16,14,17),3]))) %>% as.data.frame() %>%  
+      mutate(Indicador = c(i18n$t("Nuevas Infecciones"),
+                           i18n$t("Nuevas Defunciones"),
+                           i18n$t("Camas"),
+                           i18n$t("Ventiladores"))) %>%
+      setNames(c(i18n$t("Fecha pico"), 
+                 i18n$t("Cantidad pico"),
+                 i18n$t("Días hasta el pico"),
+                 i18n$t("% saturación"),
+                 i18n$t("Primer día saturación"),
+                 i18n$t("Indicador"))) %>% 
+      dplyr::select(6,1:5)
+    tabla_resultados_reporte$tabla[,4] <- str_replace_all(tabla_resultados_reporte$tabla[,4],"Máximo valor alcanzado el",i18n$t("Máximo valor alcanzado el"))
+    tabla_resultados_reporte$tabla[,6] <- str_replace(tabla_resultados_reporte$tabla[,6],"Capacidad no sobrepasada",i18n$t("Capacidad no sobrepasada"))
+    # tabla Resultados. Solo muestra
+    output$tableResults <- renderDT({
+      tResult <- tabla_resultados_reporte$tabla
+      datatable(tResult %>% as.data.frame(), 
+                rownames = F,
+                options = list(lengthChange = FALSE,
+                               searching = F, paging = F,
+                               ordering = F, info = F,
+                               autoWidth = T,
+                               columnDefs = list(list(className = 'dt-center', targets = 0:5))),
+                style = 'bootstrap', class = 'table-bordered')
+    })
+  }
 # Update selectInputs
   updateInputs <- function() {
     updateSelectInput(session, inputId = "escenarioPredefinido",
