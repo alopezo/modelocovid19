@@ -741,11 +741,6 @@
         "pt": "Novos Mortos"
       },
       {
-        "es": "Camas",
-        "en": "Beds",
-        "pt": "Camas"
-      },
-      {
         "es": "Cantidad pico",
         "en": "Peak quantity",
         "pt": "Pico de quantidade"
@@ -797,8 +792,38 @@
       },
       {
         "es": "Diarias",
-        "en": "Capacity not exceeded",
-        "pt": "Capacidade não excedid"
+        "en": "Daily",
+        "pt": "Diário"
+      },
+      {
+        "es": "Acumuladas",
+        "en": "Accumulated",
+        "pt": "Acumulado"
+      },
+      {
+        "es": "Edades",
+        "en": "Ages",
+        "pt": "Idades"
+      },
+      {
+        "es": "Camas",
+        "en": "Beds",
+        "pt": "Camas"
+      },
+      {
+        "es": "Médicos",
+        "en": "Doctors",
+        "pt": "Doutores"
+      },
+      {
+        "es": "Enfermeras",
+        "en": "Nurses",
+        "pt": "Enfermeiras"
+      },
+      {
+        "es": "Seleccione el segmento visible del período completo de proyección",
+        "en": "Select the visible segment of the entire projection period",
+        "pt": "Selecione o segmento visível de todo o período de projeção"
       }
       
       

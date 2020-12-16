@@ -71,7 +71,7 @@ get_dias_dupl <- function(data, hoy, ventana = 7){
 
 # modulo de graficos dygraph ----------------------------------------------
 
-Grafica <- function(id, label = "Nada") {
+Grafica <- function(id, label = "Nada", i18n) {
   
   ns <- NS(id)
   
@@ -80,7 +80,8 @@ Grafica <- function(id, label = "Nada") {
     radioGroupButtons(
       inputId = ns("que_infecc"),
       label = "",
-      choices = c("Diarias","Acumuladas","Edades"),
+      choiceNames = list(i18n$t("Diarias"),i18n$t("Acumuladas"),i18n$t("Edades")),
+      choiceValues = list("Diarias","Acumuladas","Edades"),
       selected = "Diarias",
       status = "success",
       checkIcon = list(yes = icon("check"))
@@ -98,7 +99,7 @@ Grafica <- function(id, label = "Nada") {
       column(8,
              p(
                align = "center",
-               paste("Seleccione el segmento visible del período completo de proyección")
+               i18n$t("Seleccione el segmento visible del período completo de proyección")
              )
       ),
       column(2, align = "center", textOutput(ns("max_graf_inf"))
@@ -110,7 +111,7 @@ Grafica <- function(id, label = "Nada") {
     radioGroupButtons(
       inputId = ns("que_defs"),
       label = "",
-      choiceNames = list("Diarias","Acumuladas"),
+      choiceNames = list(i18n$t("Diarias"),i18n$t("Acumuladas")),
       choiceValues = list("Diarias","Acumuladas"),
       selected = "Diarias",
       status = "success",
@@ -128,7 +129,7 @@ Grafica <- function(id, label = "Nada") {
       column(8,
              p(
                align = "center",
-               paste("Seleccione el segmento visible del período completo de proyección")
+               i18n$t("Seleccione el segmento visible del período completo de proyección")
              )
       ),
       column(2, align = "center", textOutput(ns("max_graf_mue"))
@@ -141,7 +142,8 @@ Grafica <- function(id, label = "Nada") {
     radioGroupButtons(
       inputId = ns("que_rrhh"),
       label = "Impacto en recursos sanitarios",
-      choices = c("Camas","Ventiladores","Médicos","Enfermeras"),
+      choiceNames = list(i18n$t("Camas"),i18n$t("Ventiladores"),i18n$t("Médicos"),i18n$t("Enfermeras")),
+      choiceValues = list("Camas","Ventiladores","Médicos","Enfermeras"),
       selected = "Camas",
       status = "success",
       checkIcon = list(yes = icon("check"))
@@ -160,7 +162,7 @@ Grafica <- function(id, label = "Nada") {
       column(8,
              p(
                align = "center",
-               paste("Seleccione el segmento visible del período completo de proyección")
+               i18n$t("Seleccione el segmento visible del período completo de proyección")
              )
       ),
       column(2, align = "center", textOutput(ns("max_graf_cam"))
@@ -215,7 +217,6 @@ graficando <- function(input, output, session, i18n) {
   
   ##### Infecciones
   observe({
-    
     if(input$que_infecc=="Diarias"){
       df <- cbind(modeloSimulado %>% dplyr::select(fecha, i = i_5d_ma),
                   modeloSimulado_hi %>% dplyr::select(i2 = i_5d_ma),
@@ -330,7 +331,6 @@ graficando <- function(input, output, session, i18n) {
 
 ##### Defunciones
   observe({
-    
     if(input$que_defs == "Diarias" | input$que_defs == "Acumuladas"){
       df <- cbind(fecha = modeloSimulado$fecha,
                   m = modeloSimulado$muertes_smooth,

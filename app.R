@@ -369,7 +369,7 @@ hr(),
   h4(i18n$t("Gráficos de resultados")),
   fluidRow(
     column(12,
-           Grafica("graficos") 
+           Grafica("graficos", i18n = i18n) 
     )
   ),
   
@@ -806,42 +806,41 @@ server <- function(input, output, session) {
       checkIcon = list(yes = icon("check"))
       
     )
-    print(input)
   })
   
   
 # cambio de lenguaje
   onclick("castellano", 
     {
-      print(paste("Language change!","es"))
+      # print(paste("Language change!","es"))
       update_lang(session,"es")
       i18n$set_translation_language("es")
-      callModule(graficando, "graficos", i18n = i18n)
       updateInputs()
+      callModule(graficando, "graficos", i18n = i18n)
       cambio<<-"es"
     }
   )
   onclick("ingles", 
     {
-      print(paste("Language change!","en"))
+      # print(paste("Language change!","en"))
       update_lang(session,"en")
       i18n$set_translation_language("en")
-      callModule(graficando, "graficos", i18n = i18n)
       updateInputs()
+      callModule(graficando, "graficos", i18n = i18n)
       cambio<<-"en"
     }
   )
   onclick("portugues", 
      {
-       print(paste("Language change!","pt"))
+       # print(paste("Language change!","pt"))
        update_lang(session,"pt")
        i18n$set_translation_language("pt")
-       callModule(graficando, "graficos", i18n = i18n)
        updateInputs()
+       callModule(graficando, "graficos", i18n = i18n)
        cambio<<-"pt"
      }
   )
-  
+    
 # Update selectInputs
   updateInputs <- function() {
     updateSelectInput(session, inputId = "escenarioPredefinido",
@@ -862,6 +861,43 @@ server <- function(input, output, session) {
                                           "Reducción gradual de restricciones"
                         )
                       )
+    )
+    if (input$pais %in% paisesEdad)
+    {
+      newchoicesNames <- c(i18n$t("Diarias"),i18n$t("Acumuladas"),i18n$t("Edades"))
+      newchoicesValues <- c("Diarias","Acumuladas","Edades")
+    }
+    else
+    {
+      newchoicesNames <- c(i18n$t("Diarias"),i18n$t("Acumuladas"))
+      newchoicesValues <- c("Diarias","Acumuladas")
+    }
+    updateRadioGroupButtons(
+      session = session,
+      inputId = "graficos-que_infecc",
+      choiceNames = newchoicesNames,
+      choiceValues = newchoicesValues,
+      selected = "Diarias",
+      status = "success",
+      checkIcon = list(yes = icon("check"))
+    )
+    updateRadioGroupButtons(
+      session = session,
+      inputId = "graficos-que_defs",
+      choiceNames = list(i18n$t("Diarias"),i18n$t("Acumuladas")),
+      choiceValues = list("Diarias","Acumuladas"),
+      selected = "Diarias",
+      status = "success",
+      checkIcon = list(yes = icon("check"))
+    )
+    updateRadioGroupButtons(
+      session = session,
+      inputId = "graficos-que_rrhh",
+      choiceNames = list(i18n$t("Camas"),i18n$t("Ventiladores"),i18n$t("Médicos"),i18n$t("Enfermeras")),
+      choiceValues = list("Camas","Ventiladores","Médicos","Enfermeras"),
+      selected = "Camas",
+      status = "success",
+      checkIcon = list(yes = icon("check"))
     )
   }
   
@@ -910,7 +946,7 @@ variacion_escenario <- reactiveValues(x = 0.25)
 prop_susceptible <- reactiveValues(x = 1)
 
 linkEscenarios <- function(input, output) {
-  print("Clink!")
+  print("Click!")
 };
 
 # levanta pais proyección actual -------------------------------------------------------------
