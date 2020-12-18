@@ -2037,7 +2037,6 @@ observeEvent(input$updateResults, ignoreInit = T,{
           diasHospCasosCriticos <- ifelse(is.null(input$DíasHospCrit),diasHospCasosCriticos,input$DíasHospCrit)
           diasUCICasosCriticos <- ifelse(is.null(input$DíasUCICrit),diasUCICasosCriticos,input$DíasUCICrit)
           tasaLetalidadAjustada <- ifelse(is.null(input$IFR),tasaLetalidadAjustada,input$IFR/100)
-        
           ventiladoresCamaCritica <- ifelse(is.null(input$Vent_por_CC),
                                             ventiladoresCamaCritica,input$Vent_por_CC/100)
           # solo lo cambio si se emtió en epi (devuelve null si entra en la pestaña)
@@ -2069,15 +2068,91 @@ observeEvent(input$updateResults, ignoreInit = T,{
     # s/ tipo
     source("seir.R", encoding = "UTF-8")
     iecs <- seir(tipo = ifelse(input$pais %in% paises_distintos,"B","A"),
-                 hoy_date = hoy, 
-                 R0_usuario = Rusuario)
+                 compartimentos = F,
+                 variacion = 0,
+                 porc_detectado = .2,
+                 hoy_date = hoy,
+                 R0_usuario = Rusuario, 
+                 lag = 17, cantidadDiasProyeccion = 600,
+                 ifr=tasaLetalidadAjustada,
+                 duracionI = duracionMediaInf, 
+                 duracionE = periodoPreinfPromedio,
+                 porc_gr = porcentajeCasosGraves,
+                 porc_cr = porcentajeCasosCriticos,
+                 trigger_on_app_ok = trigger_on_app, 
+                 triggerPorcCrit = trigger_Porc_crit, diasInterv = Dias_interv, R_trigger = trigger_R_inter,
+                 data = dataEcdc, # data de ecdc
+                 porc_covid = porcentajeDisponibilidadCamasCOVID,
+                 N = poblacion, S = N,
+                 porc_uci = diasUCICasosCriticos / diasHospCasosCriticos,
+                 camasCC = camasCriticas,
+                 camasGG = camasGenerales,
+                 ventsCC = ventiladoresCamaCritica,
+                 camasGGEnfDia = camasGeneralesEnfermeraDia,
+                 camasUCIEnfDia = camasUCIEnfermerasDia,
+                 camasGGMedDia  = camasGeneralesMedicoDia,
+                 camasUCIMedDia = camasCCMedicoDia,
+                 enfCamasGG = enfermerasCamasGenerales,
+                 enfCamasUCI = enfermerasCamasUCI,
+                 medCamasGG = medicosCamasGenerales,
+                 medCamasUCI = medicosCamasUCI)
     modeloSimulado <<- iecs$modeloSimulado %>% as.data.frame()
-    modeloSimulado_hi <<- seir(tipo = ifelse(input$pais %in% paises_distintos,"B","A"),
-                               hoy_date = hoy, variacion = variacion_escenario$x,
-                               R0_usuario = Rusuario)$modeloSimulado %>% as.data.frame()
-    modeloSimulado_low <<- seir(tipo = ifelse(input$pais %in% paises_distintos,"B","A"),
-                                hoy_date = hoy,  variacion = -variacion_escenario$x,
-                                R0_usuario = Rusuario)$modeloSimulado %>% as.data.frame()
+    modeloSimulado_hi <<- seir(compartimentos = F,
+                               variacion = variacion_escenario$x,
+                               porc_detectado = .2,
+                               hoy_date = hoy,
+                               R0_usuario = Rusuario, 
+                               lag = 17, cantidadDiasProyeccion = 600,
+                               ifr=tasaLetalidadAjustada,
+                               duracionI = duracionMediaInf, 
+                               duracionE = periodoPreinfPromedio,
+                               porc_gr = porcentajeCasosGraves,
+                               porc_cr = porcentajeCasosCriticos,
+                               trigger_on_app_ok = trigger_on_app, 
+                               triggerPorcCrit = trigger_Porc_crit, diasInterv = Dias_interv, R_trigger = trigger_R_inter,
+                               data = dataEcdc, # data de ecdc
+                               porc_covid = porcentajeDisponibilidadCamasCOVID,
+                               N = poblacion, S = N,
+                               porc_uci = diasUCICasosCriticos / diasHospCasosCriticos,
+                               camasCC = camasCriticas,
+                               camasGG = camasGenerales,
+                               ventsCC = ventiladoresCamaCritica,
+                               camasGGEnfDia = camasGeneralesEnfermeraDia,
+                               camasUCIEnfDia = camasUCIEnfermerasDia,
+                               camasGGMedDia  = camasGeneralesMedicoDia,
+                               camasUCIMedDia = camasCCMedicoDia,
+                               enfCamasGG = enfermerasCamasGenerales,
+                               enfCamasUCI = enfermerasCamasUCI,
+                               medCamasGG = medicosCamasGenerales,
+                               medCamasUCI = medicosCamasUCI)$modeloSimulado %>% as.data.frame()
+    modeloSimulado_low <<- seir(compartimentos = F,
+                                variacion = -variacion_escenario$x,
+                                porc_detectado = .2,
+                                hoy_date = hoy,
+                                R0_usuario = Rusuario, 
+                                lag = 17, cantidadDiasProyeccion = 600,
+                                ifr=tasaLetalidadAjustada,
+                                duracionI = duracionMediaInf, 
+                                duracionE = periodoPreinfPromedio,
+                                porc_gr = porcentajeCasosGraves,
+                                porc_cr = porcentajeCasosCriticos,
+                                trigger_on_app_ok = trigger_on_app, 
+                                triggerPorcCrit = trigger_Porc_crit, diasInterv = Dias_interv, R_trigger = trigger_R_inter,
+                                data = dataEcdc, # data de ecdc
+                                porc_covid = porcentajeDisponibilidadCamasCOVID,
+                                N = poblacion, S = N,
+                                porc_uci = diasUCICasosCriticos / diasHospCasosCriticos,
+                                camasCC = camasCriticas,
+                                camasGG = camasGenerales,
+                                ventsCC = ventiladoresCamaCritica,
+                                camasGGEnfDia = camasGeneralesEnfermeraDia,
+                                camasUCIEnfDia = camasUCIEnfermerasDia,
+                                camasGGMedDia  = camasGeneralesMedicoDia,
+                                camasUCIMedDia = camasCCMedicoDia,
+                                enfCamasGG = enfermerasCamasGenerales,
+                                enfCamasUCI = enfermerasCamasUCI,
+                                medCamasGG = medicosCamasGenerales,
+                                medCamasUCI = medicosCamasUCI)$modeloSimulado %>% as.data.frame()
     fechaIntervencionesTrigger <<- iecs$fechatrigger
     resumenResultados <<- crea_tabla_rr(modeloSimulado = modeloSimulado)
     crea_tabla_inputs()

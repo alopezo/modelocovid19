@@ -37,6 +37,7 @@ seir <- function(tipo = "A", actualiza = F,
                  medCamasGG = medicosCamasGenerales,
                  medCamasUCI = medicosCamasUCI){
 
+  
   # variacion
   ifr_inv = ifr * (1 - variacion) # para calcular incidentes (escenario inverso por método)
   ifr = ifr * (1 + variacion)
@@ -126,9 +127,9 @@ seir <- function(tipo = "A", actualiza = F,
       prop_60_mas <- md_60_mas/(md_00_19+md_20_59+md_60_mas)
       
       # expando a casos con IFR general
-      i_00_19_aj <- i_00_19_smooth/(i_00_19_smooth+i_20_59_smooth+i_60_mas_smooth)*i
-      i_20_59_aj <- i_20_59_smooth/(i_00_19_smooth+i_20_59_smooth+i_60_mas_smooth)*i
-      i_60_mas_aj <- i_60_mas_smooth/(i_00_19_smooth+i_20_59_smooth+i_60_mas_smooth)*i
+      i_00_19_aj <- i_00_19_smooth /(i_00_19_smooth+i_20_59_smooth+i_60_mas_smooth)*i
+      i_20_59_aj <- i_20_59_smooth /(i_00_19_smooth+i_20_59_smooth+i_60_mas_smooth)*i
+      i_60_mas_aj <- i_60_mas_smooth /(i_00_19_smooth+i_20_59_smooth+i_60_mas_smooth)*i
       i_total_aj <- i_00_19_aj+i_20_59_aj+i_60_mas_aj
       }
       } else{
