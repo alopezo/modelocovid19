@@ -912,7 +912,7 @@ server <- function(input, output, session) {
   
 updateColnames <- function ()
   {
-  columnas <<- c(i18n$t("Mes"),i18n$t("Fecha desde"), i18n$t("Fecha hasta"),i18n$t("R0"))
+  columnas <<- c(i18n$t("Mes"),i18n$t("Fecha desde"), i18n$t("Fecha hasta"),"R0")
   }
 
 # Update selectInputs
