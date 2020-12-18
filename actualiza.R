@@ -15,14 +15,17 @@ library(EpiEstim)
 
 #### países/juris a actualizar ####
 
-hoy <<- diaActualizacion <<- as.Date("2020-12-05")
-paises_actualizar <- c("ARG","BOL","CRI","SLV","ECU","GTM",
+hoy <<- diaActualizacion <<- as.Date("2020-12-01")
+paises_actualizar <- c("BOL","CRI","SLV","ECU","GTM",
                        "HND","JAM","PAN","PRY","DOM","CHL","NIC",
                        "URY","BRA","PER","MEX","COL", "BHS",
                        "BRB","BLZ","GUY","HTI","SUR","TTO","VEN",
-                       "ARG_18", "ARG_2", "ARG_6", "ARG_7", "ARG_50", "ARG_3", "ARG_6_826","ARG_6_756")
+                       "ARG","ARG_18", "ARG_2", "ARG_6", "ARG_7", "ARG_50", "ARG_3", "ARG_6_826","ARG_6_756")
 
-paisesEdad <<- c("ARG")
+
+
+
+paisesEdad <<- c("ARG","ARG_2")
 
 ##### carga población y oms data  ####
 load("DatosIniciales/poblacion_data.RData")
@@ -30,10 +33,11 @@ source("oms_data.R", encoding = "UTF-8")
 
 ##### descarga ultimos datos de msal  ####
 urlMsal <- 'https://sisa.msal.gov.ar/datos/descargas/covid-19/files/Covid19Casos.csv'
-download.file(urlMsal, "Covid19Casos.csv")
+#download.file(urlMsal, "Covid19Casos.csv")
 
-urlEcdc <- "https://opendata.ecdc.europa.eu/covid19/casedistribution/csv"
-download.file(urlEcdc, "dataEcdc.csv")
+urlOwd <- "https://covid.ourworldindata.org/data/owid-covid-data.csv"
+download.file(urlOwd, "dataEcdc.csv")
+
 
 #### casos/muertes y parámetros para cada país ####
 input=list()
@@ -211,14 +215,13 @@ dataMsal <-
 {
 
   dataEcdc <- read.csv("dataEcdc.csv", fileEncoding = "UTF-8-BOM")
-
+  dataEcdc <- data.frame(countryterritoryCode=dataEcdc$iso_code,
+                         dateRep=as.Date(dataEcdc$date),
+                         cases=dataEcdc$new_cases,
+                         deaths=dataEcdc$new_deaths)
+  dataEcdc[is.na(dataEcdc)] = 0
   
-  
-  dataEcdc$dateRep <- as.Date(dataEcdc$dateRep, format = "%d/%m/%Y")
-  dataEcdc$dateRep <- format(dataEcdc$dateRep, "%Y-%m-%d")
   dataEcdc<-dataEcdc %>% filter(dateRep<=Sys.Date())
-  dataEcdc$dateRep<-as.Date(dataEcdc$dateRep)
-  
   dataEcdc <- dataEcdc %>% filter(countryterritoryCode==input$pais)
   dataEcdc <- dataEcdc %>% dplyr::select(fecha=dateRep,countryterritoryCode, cases, deaths)
   seqFecha<-seq(min(as.Date(dataEcdc$fecha)),max(as.Date(dataEcdc$fecha)), by=1 )
@@ -278,7 +281,38 @@ diasHospCasosCriticos <- 23.0
 diasUCICasosCriticos <- 18.0
 
 ## Tasa letalidad
-tasaLetalidadAjustada <- 0.0027
+if (input$pais %in% paisesEdad)
+  {
+  load("DatosIniciales/ifr_age.RData")
+  data <- dataEcdc
+  lag <- 17
+  d_obs = data$new_deaths
+  d_obs_smooth = predict(loess(d_obs~seq(1,nrow(data)),span=.5)) # saco negativos
+  d_obs_smooth[d_obs_smooth<0] = 0
+  
+  for (grupo in unique(ifr_age$grupedad))
+  {
+    assign(paste0("i_",grupo),eval(parse(text=paste0("data$",grupo,"_deaths/ifr_age$ifr[ifr_age$grupedad==grupo]"))))
+  }
+  
+  # sumo grupos quinquenales para tener casos en 3 grupos
+  i00_19 = i_gr_00_09 + i_gr_10_14 + i_gr_15_19
+  i20_59 = i_gr_20_24 + i_gr_25_29 + i_gr_30_34 + i_gr_35_39 + i_gr_40_44 + i_gr_45_49 + i_gr_50_54 + i_gr_55_59
+  i60_mas = i_gr_60_64 + i_gr_65_69 + i_gr_70_74 + i_gr_75_79 + i_gr_80_84 + i_gr_85_89 + i_gr_90_
+  
+  # suavizo
+  i_00_19_smooth <- c(predict(loess(i00_19[1:(hoy-lag)]~seq(1,(hoy-lag)),span=.5)),rep(0,lag))
+  i_20_59_smooth <- c(predict(loess(i20_59[1:(hoy-lag)]~seq(1,(hoy-lag)),span=.5)),rep(0,lag)) 
+  i_60_mas_smooth <- c(predict(loess(i60_mas[1:(hoy-lag)]~seq(1,(hoy-lag)),span=.5)),rep(0,lag)) 
+  
+  # elimino negativos
+  i_00_19_smooth[i_00_19_smooth<0] <- 0
+  i_20_59_smooth[i_20_59_smooth<0] <- 0
+  i_60_mas_smooth[i_60_mas_smooth<0] <- 0
+  
+  
+  tasaLetalidadAjustada <- round(sum(d_obs_smooth)/(sum(i_00_19_smooth)+sum(i_20_59_smooth)+sum(i_60_mas_smooth)),digits=4)
+  } else {tasaLetalidadAjustada <- 0.0027}
 
 ## Días desde el primer informe hasta la dinámica de la muerte: nuevo modelo
 diasPrimerInformeMuerte <- 7.0
@@ -396,8 +430,9 @@ rm(seir_update_hi)
 rm(seir_update_low)
 
 #### guarda conjunto de datos que serán levantados en la app####
+
 save.image(paste0("DatosIniciales/DatosIniciales_",input$pais,".RData"))
-print(input$pais)
+print(paste0("Actualizado: ", input$pais))
 }
 
 #### update owd_data and mapa ####
