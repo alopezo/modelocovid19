@@ -22,13 +22,13 @@ library(tinytex)
 library(raster)
 library(shiny.i18n)
 
-#subNac <<- "no"
+#subNac <<- "si"
 subNacUrl <<- c("ARG_2","ARG_3","ARG_6","ARG_7","ARG_50","ARG_18","ARG_6_756", "ARG_6_826")
-paisesEdad <<- c("ARG") 
+paisesEdad <<- c("ARG","ARG_2") 
 versionModelo <<- "2.6"
 
 # funs --------------------------------------------------------------------
-hoy <<- as.Date("2020-11-01")
+hoy <<- as.Date("2020-12-01")
 default <<- FALSE
 
 # Configurando archivo de traducciones
@@ -194,32 +194,39 @@ ui <- fluidPage(
           
           conditionalPanel(
             condition = "input.pais == 'ARG_2' || 
+                            input.pais == 'ARG_6' ||
+                            input.pais == 'ARG_6_756' ||
+                            input.pais == 'ARG_6_826' ||
                             input.pais == 'ARG_50' ||
                             input.pais == 'ARG_3' || 
                             input.pais == 'ARG_7'  ",
-            em(i18n$t("Ultimos datos disponibles (fuentes "), 
+            em("Ultimos datos disponibles (fuentes ", 
                tags$a(href="https://www.ecdc.europa.eu/en", "ECDC",target="_blank"), ", ", 
                tags$a(href="https://ourworldindata.org/", "OWD", target="_blank"),  ", ", 
                tags$a(href="http://datos.salud.gob.ar/dataset/covid-19-casos-registrados-en-la-republica-argentina", 
-                        "MSAL", target="_blank"),
+                      "MSAL", target="_blank"),
                ")",
                tags$span(id="warning_data", icon("info-circle"), 
                          style=("margin-left:5px;"))
-
-          )),
+               
+            )),
           conditionalPanel(
             condition = "input.pais != 'ARG_2' && 
-                            input.pais != 'ARG_50' &&
-                            input.pais != 'ARG_3' && 
-                            input.pais != 'ARG_7'  ",
-            em(i18n$t("Ultimos datos disponibles (fuentes "), 
+                            input.pais != 'ARG_3' &&
+                            input.pais != 'ARG_6' &&
+                            input.pais != 'ARG_7' &&
+                            input.pais != 'ARG_6_756' &&
+                            input.pais != 'ARG_6_726' &&
+                            input.pais != 'ARG_18' &&
+                            input.pais != 'ARG_50' ",
+            em("Ultimos datos disponibles (fuentes ", 
                tags$a(href="https://www.ecdc.europa.eu/en", "ECDC",target="_blank"), ", ", 
                tags$a(href="https://ourworldindata.org/", "OWD", target="_blank"), ", ",
                tags$a(href="https://covid19.who.int/table", "OMS", target="_blank"),
                ")",
                tags$span(id="warning_data", icon("info-circle"), 
                          style=("margin-left:5px;"))
-          )),
+            )),
     
           br(),br(),
 
@@ -276,10 +283,27 @@ ui <- fluidPage(
     
     # map some index
     column(5,
-           leafletOutput("mymap", width = "90%", height = 330) ,
+           conditionalPanel(condition="input.pais == 'ARG_2' ||
+                              input.pais == 'ARG_3' ||
+                              input.pais == 'ARG_6' ||
+                              input.pais == 'ARG_7' ||
+                              input.pais == 'ARG_18' ||
+                              input.pais == 'ARG_50' ||
+                              input.pais == 'ARG_6_756' ||
+                              input.pais == 'ARG_6_826'",
+                            leafletOutput("mymap_subnac", width = "90%", height = 330)) ,
+           conditionalPanel(condition="input.pais != 'ARG_2' &&
+                              input.pais != 'ARG_3' &&
+                              input.pais != 'ARG_6' &&
+                              input.pais != 'ARG_7' &&
+                              input.pais != 'ARG_18' &&
+                              input.pais != 'ARG_50' &&
+                              input.pais != 'ARG_6_756' &&
+                              input.pais != 'ARG_6_826'",
+                            leafletOutput("mymap", width = "90%", height = 330)) ,
            bsTooltip("mymap", "Mapa de calor: Defunciones acumuladas cada millón de habitantes al día de ayer:",
                      "right", options = list(container = "body"))
-      )
+    )
     ),
   br(),
 hr(),
@@ -788,6 +812,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$pais, {
     
+    print(paisesEdad)
     if (input$pais %in% paisesEdad)
     {
       newchoices <<- c("Diarias","Acumuladas","Edades")
@@ -984,13 +1009,18 @@ updateColnames <- function ()
   
 # url me dice si quiere ir a subnacional argentino
 observe({
-  if(str_detect(session$clientData$url_pathname, "argentina")==T){
+  if(str_detect(session$clientData$url_pathname, "argentina")==T
+     #subNac=="si"
+     ){
       updateSelectInput(session, "pais",
-                      choices = c("Argentina - Ciudad Autónoma de Buenos Aires" = "ARG_2",
-                                  "Argentina - AMBA" = "ARG_3",
-                                  "Argentina - Buenos Aires (Partidos del AMBA)" = "ARG_7",
-                                  "Argentina - Corrientes" = "ARG_18",
-                                  "Argentina - Mendoza" = "ARG_50"),
+                      choices = c("Ciudad Autónoma de Buenos Aires" = "ARG_2",
+                                  "AMBA" = "ARG_3",
+                                  "Provincia de Buenos Aires" = "ARG_6",
+                                  "Buenos Aires (Partidos del AMBA)" = "ARG_7",
+                                  "Partido de San isidro" = "ARG_6_756",
+                                  "Partido de Trenque Lauquen" = "ARG_6_826",
+                                  "Corrientes" = "ARG_18",
+                                  "Mendoza" = "ARG_50"),
                       selected = "ARG_2")
   }
 })
@@ -1075,7 +1105,14 @@ observeEvent(input$pais,{
     # avg
     
     
-    if(input$pais %in% c("ARG_18", "ARG_50", "ARG_2", "ARG_3", "ARG_7")){
+    if(input$pais %in% c("ARG_18", 
+                         "ARG_50", 
+                         "ARG_2", 
+                         "ARG_3", 
+                         "ARG_7",
+                         "ARG_6",
+                         "ARG_6_756",
+                         "ARG_6_826")){
       owd_pais_avg <- owd_data %>% 
                           filter(iso_code==input$pais, as.Date(date) %in% seq(hoy-7,hoy-1,by="day")) %>% 
                           dplyr::summarise(new_cases = mean(new_cases),
@@ -1179,7 +1216,7 @@ observeEvent(input$pais,{
               lat = coords[coords$pais==input$pais,"lat"],
               zoom = ifelse(input$pais %in% c("ARG_18", "ARG_7", "ARG_50"), 6,
                             ifelse(input$pais == "ARG_2", 10, 3.5))
-              )
+      )
     
     # Estrategias Base, reinicia con cada país
     estrategia_inicial <<- data.frame(
@@ -1931,25 +1968,47 @@ observeEvent(input$pais,{
   
 # map ---------------------------------------------------------------------
 
-  output$mymap <- renderLeaflet({
-    mytext <- paste(
-      round(map_data@data$cum_deaths_millon,1),
-      " c/Mill.Hab.",
-      sep="") %>%
-      lapply(htmltools::HTML)
-    pal <- colorBin("YlOrRd", map_data@data$cum_deaths_millon)
-    leaflet(map_data,
-            options = leafletOptions(attributionControl=FALSE,
-                                     zoomControl = FALSE,
-                                     zoomControl = FALSE,
-                                     minZoom = 3, maxZoom = 4)) %>%
-      addProviderTiles(providers$CartoDB.Positron) %>%
-      addPolygons(stroke = F, fillOpacity = .5, smoothFactor = .5, 
-                  color = ~pal(cum_deaths_millon),
-                  label = mytext) %>% 
-      leaflet::addLegend("bottomright", pal = pal, values = ~cum_deaths_millon, opacity = .6, 
-                         title = paste(i18n$t("Muertes Acum."), "</br>",
-                                       i18n$t("c/Mill. hab.")))
+  observe( if (input$pais %!in% subNacUrl) {
+    
+    output$mymap <- renderLeaflet({
+      mytext <- paste(
+        round(map_data@data$cum_deaths_millon,1),
+        " c/Mill.Hab.",
+        sep="") %>%
+        lapply(htmltools::HTML)
+      pal <- colorBin("YlOrRd", map_data@data$cum_deaths_millon)
+      leaflet(map_data,
+              options = leafletOptions(attributionControl=FALSE,
+                                       zoomControl = FALSE,
+                                       zoomControl = FALSE,
+                                       minZoom = 3, maxZoom = 4)) %>%
+        addProviderTiles(providers$CartoDB.Positron) %>%
+        addPolygons(stroke = F, fillOpacity = .5, smoothFactor = .5, 
+                    color = ~pal(cum_deaths_millon),
+                    label = mytext) %>% 
+        leaflet::addLegend("bottomright", pal = pal, values = ~cum_deaths_millon, opacity = .6, 
+                           title = "Muertes Acum. </br>
+                         c/Mill. hab.")
+    })
+  }
+  else {
+    output$mymap_subnac <- renderLeaflet({
+      leaflet(
+        if (input$pais=="ARG_18") {subset(map_data,ADM0_A3==input$pais)} else
+        if (input$pais=="ARG_2") {subset(map_data,ADM0_A3==input$pais)} else
+        if (input$pais=="ARG_3") {ambaMap} else
+        if (input$pais=="ARG_50") {ambaMap} else
+        if (input$pais=="ARG_6") {raster::aggregate(subset(Deptos,codpcia=="06"))} else
+        if (input$pais=="ARG_7") {ambaProvMap} else
+        if (input$pais=="ARG_6_756") {subset(Deptos,link=="06756")} else
+        if (input$pais=="ARG_6_826") {subset(Deptos,link=="06826")}
+        else {Deptos},
+        options = leafletOptions(attributionControl=FALSE,
+                                 zoomControl = FALSE)) %>%
+        addProviderTiles(providers$CartoDB.Positron) %>%
+        addPolygons(stroke = T, color="#18BC9C", weight=0.4)
+    })
+    
   })
 
   

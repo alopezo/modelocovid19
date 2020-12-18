@@ -23,7 +23,9 @@ paises_actualizar <- c("BOL","CRI","SLV","ECU","GTM",
                        "ARG","ARG_18", "ARG_2", "ARG_6", "ARG_7", "ARG_50", "ARG_3", "ARG_6_826","ARG_6_756")
 
 
-paisesEdad <<- c("ARG")
+
+
+paisesEdad <<- c("ARG","ARG_2")
 
 ##### carga población y oms data  ####
 load("DatosIniciales/poblacion_data.RData")
@@ -309,7 +311,7 @@ if (input$pais %in% paisesEdad)
   i_60_mas_smooth[i_60_mas_smooth<0] <- 0
   
   
-  tasaLetalidadAjustada <- sum(d_obs_smooth)/(sum(i_00_19_smooth)+sum(i_20_59_smooth)+sum(i_60_mas_smooth))
+  tasaLetalidadAjustada <- round(sum(d_obs_smooth)/(sum(i_00_19_smooth)+sum(i_20_59_smooth)+sum(i_60_mas_smooth)),digits=4)
   } else {tasaLetalidadAjustada <- 0.0027}
 
 ## Días desde el primer informe hasta la dinámica de la muerte: nuevo modelo

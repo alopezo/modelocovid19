@@ -276,8 +276,8 @@ graficando <- function(input, output, session, i18n) {
       dy <- dygraph(dg, group = "grupo") %>% 
         dySeries(c(names(dg[,c(1)])), label = labels[1], strokeWidth = 3,  color = if (input$que_infecc=="Edades") {color=color_dyg[4]} else {color=color_dyg[1]})  %>% 
         dySeries(c(names(dg[,c(4)])), label = labels[4], stepPlot = T, fillGraph = TRUE, color = "#c3c3c7") %>%
-        dyOptions(drawGrid = FALSE, labelsKMB=F,maxNumberWidth=10, rightGap=100, digitsAfterDecimal=0)  %>%  dyAxis("y", label = labels[1], 
-               valueRange = c(0, max(dg)*1.1)) %>% dyOptions(stackedGraph = (input$que_infecc=="Edades")) %>% 
+        dyOptions(stackedGraph = input$que_infecc=="Edades", drawGrid = FALSE, labelsKMB=F,maxNumberWidth=10, rightGap=100, digitsAfterDecimal=0)  %>%  dyAxis("y", label = labels[1], 
+               valueRange = c(0, max(dg)*1.1)) %>% 
         dyHighlight(highlightCircleSize = 5, 
                     highlightSeriesBackgroundAlpha = 1,
                     hideOnMouseOut = FALSE) %>% 
@@ -290,8 +290,8 @@ graficando <- function(input, output, session, i18n) {
       {
         dy <- dygraph(dg[,-4], group = "grupo") %>% 
           dySeries(c(names(dg[,c(1)])), label = labels[1], strokeWidth = 3,  color = if (input$que_infecc=="Edades") {color=color_dyg[4]} else {color=color_dyg[1]})  %>% 
-          dyOptions(drawGrid = FALSE, labelsKMB=F,maxNumberWidth=10, rightGap=100, digitsAfterDecimal=0)  %>%  dyAxis("y", label = labels[1], 
-                                                                                                                      valueRange = c(0, max(dg)*1.1)) %>% dyOptions(stackedGraph = (input$que_infecc=="Edades")) %>% 
+          dyOptions(stackedGraph = input$que_infecc=="Edades", drawGrid = FALSE, labelsKMB=F,maxNumberWidth=10, rightGap=100, digitsAfterDecimal=0)  %>%  dyAxis("y", label = labels[1], 
+                                                                                                                      valueRange = c(0, max(dg)*1.1))  %>% 
           dyHighlight(highlightCircleSize = 5, 
                       highlightSeriesBackgroundAlpha = 1,
                       hideOnMouseOut = FALSE) %>% 
