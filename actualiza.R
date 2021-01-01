@@ -15,7 +15,7 @@ library(EpiEstim)
 
 #### países/juris a actualizar ####
 
-hoy <<- diaActualizacion <<- as.Date("2020-12-01")
+hoy <<- diaActualizacion <<- as.Date("2020-12-10")
 paises_actualizar <- c("BOL","CRI","SLV","ECU","GTM",
                        "HND","JAM","PAN","PRY","DOM","CHL","NIC",
                        "URY","BRA","PER","MEX","COL", "BHS",
@@ -33,7 +33,7 @@ source("oms_data.R", encoding = "UTF-8")
 
 ##### descarga ultimos datos de msal  ####
 urlMsal <- 'https://sisa.msal.gov.ar/datos/descargas/covid-19/files/Covid19Casos.csv'
-#download.file(urlMsal, "Covid19Casos.csv")
+download.file(urlMsal, "Covid19Casos.csv")
 
 urlOwd <- "https://covid.ourworldindata.org/data/owid-covid-data.csv"
 download.file(urlOwd, "dataEcdc.csv")
