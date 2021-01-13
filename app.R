@@ -28,7 +28,7 @@ paisesEdad <<- c("ARG","ARG_2")
 versionModelo <<- "2.6"
 
 # funs --------------------------------------------------------------------
-hoy <<- as.Date("2020-12-01")
+hoy <<- as.Date("2020-12-30")
 default <<- FALSE
 
 # Configurando archivo de traducciones

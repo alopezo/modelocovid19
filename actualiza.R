@@ -15,14 +15,15 @@ library(EpiEstim)
 
 #### países/juris a actualizar ####
 
-hoy <<- diaActualizacion <<- as.Date("2020-12-10")
+hoy <<- diaActualizacion <<- as.Date("2020-12-30")
 paises_actualizar <- c("BOL","CRI","SLV","ECU","GTM",
                        "HND","JAM","PAN","PRY","DOM","CHL","NIC",
-                       "URY","BRA","PER","MEX","COL", "BHS",
+                       "URY","BRA","PER","MEX","COL", 
+                       #"BHS",
                        "BRB","BLZ","GUY","HTI","SUR","TTO","VEN",
-                       "ARG","ARG_18", "ARG_2", "ARG_6", "ARG_7", "ARG_50", "ARG_3", "ARG_6_826","ARG_6_756")
-
-
+                       "ARG","ARG_18", "ARG_2", "ARG_6", "ARG_7", 
+                       #"ARG_50", 
+                       "ARG_3", "ARG_6_826","ARG_6_756")
 
 
 paisesEdad <<- c("ARG","ARG_2")
@@ -43,7 +44,7 @@ download.file(urlOwd, "dataEcdc.csv")
 input=list()
 for(p in paises_actualizar){
 input$pais = p
-
+p="ARG_50"
 if (substr(input$pais,1,3)=="ARG"){
   
   dataMsal<-read.csv("Covid19Casos.csv", fileEncoding = "UTF-8")
