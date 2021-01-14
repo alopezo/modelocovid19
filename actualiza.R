@@ -14,16 +14,19 @@ library(zoo)
 library(EpiEstim)
 
 #### países/juris a actualizar ####
-
+rm(list = ls())
 hoy <<- diaActualizacion <<- as.Date("2020-12-30")
 paises_actualizar <- c("BOL","CRI","SLV","ECU","GTM",
                        "HND","JAM","PAN","PRY","DOM","CHL","NIC",
                        "URY","BRA","PER","MEX","COL", 
-                       #"BHS",
+                       "BHS",
                        "BRB","BLZ","GUY","HTI","SUR","TTO","VEN",
-                       "ARG","ARG_18", "ARG_2", "ARG_6", "ARG_7", 
-                       #"ARG_50", 
-                       "ARG_3", "ARG_6_826","ARG_6_756")
+                       "ARG"
+                       ,
+                       "ARG_18", "ARG_2", "ARG_6", "ARG_7", 
+                       "ARG_50", 
+                       "ARG_3", "ARG_6_826","ARG_6_756"
+                       )
 
 
 paisesEdad <<- c("ARG","ARG_2")
@@ -34,7 +37,7 @@ source("oms_data.R", encoding = "UTF-8")
 
 ##### descarga ultimos datos de msal  ####
 urlMsal <- 'https://sisa.msal.gov.ar/datos/descargas/covid-19/files/Covid19Casos.csv'
-download.file(urlMsal, "Covid19Casos.csv")
+#download.file(urlMsal, "Covid19Casos.csv")
 
 urlOwd <- "https://covid.ourworldindata.org/data/owid-covid-data.csv"
 download.file(urlOwd, "dataEcdc.csv")
@@ -46,7 +49,6 @@ for(p in paises_actualizar){
 input$pais = p
 p="ARG_50"
 if (substr(input$pais,1,3)=="ARG"){
-  
   dataMsal<-read.csv("Covid19Casos.csv", fileEncoding = "UTF-8")
   dataMsal<-dataMsal %>% filter(clasificacion_resumen=="Confirmado" & is.na(edad)==F)
   dataMsal<-dataMsal %>% mutate(grupedad = case_when(

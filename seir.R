@@ -60,7 +60,7 @@ seir <- function(tipo = "A", actualiza = F,
   
   # observo y suaviz muertes
   d_obs = data$new_deaths
-  d_obs_smooth = predict(loess(d_obs~seq(1,nrow(data)),span=.5)) # saco negativos
+  d_obs_smooth = predict(loess(d_obs~seq(1,nrow(data)),span=.1)) # saco negativos
   d_obs_smooth[d_obs_smooth<0] = 0
 
   # organizo R recibido
@@ -109,9 +109,9 @@ seir <- function(tipo = "A", actualiza = F,
       i60_mas = i_gr_60_64 + i_gr_65_69 + i_gr_70_74 + i_gr_75_79 + i_gr_80_84 + i_gr_85_89 + i_gr_90_
       
       # suavizo
-      i_00_19_smooth <- c(predict(loess(i00_19[1:(hoy-lag)]~seq(1,(hoy-lag)),span=.5)),rep(0,lag))
-      i_20_59_smooth <- c(predict(loess(i20_59[1:(hoy-lag)]~seq(1,(hoy-lag)),span=.5)),rep(0,lag)) 
-      i_60_mas_smooth <- c(predict(loess(i60_mas[1:(hoy-lag)]~seq(1,(hoy-lag)),span=.5)),rep(0,lag)) 
+      i_00_19_smooth <- c(predict(loess(i00_19[1:(hoy-lag)]~seq(1,(hoy-lag)),span=.1)),rep(0,lag))
+      i_20_59_smooth <- c(predict(loess(i20_59[1:(hoy-lag)]~seq(1,(hoy-lag)),span=.1)),rep(0,lag)) 
+      i_60_mas_smooth <- c(predict(loess(i60_mas[1:(hoy-lag)]~seq(1,(hoy-lag)),span=.1)),rep(0,lag)) 
       
       # elimino negativos
       i_00_19_smooth[i_00_19_smooth<0] <- 0
@@ -136,7 +136,7 @@ seir <- function(tipo = "A", actualiza = F,
       i_raw = data$new_cases / porc_detectado
       i = rollmean(i_raw, 5, fill = 0)
       i[(hoy-1):hoy] = c(mean(i_raw[(hoy-3):hoy]),mean(i_raw[(hoy-2):hoy]))
-      i=predict(loess(i~seq(1,nrow(data)),span=.5))
+      i=predict(loess(i~seq(1,nrow(data)),span=.1))
     
     }
  
