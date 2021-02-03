@@ -315,7 +315,7 @@ hr(),
   fluidRow(
     column(6,
            # h4(em(textOutput("default_o_no"))),
-           p(i18n$t("La fecha de última actualización de datos es el"), format(hoy,"%d-%m-%Y"),"."),
+           p(i18n$t("Actualizado el 03-02-2021 con datos disponibles al"), format(hoy,"%d-%m-%Y")),
            # conditionalPanel("input$pais %in% paises_distintos",
            #                  p("La fecha de última actualización de datos es el", 
            #                    format(hoy,"%d-%m-%Y"),". ","Ajustando el modelo en base a casos reportados")
