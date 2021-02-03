@@ -15,7 +15,7 @@ library(EpiEstim)
 
 #### países/juris a actualizar ####
 rm(list = ls())
-hoy <<- diaActualizacion <<- as.Date("2020-12-30")
+hoy <<- diaActualizacion <<- as.Date("2021-01-15")
 paises_actualizar <- c("BOL","CRI","SLV","ECU","GTM",
                        "HND","JAM","PAN","PRY","DOM","CHL","NIC",
                        "URY","BRA","PER","MEX","COL", 
@@ -40,14 +40,14 @@ urlMsal <- 'https://sisa.msal.gov.ar/datos/descargas/covid-19/files/Covid19Casos
 #download.file(urlMsal, "Covid19Casos.csv")
 
 urlOwd <- "https://covid.ourworldindata.org/data/owid-covid-data.csv"
-download.file(urlOwd, "dataEcdc.csv")
+#download.file(urlOwd, "dataEcdc.csv")
 
 
 #### casos/muertes y parámetros para cada país ####
 input=list()
 for(p in paises_actualizar){
 input$pais = p
-p="ARG_50"
+#p="ARG_50"
 if (substr(input$pais,1,3)=="ARG"){
   dataMsal<-read.csv("Covid19Casos.csv", fileEncoding = "UTF-8")
   dataMsal<-dataMsal %>% filter(clasificacion_resumen=="Confirmado" & is.na(edad)==F)
