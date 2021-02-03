@@ -199,7 +199,8 @@ graficando <- function(input, output, session, i18n) {
   
   rango_data = paste0(month(range(modeloSimulado$fecha),label = T,abbr = F),"-",
                       year(range(modeloSimulado$fecha)))
-  range_graf_select = c(min(as.Date(modeloSimulado$fecha)),as.Date("2020-12-31")) + c(60,0)
+  range_graf_select = c(min(as.Date("2020-06-01")),as.Date("2021-06-30")) + c(60,0)
+  # modeloSimulado$fecha
   output$min_graf_inf <- renderText({str_to_sentence(as.character(rango_data[1]))})
   output$max_graf_inf <- renderText({str_to_sentence(as.character(rango_data[2]))})
   output$min_graf_cam <- renderText({str_to_sentence(as.character(rango_data[1]))})
