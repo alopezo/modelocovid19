@@ -9,6 +9,7 @@ paises <-c("ARG","BOL","BRA","CHL","COL","CRI","SLV",
            "ECU","GTM","HND","JAM","MEX","PAN","PRY","PER","DOM","URY","ARG_2","ARG_18","ARG_3","ARG_7", "ARG_50", "ARG_6_756", "ARG_6_826", "ARG_6",
            "BHS", "BRB", "BLZ", "GUY", "HTI", "NIC", "SUR", "TTO", "VEN")
 
+
 # get data
 # Our World In Data. Deaths and Cases from ECDC
 owd_data <- read.csv("https://covid.ourworldindata.org/data/owid-covid-data.csv",header = T) %>% 

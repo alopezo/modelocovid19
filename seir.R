@@ -231,6 +231,7 @@ seir <- function(tipo = "A", actualiza = F,
 # crea tabla de resultados ------------------------------------------------
 
 crea_tabla_rr <- function(modeloSimulado){
+  
   CantidadMaximaNuevasInfeccionesDia <-
     as.character(format(round(max(
       modeloSimulado$i_5d_ma

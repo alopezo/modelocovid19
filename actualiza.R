@@ -14,12 +14,37 @@ library(EpiEstim)
 
 #### países/juris a actualizar ####
 
-hoy <<- diaActualizacion <<- as.Date("2020-11-27")
-paises_actualizar <- c("ARG","BOL","CRI","SLV","ECU","GTM",
-                        "HND","JAM","PAN","PRY","DOM","CHL","NIC",
-                        "URY","BRA","PER","MEX","COL", "BHS",
-                        "BRB","BLZ","GUY","HTI","SUR","TTO","VEN",
-                        "ARG_18", "ARG_2", "ARG_6", "ARG_7", "ARG_50", "ARG_3", "ARG_6_826","ARG_6_756")
+hoy <<- diaActualizacion <<- as.Date("2021-03-03")
+paises_actualizar <- c(
+                       "BOL",
+                       "CRI",
+                       "SLV",
+                       "ECU",
+                       "GTM",
+                       "HND",
+                       "JAM",
+                       "PAN",
+                       "PRY",
+                       "DOM",
+                       "CHL",
+                       "NIC",
+                       "URY",
+                       "BRA",
+                       "PER",
+                       "MEX",
+                       "COL", 
+                       "BHS",
+                       "BRB",
+                       "BLZ",
+                       "GUY",
+                       "HTI",
+                       "SUR",
+                       "TTO",
+                       "VEN",
+                       "ARG","ARG_18", "ARG_2", "ARG_6", "ARG_7", "ARG_50", "ARG_3", "ARG_6_826","ARG_6_756"
+                       )
+
+
 
 ##### carga población y oms data  ####
 load("DatosIniciales/poblacion_data.RData")
@@ -137,12 +162,14 @@ union all
 } else
   
 {
-  dataEcdc <- read.csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv", 
+  dataEcdc <- read.csv("https://covid.ourworldindata.org/data/owid-covid-data.csv", 
                        na.strings = "", fileEncoding = "UTF-8-BOM")
-
-  dataEcdc$dateRep <- as.Date(dataEcdc$dateRep, format = "%d/%m/%Y")
-  dataEcdc$dateRep <- format(dataEcdc$dateRep, "%Y-%m-%d")
-  dataEcdc<-dataEcdc %>% filter(dateRep<=Sys.Date())
+  
+  dataEcdc<-dataEcdc %>% rename(dateRep=date,
+                                countryterritoryCode=iso_code,
+                                cases=new_cases,
+                                deaths=new_deaths) %>%
+                                filter(dateRep<=Sys.Date())
   dataEcdc$dateRep<-as.Date(dataEcdc$dateRep)
   
   dataEcdc <- dataEcdc %>% filter(countryterritoryCode==input$pais)
@@ -297,6 +324,22 @@ r_cori <- seir_update$r_cori
 Rusuario <- data.frame(Comienzo = max(dataEcdc$dateRep),
                        Final = max(dataEcdc$dateRep)+420,
                        R.modificado=r_cori)
+
+##### FIX NUMEROS NEGATIVOS #####
+modeloSimulado$muertesDiariasProyeccion[is.nan(modeloSimulado$muertesDiariasProyeccion)==T] <- 0
+modeloSimulado$muertesDiariasProyeccion[modeloSimulado$muertesDiariasProyeccion<1] <- 0
+modeloSimulado$HHRR.criticCareBeds[is.nan(modeloSimulado$HHRR.criticCareBeds)==T] <- 0
+modeloSimulado$HHRR.criticCareBeds[modeloSimulado$HHRR.criticCareBeds<1] <- 0
+modeloSimulado$HHRR.SAT.criticCareBeds[is.nan(modeloSimulado$HHRR.SAT.criticCareBeds)==T] <- 0
+modeloSimulado$HHRR.SAT.criticCareBeds[modeloSimulado$HHRR.SAT.criticCareBeds<1] <- 0
+modeloSimulado$HHRR.ventilators[is.nan(modeloSimulado$HHRR.ventilators)==T] <- 0
+modeloSimulado$HHRR.ventilators[modeloSimulado$HHRR.ventilators<1] <- 0
+modeloSimulado$HHRR.SAT.ventilators[is.nan(modeloSimulado$HHRR.SAT.ventilators)==T] <- 0
+modeloSimulado$HHRR.SAT.ventilators[modeloSimulado$HHRR.SAT.ventilators<1] <- 0
+modeloSimulado$i_5d_ma[is.nan(modeloSimulado$i_5d_ma)==T] <- 0
+modeloSimulado$i_5d_ma[modeloSimulado$i_5d_ma<1] <- 0
+
+
 resumenResultados <- crea_tabla_rr(modeloSimulado = modeloSimulado)
 crea_tabla_inputs()
 
