@@ -12,6 +12,14 @@ library(readxl)
 library(zoo)
 library(EpiEstim)
 
+
+##### download data OWD ####
+dataEcdcFull <- read.csv("https://covid.ourworldindata.org/data/owid-covid-data.csv", 
+                         na.strings = "", 
+                         fileEncoding = "UTF-8-BOM")
+
+
+
 #### países/juris a actualizar ####
 
 hoy <<- diaActualizacion <<- as.Date("2021-03-03")
@@ -40,8 +48,8 @@ paises_actualizar <- c(
                        "HTI",
                        "SUR",
                        "TTO",
-                       "VEN",
-                       "ARG","ARG_18", "ARG_2", "ARG_6", "ARG_7", "ARG_50", "ARG_3", "ARG_6_826","ARG_6_756"
+                       "VEN"#,
+                       #"ARG","ARG_18", "ARG_2", "ARG_6", "ARG_7", "ARG_50", "ARG_3", "ARG_6_826","ARG_6_756"
                        )
 
 
@@ -61,9 +69,10 @@ input$pais = p
 
 if (substr(input$pais,1,3)=="ARG"){
   
-  dataMsal<-read.csv("Covid19Casos.csv", fileEncoding = "UTF-8")
-  dataMsal<-dataMsal %>% filter(clasificacion_resumen=="Confirmado")
-
+  dataMsal<-read.csv("Covid19Casos.csv", fileEncoding = "UTF-8") %>% 
+            dplyr::filter(clasificacion_resumen=="Confirmado")
+  
+  
   dataMsalARG<-dataMsal
   dataMsalARG$residencia_provincia_id<-"0"
   dataMsalARG$residencia_provincia_nombre<-"Argentina"
@@ -158,50 +167,34 @@ union all
   rm(dataMsalARG)
   rm(dataMsal_6_756)
   rm(dataMsal_6_826)
-  #   dataEcdc$new_deaths[6:nrow(dataEcdc)-6]<-rollmean(dataEcdc$new_deaths,7)
+
+    #   dataEcdc$new_deaths[6:nrow(dataEcdc)-6]<-rollmean(dataEcdc$new_deaths,7)
 } else
   
 {
-  dataEcdc <- read.csv("https://covid.ourworldindata.org/data/owid-covid-data.csv", 
-                       na.strings = "", fileEncoding = "UTF-8-BOM")
+  dataEcdc <- dataEcdcFull
+
+  dataEcdc <- dataEcdc %>% dplyr::rename(dateRep=date,
+                                         countryterritoryCode=iso_code,
+                                         cases=new_cases,
+                                         deaths=new_deaths) %>%
+                           dplyr::filter(dateRep<=Sys.Date(),
+                                         countryterritoryCode==input$pais) %>%
+                           dplyr::mutate(dateRep=as.Date(dateRep)) %>%
+                           dplyr::select(dateRep,countryterritoryCode, cases, deaths) 
+                           
+  dataEcdc <- dplyr::left_join(data.frame(dateRep=as.Date(seq(min(as.Date(dataEcdc$date)),max(as.Date(dataEcdc$date)), by=1))), dataEcdc) %>%
+              dplyr::select(dateRep=dateRep,cases,deaths) %>%
+              dplyr::mutate(deaths = ifelse(is.na(deaths), 0, deaths),
+                            cases = ifelse(is.na(cases), 0, cases),
+                            total_cases = cumsum(cases),
+                            total_deaths = cumsum(deaths)) %>%
+                            dplyr::rename(new_cases=cases,
+                            new_deaths=deaths) %>%
+                            dplyr::filter(dateRep <= diaActualizacion &
+                            total_cases > 0)
   
-  dataEcdc<-dataEcdc %>% rename(dateRep=date,
-                                countryterritoryCode=iso_code,
-                                cases=new_cases,
-                                deaths=new_deaths) %>%
-                                filter(dateRep<=Sys.Date())
-  dataEcdc$dateRep<-as.Date(dataEcdc$dateRep)
-  
-  dataEcdc <- dataEcdc %>% filter(countryterritoryCode==input$pais)
-  dataEcdc <- dataEcdc %>% dplyr::select(fecha=dateRep,countryterritoryCode, cases, deaths)
-  seqFecha<-seq(min(as.Date(dataEcdc$fecha)),max(as.Date(dataEcdc$fecha)), by=1 )
-  seqFecha<-data.frame(secuencia=seqFecha)
-  seqFecha$secuencia<-as.Date(seqFecha$secuencia)
-  
-  dataEcdc<-sqldf('
-      select T1.*, T2.cases,T2.deaths from seqFecha as T1
-      left join dataEcdc as T2 on
-      T1.secuencia=T2.fecha
-      ')
-  dataEcdc<-data.frame(dataEcdc %>% dplyr::select(dateRep=secuencia,cases,deaths))
-  
-  dataEcdc <-
-    mutate(dataEcdc, deaths = ifelse(is.na(deaths), 0, deaths))
-  
-  dataEcdc$cases[is.na(dataEcdc$cases)] <- 0
-  
-  dataEcdc <- dataEcdc %>%
-    mutate(total_cases = cumsum(cases)) %>%
-    mutate(total_deaths = cumsum(deaths))
-  
-  colnames(dataEcdc)[2] <- "new_cases"
-  colnames(dataEcdc)[3] <- "new_deaths"
-  
-  dataEcdc <-
-    dataEcdc %>% filter(
-      dateRep <= diaActualizacion &
-        total_cases > 0
-    )
+
 }
 
 #### parametros epidemiológicos####
@@ -365,7 +358,9 @@ rm(seir_update_hi)
 rm(seir_update_low)
 
 #### guarda conjunto de datos que serán levantados en la app####
-save.image(paste0("DatosIniciales/DatosIniciales_",input$pais,".RData"))
+
+save(list=ls()[!ls() %in% c("dataEcdcFull")], file=paste0("DatosIniciales/DatosIniciales_",input$pais,".RData"))
+#save.image(paste0("DatosIniciales/DatosIniciales_",input$pais,".RData"))
 print(input$pais)
 }
 
