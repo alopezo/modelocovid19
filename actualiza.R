@@ -22,7 +22,7 @@ dataEcdcFull <- read.csv("https://covid.ourworldindata.org/data/owid-covid-data.
 
 #### países/juris a actualizar ####
 
-hoy <<- diaActualizacion <<- as.Date("2021-03-03")
+hoy <<- diaActualizacion <<- as.Date("2021-03-22")
 paises_actualizar <- c(
                        "BOL",
                        "CRI",
@@ -48,8 +48,8 @@ paises_actualizar <- c(
                        "HTI",
                        "SUR",
                        "TTO",
-                       "VEN"#,
-                       #"ARG","ARG_18", "ARG_2", "ARG_6", "ARG_7", "ARG_50", "ARG_3", "ARG_6_826","ARG_6_756"
+                       "VEN",
+                       "ARG","ARG_18", "ARG_2", "ARG_6", "ARG_7", "ARG_50", "ARG_3", "ARG_6_826","ARG_6_756"
                        )
 
 
@@ -60,7 +60,7 @@ source("oms_data.R", encoding = "UTF-8")
 
 ##### descarga ultimos datos de msal  ####
 urlMsal <- 'https://sisa.msal.gov.ar/datos/descargas/covid-19/files/Covid19Casos.csv'
-#download.file(urlMsal, "Covid19Casos.csv")
+download.file(urlMsal, "Covid19Casos.csv")
 
 #### casos/muertes y parámetros para cada país ####
 input=list()
