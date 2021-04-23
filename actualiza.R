@@ -22,7 +22,7 @@ dataEcdcFull <- read.csv("https://covid.ourworldindata.org/data/owid-covid-data.
 
 #### países/juris a actualizar ####
 
-hoy <<- diaActualizacion <<- as.Date("2021-03-22")
+hoy <<- diaActualizacion <<- as.Date("2021-04-09")
 paises_actualizar <- c(
                        "BOL",
                        "CRI",
@@ -59,8 +59,9 @@ load("DatosIniciales/poblacion_data.RData")
 source("oms_data.R", encoding = "UTF-8")
 
 ##### descarga ultimos datos de msal  ####
-urlMsal <- 'https://sisa.msal.gov.ar/datos/descargas/covid-19/files/Covid19Casos.csv'
-download.file(urlMsal, "Covid19Casos.csv")
+urlMsal <- 'https://sisa.msal.gov.ar/datos/descargas/covid-19/files/Covid19Casos.zip'
+download.file(urlMsal, "Covid19Casos.zip")
+unzip("Covid19Casos.zip")
 
 #### casos/muertes y parámetros para cada país ####
 input=list()
@@ -160,6 +161,7 @@ union all
   
   dataEcdc<-data.frame(dataMsal %>% dplyr::select(dateRep,countryterritoryCode,new_cases=cases,new_deaths=deaths,total_cases,total_deaths))
   dataEcdc<-dataEcdc[,-2]
+  
   dataEcdc<-dataEcdc %>% dplyr::filter(dateRep>="2020-03-01") 
   rm(dataMsal)
   rm(dataMsalAmba)

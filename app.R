@@ -21,12 +21,12 @@ library(sp)
 library(tinytex)
 library(raster)
 
-#subNac <<- "no"
+subNac <<- "no"
 subNacUrl <<- c("ARG_2","ARG_3","ARG_6","ARG_7","ARG_50","ARG_18","ARG_6_756", "ARG_6_826")
 versionModelo <<- "2.6"
 
 # funs --------------------------------------------------------------------
-hoy <<- as.Date("2021-03-22")
+hoy <<- as.Date("2021-04-09")
 default <<- FALSE
 # setwd("appTest - Cod")
 source("modulos.R", encoding = "UTF-8")
@@ -784,8 +784,8 @@ server <- function(input, output, session) {
   # url me dice si quiere ir a subnacional argentino
   observe({
     if(
-      str_detect(session$clientData$url_pathname, "argentina")==T
-      #subNac=="si"
+      #str_detect(session$clientData$url_pathname, "argentina")==T
+      subNac=="si"
     )
     {
       updateSelectInput(session, "pais",

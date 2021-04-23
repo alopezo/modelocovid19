@@ -59,7 +59,7 @@ seir <- function(tipo = "A", actualiza = F,
   
   # observo y suaviz muertes
   d_obs = data$new_deaths
-  d_obs_smooth = predict(loess(d_obs~seq(1,nrow(data)),span=.5)) # saco negativos
+  d_obs_smooth = predict(loess(d_obs~seq(1,nrow(data)),span=.2)) # saco negativos
   d_obs_smooth[d_obs_smooth<0] = 0
 
   # organizo R recibido
@@ -92,7 +92,7 @@ seir <- function(tipo = "A", actualiza = F,
       i_raw = data$new_cases / porc_detectado
       i = rollmean(i_raw, 5, fill = 0)
       i[(hoy-1):hoy] = c(mean(i_raw[(hoy-3):hoy]),mean(i_raw[(hoy-2):hoy]))
-      i=predict(loess(i~seq(1,nrow(data)),span=.5))
+      i=predict(loess(i~seq(1,nrow(data)),span=.2))
     }
  
   # para trigger
