@@ -780,7 +780,18 @@ ui <- fluidPage(
 
 ########### server
 server <- function(input, output, session) {
-  
+  showModal(modalDialog(
+    title = "Advertencia: Modelo en revisión",
+    p("El modelo está configurado de acuerdo al comportamiento de la dinámica de propagación 
+    original de la pandemia. Actualmente hemos iniciado un proceso de revisión para incorporar el impacto de 
+    la vacunación, la duración de la inmunidad, cambios en el R0/Rt relacionado con la circulación de otras variantes 
+    de preocupación (VOC) del SARS CoV2, la estrategia actual de testeo y rastreo, y otras variables epidemiológicas y 
+    clínicas. Hasta que se publique esta nueva 
+    versión su capacidad predictiva esta limitada en los nuevos escenarios."),
+    tags$small("Haga click en cualquier parte de la pantalla para continuar"),
+    easyClose = TRUE,
+    footer = NULL
+  ))
   # url me dice si quiere ir a subnacional argentino
   observe({
     if(
