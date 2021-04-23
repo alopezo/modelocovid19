@@ -40,7 +40,7 @@ paises_actualizar <- c(
                        "BRA",
                        "PER",
                        "MEX",
-                       "COL", 
+                       "COL",
                        "BHS",
                        "BRB",
                        "BLZ",
@@ -49,7 +49,8 @@ paises_actualizar <- c(
                        "SUR",
                        "TTO",
                        "VEN",
-                       "ARG","ARG_18", "ARG_2", "ARG_6", "ARG_7", "ARG_50", "ARG_3", "ARG_6_826","ARG_6_756"
+                       "ARG",
+                       "ARG_18", "ARG_2", "ARG_6", "ARG_7", "ARG_50", "ARG_3", "ARG_6_826","ARG_6_756"
                        )
 
 
@@ -59,9 +60,9 @@ load("DatosIniciales/poblacion_data.RData")
 source("oms_data.R", encoding = "UTF-8")
 
 ##### descarga ultimos datos de msal  ####
-urlMsal <- 'https://sisa.msal.gov.ar/datos/descargas/covid-19/files/Covid19Casos.zip'
-download.file(urlMsal, "Covid19Casos.zip")
-unzip("Covid19Casos.zip")
+#urlMsal <- 'https://sisa.msal.gov.ar/datos/descargas/covid-19/files/Covid19Casos.zip'
+#download.file(urlMsal, "Covid19Casos.zip")
+#unzip("Covid19Casos.zip")
 
 #### casos/muertes y parámetros para cada país ####
 input=list()
@@ -211,7 +212,7 @@ duracionMediaInf <- 4.8
 porcentajeCasosGraves <- 0.0328
 
 ## Porcentaje de casos críticos
-porcentajeCasosCriticos <- 0.0054
+porcentajeCasosCriticos <- 0.0108
 
 ## Días con síntomas antes de la hospitalización.
 diasSintomasAntesHosp <- 7.12
@@ -226,7 +227,7 @@ diasHospCasosCriticos <- 23.0
 diasUCICasosCriticos <- 18.0
 
 ## Tasa letalidad
-tasaLetalidadAjustada <- 0.0027
+tasaLetalidadAjustada <- 0.0033
 
 ## Días desde el primer informe hasta la dinámica de la muerte: nuevo modelo
 diasPrimerInformeMuerte <- 7.0
