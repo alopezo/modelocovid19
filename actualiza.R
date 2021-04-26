@@ -1,10 +1,11 @@
-#### Actualizar contenido ####
+#### ACTUALIZACION ####
 # se actualizan insumos para app, recalculando curvas en base a últimas observaciones
 # se utiilzan tres fuentes ppalmente: Ecdc (online), oms (online), owd (online), MSal (descarga manual).
 # la funcionalidad de los links de descarga debe ser revisada periódicamente
 # una vez organizada la info, se apica función seir.
 
 # librerías
+library(tidyr)
 library(tidyverse)
 library(readxl)
 library(sqldf)
@@ -13,170 +14,153 @@ library(zoo)
 library(EpiEstim)
 
 
-##### download data OWD ####
+##### DESCARGA DATOS DE OWD ####
 dataEcdcFull <- read.csv("https://covid.ourworldindata.org/data/owid-covid-data.csv", 
                          na.strings = "", 
                          fileEncoding = "UTF-8-BOM")
 
 
 
-#### países/juris a actualizar ####
+#### DEFINE DIA DE ACTUALIZACION Y PAISES ####
 
-hoy <<- diaActualizacion <<- as.Date("2021-04-09")
+hoy <<- diaActualizacion <<- as.Date("2021-04-12")
 paises_actualizar <- c(
-                       "BOL",
-                       "CRI",
-                       "SLV",
-                       "ECU",
-                       "GTM",
-                       "HND",
-                       "JAM",
-                       "PAN",
-                       "PRY",
-                       "DOM",
-                       "CHL",
-                       "NIC",
-                       "URY",
-                       "BRA",
-                       "PER",
-                       "MEX",
-                       "COL",
-                       "BHS",
-                       "BRB",
-                       "BLZ",
-                       "GUY",
-                       "HTI",
-                       "SUR",
-                       "TTO",
-                       "VEN",
-                       "ARG",
-                       "ARG_18", "ARG_2", "ARG_6", "ARG_7", "ARG_50", "ARG_3", "ARG_6_826","ARG_6_756"
+                       "BOL","CRI","SLV","ECU","GTM","HND",
+                       "JAM","PAN","PRY","DOM","CHL","NIC",
+                       "URY","BRA","PER","MEX","COL","BHS",
+                       "BRB","BLZ","GUY","HTI","SUR","TTO",
+                       "VEN","ARG","ARG_18", "ARG_2", "ARG_6", 
+                       "ARG_7", "ARG_50", "ARG_3", "ARG_6_826","ARG_6_756"
                        )
 
-
-
-##### carga población y oms data  ####
+##### CARGA POBLACIONES Y DATOS DE OMS  ####
 load("DatosIniciales/poblacion_data.RData")
 source("oms_data.R", encoding = "UTF-8")
 
-##### descarga ultimos datos de msal  ####
-#urlMsal <- 'https://sisa.msal.gov.ar/datos/descargas/covid-19/files/Covid19Casos.zip'
-#download.file(urlMsal, "Covid19Casos.zip")
-#unzip("Covid19Casos.zip")
+##### DESCARGA DATOS DE ARGENTINA  ####
+urlMsal <- 'https://sisa.msal.gov.ar/datos/descargas/covid-19/files/Covid19Casos.zip'
+download.file(urlMsal, "Covid19Casos.zip")
+unzip("Covid19Casos.zip")
 
-#### casos/muertes y parámetros para cada país ####
+##### PREPARA DF DE CADA PAIS #####
 input=list()
 for(p in paises_actualizar){
 input$pais = p
 
+##### SI ES ARGENTINA #####
 if (substr(input$pais,1,3)=="ARG"){
-  
-  dataMsal<-read.csv("Covid19Casos.csv", fileEncoding = "UTF-8") %>% 
-            dplyr::filter(clasificacion_resumen=="Confirmado")
-  
-  
-  dataMsalARG<-dataMsal
-  dataMsalARG$residencia_provincia_id<-"0"
-  dataMsalARG$residencia_provincia_nombre<-"Argentina"
-  
-  dataMsal_6_756<-dataMsal %>% dplyr::filter(residencia_provincia_id==6 & residencia_departamento_id==756)
-  dataMsal_6_756$residencia_provincia_id<-"6_756"
-  dataMsal_6_756$residencia_provincia_nombre<-"Buenos Aires - Partido de San Isidro"
-  
-  dataMsal_6_826<-dataMsal %>% dplyr::filter(residencia_provincia_id==6 & residencia_departamento_id==826)
-  dataMsal_6_826$residencia_provincia_id<-"6_826"
-  dataMsal_6_826$residencia_provincia_nombre<-"Buenos Aires - Partido de Trenque Lauquen"
-  
-  deptosAmba<-c(28,35,91,98,119,126,134,245,252,260,266,270,274,329,364,
-                371,408,410,412,427,441,434,490,497,515,525,539,560,568,
-                638,648,658,749,756,760,778,805,840,861,882)
-  dataMsalAmba<-dataMsal %>% filter(residencia_provincia_id==2 |
-                                      residencia_provincia_id==6 &
-                                      residencia_departamento_id %in% (deptosAmba))
-  dataMsalAmba$residencia_provincia_id<-as.character(dataMsalAmba$residencia_provincia_id)
-  dataMsal$residencia_provincia_id<-as.character(dataMsal$residencia_provincia_id)
-  dataMsalAmba$residencia_provincia_id<-"3"
-  dataMsalAmba$residencia_provincia_nombre<-"AMBA"
-  
-  
-  dataMsalAmbaPBA<-dataMsal %>% filter(residencia_provincia_id==6 &
-                                         residencia_departamento_id %in% (deptosAmba))
-  dataMsalAmbaPBA$residencia_provincia_id<-as.character(dataMsalAmbaPBA$residencia_provincia_id)
-  dataMsalAmbaPBA$residencia_provincia_id<-"7"
-  dataMsalAmbaPBA$residencia_provincia_nombre<-"Argentina - Buenos Aires (Partidos del AMBA)"
 
-  dataMsal<-union_all(dataMsal,dataMsalAmba)
-  dataMsal<-union_all(dataMsal,dataMsalAmbaPBA)
-  dataMsal<-union_all(dataMsal,dataMsalARG)
-  dataMsal<-union_all(dataMsal,dataMsal_6_756)
-  dataMsal<-union_all(dataMsal,dataMsal_6_826)
+  # identifica deptos del amba
+  deptosAmba <- c(28,35,91,98,119,126,134,245,252,260,266,270,274,329,364,371,408,410,412,427,441,434,490,497,515,525,539,560,568,638,648,658,749,756,760,778,805,840,861,882)
   
-  dataMsal<-sqldf('
-     select distinct "cases" as tipo,
-     fecha_diagnostico as dateRep,
-     residencia_provincia_nombre as countriesAndTerritories,
-     "ARG_" || residencia_provincia_id as countryterritoryCode,
-     sum(case
-       when clasificacion_resumen="Confirmado" then 1 else 0 end) as count
-     from dataMsal
-     where fecha_diagnostico <> "" and residencia_provincia_nombre <> "SIN ESPECIFICAR"
-     group by fecha_diagnostico,
-     residencia_provincia_nombre
-union all
-     select distinct "deaths" as tipo,
-     fecha_fallecimiento as dateRep,
-     residencia_provincia_nombre as countriesAndTerritories,
-     "ARG_" || residencia_provincia_id as countryterritoryCode,
-     sum(case
-       when clasificacion_resumen="Confirmado" then 1 else 0 end and fallecido="SI") as count
-     from dataMsal
-     where fecha_diagnostico <> "" and residencia_provincia_nombre <> "SIN ESPECIFICAR"
-     group by fecha_fallecimiento,
-     residencia_provincia_nombre
-     ')
-   
+  # lee dataset, selecciona confirmados y columnas necesarias y crea df para provincias
+  dataMsal <- read.csv("Covid19Casos.csv", fileEncoding = "UTF-8") %>% dplyr::filter(clasificacion_resumen=="Confirmado") %>%
+    dplyr::select(edad,
+                  edad_años_meses,
+                  fecha_diagnostico,
+                  fecha_fallecimiento,
+                  fallecido,
+                  clasificacion_resumen,
+                  residencia_provincia_id,
+                  residencia_departamento_id,
+                  residencia_provincia_nombre) %>%
+    dplyr::mutate(gredad=case_when(edad_años_meses=="Meses" | edad_años_meses=="Años" & edad>=1 & edad <=19 ~ "00 a 19",
+                                   edad_años_meses=="Años" & edad>=20 & edad <=64 ~ "20 a 64",
+                                   edad_años_meses=="Años" & edad>=65 & edad <=110 ~ "65 y más",
+                                   TRUE ~ "Sin esp."),
+                  residencia_provincia_id=as.character(residencia_provincia_id))
+ 
+  # df pais
+  dataMsalARG <- dataMsal %>% dplyr::mutate(residencia_provincia_id="0",
+                                            residencia_provincia_nombre="Argentina")
   
-  dataMsal$countryterritoryCode[dataMsal$countryterritoryCode=="ARG_0"] <- "ARG"
-  combinaciones=list(unique(dataMsal$tipo),
-                   seq(as.Date(first(dataMsal$dateRep)),as.Date(last(dataMsal$dateRep)),by=1),
-                   unique(dataMsal$countryterritoryCode))
+  # df depto 756 pba
+  dataMsal_6_756 <- dataMsal %>% dplyr::filter(residencia_provincia_id==6 & residencia_departamento_id==756) %>%
+    dplyr::mutate(residencia_provincia_id = "6_756",
+                  residencia_provincia_nombre = "Buenos Aires - Partido de San Isidro")
   
-  df_full<-data.frame(expand.grid(combinaciones)) %>% arrange(Var1,Var2) 
+  # df depto 826 pba
+  dataMsal_6_826 <- dataMsal %>% dplyr::filter(residencia_provincia_id==6 & residencia_departamento_id==756) %>%
+    dplyr::mutate(residencia_provincia_id = "6_826",
+                  residencia_provincia_nombre = "Buenos Aires - Partido de Trenque Lauquen")
   
-  colnames(df_full) <- c("tipo","dateRep","countryterritoryCode")
+  # df amba
+  dataMsalAmba<-dataMsal %>% dplyr::filter(residencia_provincia_id==2 | residencia_provincia_id==6 & residencia_departamento_id %in% (deptosAmba)) %>%
+    dplyr::mutate(residencia_provincia_id = "3",
+                  residencia_provincia_nombre = "AMBA")
   
-  dataMsal<-merge(df_full, dataMsal, all.x = TRUE) %>% arrange(tipo,countriesAndTerritories,dateRep)
-  dataMsal<-dataMsal %>% arrange(dateRep, countryterritoryCode)
-  dataMsal$count[is.na(dataMsal$count)]<-0
-  dataMsal$countriesAndTerritories <- NULL
-  dataMsal$tipo <- as.character(dataMsal$tipo) 
-  dataMsal$dateRep <- as.character(dataMsal$dateRep) 
-  dataMsal$countryterritoryCode <- as.character(dataMsal$countryterritoryCode)
+  # df amba pba
+  dataMsalAmbaPBA <- dataMsal %>% dplyr::filter(residencia_provincia_id==6 & residencia_departamento_id %in% (deptosAmba)) %>%
+    dplyr::mutate(residencia_provincia_id = "7",
+                  residencia_provincia_nombre = "Argentina - Buenos Aires (Partidos del AMBA)")
   
-  dataMsal<-dataMsal %>% filter(countryterritoryCode == input$pais & dateRep<=diaActualizacion)
+  # une todos 
+  dataMsal <- bind_rows(dataMsal,
+                        dataMsalAmba,
+                        dataMsalAmbaPBA,
+                        dataMsalARG,
+                        dataMsal_6_756,
+                        dataMsal_6_826)
   
-  dataMsal<-spread(dataMsal, tipo, count) %>% filter(dateRep!="") %>% arrange(countryterritoryCode, dateRep)
-  dataMsal$dateRep<-as.Date(dataMsal$dateRep)
-  dataMsal[is.na(dataMsal)] <- 0
-  dataMsal<-dataMsal %>% group_by(countryterritoryCode) %>% dplyr::mutate(total_cases=cumsum(cases),total_deaths=cumsum(deaths))
+  # da formato a df con grupos de edad
+  casos <- dataMsal %>% dplyr::group_by(dateRep=as.Date(fecha_diagnostico),
+                                        countriesAndTerritories=residencia_provincia_nombre,
+                                        countryterritoryCode=paste0("ARG_",residencia_provincia_id)) %>%
+    dplyr::summarise(new_cases=n(),
+                     nc0019=sum(gredad=="00 a 19"),
+                     nc2064=sum(gredad=="20 a 64"),
+                     nc6599=sum(gredad=="65 y más"))
   
-  dataEcdc<-data.frame(dataMsal %>% dplyr::select(dateRep,countryterritoryCode,new_cases=cases,new_deaths=deaths,total_cases,total_deaths))
-  dataEcdc<-dataEcdc[,-2]
+  muertes <- dataMsal %>% dplyr::filter(fallecido=="SI") %>%
+    dplyr::group_by(dateRep=as.Date(fecha_fallecimiento),
+                    countriesAndTerritories=residencia_provincia_nombre,
+                    countryterritoryCode=paste0("ARG_",residencia_provincia_id)) %>%
+    dplyr::summarise(new_deaths=n(),
+                     nd0019=sum(gredad=="00 a 19"),
+                     nd2064=sum(gredad=="20 a 64"),
+                     nd6599=sum(gredad=="65 y más"))
   
-  dataEcdc<-dataEcdc %>% dplyr::filter(dateRep>="2020-03-01") 
+  combinaciones=list(seq(min(casos$dateRep[is.na(casos$dateRep)==F & casos$dateRep>="2020-03-01"]),max(casos$dateRep[is.na(casos$dateRep)==F]),by=1),
+                     unique(casos$countryterritoryCode))
+  
+  # df final
+  dataEcdc <- 
+    expand.grid(combinaciones) %>% dplyr::mutate(Var1=as.Date(Var1)) %>% 
+    dplyr::rename(dateRep=Var1,
+                  countryterritoryCode=Var2) %>%
+    dplyr::left_join(casos, by=c("dateRep", "countryterritoryCode")) %>%
+    dplyr::left_join(muertes, by=c("dateRep", "countryterritoryCode")) %>%
+    dplyr::select(-countriesAndTerritories.x,-countriesAndTerritories.y) %>%
+    mutate_if(is.numeric, ~replace_na(., 0)) %>%
+    dplyr::mutate(countryterritoryCode=case_when(countryterritoryCode=="ARG_0" ~ "ARG",
+                                                 TRUE ~ countryterritoryCode)) %>%
+    dplyr::group_by(countryterritoryCode) %>%
+    mutate(total_cases=cumsum(new_cases),
+           total_deaths=cumsum(new_deaths)) %>%
+    dplyr::filter(countryterritoryCode == input$pais & dateRep<=diaActualizacion) %>%
+    ungroup() %>%
+    dplyr::select(-countryterritoryCode)
+  
+  # limpia entorno
+  rm(casos)
+  rm(muertes)
   rm(dataMsal)
-  rm(dataMsalAmba)
-  rm(dataMsalAmbaPBA)
   rm(dataMsalARG)
-  rm(dataMsal_6_756)
+  rm(dataMsalAmbaPBA)
+  rm(dataMsalAmba)
   rm(dataMsal_6_826)
-
-    #   dataEcdc$new_deaths[6:nrow(dataEcdc)-6]<-rollmean(dataEcdc$new_deaths,7)
+  rm(dataMsal_6_756)
+  rm(dataEcdcFull)
+  
 } else
   
+##### SI ES OTRO PAIS #####
+  
 {
+  # lee datos OWD
   dataEcdc <- dataEcdcFull
 
+  # da formato
   dataEcdc <- dataEcdc %>% dplyr::rename(dateRep=date,
                                          countryterritoryCode=iso_code,
                                          cases=new_cases,
@@ -185,7 +169,8 @@ union all
                                          countryterritoryCode==input$pais) %>%
                            dplyr::mutate(dateRep=as.Date(dateRep)) %>%
                            dplyr::select(dateRep,countryterritoryCode, cases, deaths) 
-                           
+  
+  # agrega dias vacios y frecuencias acumuladas                         
   dataEcdc <- dplyr::left_join(data.frame(dateRep=as.Date(seq(min(as.Date(dataEcdc$date)),max(as.Date(dataEcdc$date)), by=1))), dataEcdc) %>%
               dplyr::select(dateRep=dateRep,cases,deaths) %>%
               dplyr::mutate(deaths = ifelse(is.na(deaths), 0, deaths),
@@ -200,7 +185,7 @@ union all
 
 }
 
-#### parametros epidemiológicos####
+##### DEFINE PARAMETROS EPIDEMIOLOGICOS #####
 
 ## Periodo preinfeccioso promedio (días)
 periodoPreinfPromedio <- 5.84
@@ -271,7 +256,7 @@ recuperados <- 0
 ## Población
 poblacion<-as.numeric(poblacion_data$value[which(poblacion_data$indicator=='total' & poblacion_data$pais==input$pais)])
 
-##### Recursos #####
+##### CARGA INFROMACION DE RECURSOS POR PAIS #####
 # asigna recursos según país
 recursos <- read.csv("recursos.csv",sep=";") %>% filter(pais==input$pais)
 camasGenerales <- recursos[,"camasGenerales"]
@@ -284,7 +269,7 @@ medicosCamasUCI <- recursos[,"medicosCamasUCI"]
 porcentajeDisponibilidadCamasCOVID <- recursos[,"porcentajeDisponibilidadCamasCOVID"]
 
 
-#### Actualizar ####
+##### ACTUALIZA MODELO #####
 
 # obtiene función seir
 source("seir.R", encoding = "UTF-8")
@@ -321,7 +306,7 @@ Rusuario <- data.frame(Comienzo = max(dataEcdc$dateRep),
                        Final = max(dataEcdc$dateRep)+420,
                        R.modificado=r_cori)
 
-##### FIX NUMEROS NEGATIVOS #####
+# FIX NUMEROS NEGATIVOS #
 modeloSimulado$muertesDiariasProyeccion[is.nan(modeloSimulado$muertesDiariasProyeccion)==T] <- 0
 modeloSimulado$muertesDiariasProyeccion[modeloSimulado$muertesDiariasProyeccion<1] <- 0
 modeloSimulado$HHRR.criticCareBeds[is.nan(modeloSimulado$HHRR.criticCareBeds)==T] <- 0
@@ -360,14 +345,14 @@ rm(seir_update)
 rm(seir_update_hi)
 rm(seir_update_low)
 
-#### guarda conjunto de datos que serán levantados en la app####
+#### GUARDA ARCHIVO RDATA DE CADA PAIS ####
 
 save(list=ls()[!ls() %in% c("dataEcdcFull")], file=paste0("DatosIniciales/DatosIniciales_",input$pais,".RData"))
-#save.image(paste0("DatosIniciales/DatosIniciales_",input$pais,".RData"))
+save.image(paste0("DatosIniciales/DatosIniciales_",input$pais,".RData"))
 print(input$pais)
 }
 
-#### update owd_data and mapa ####
+#### ACTUALIZA DATOS PARA RESUMEN Y MAPA ####
 source("owd_data.R", encoding = "UTF-8")
 source("map_set.R", encoding = "UTF-8")
 
