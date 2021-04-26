@@ -348,7 +348,7 @@ rm(seir_update_low)
 #### GUARDA ARCHIVO RDATA DE CADA PAIS ####
 
 save(list=ls()[!ls() %in% c("dataEcdcFull")], file=paste0("DatosIniciales/DatosIniciales_",input$pais,".RData"))
-#save.image(paste0("DatosIniciales/DatosIniciales_",input$pais,".RData"))
+save.image(paste0("DatosIniciales/DatosIniciales_",input$pais,".RData"))
 print(input$pais)
 }
 
