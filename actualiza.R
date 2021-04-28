@@ -64,9 +64,25 @@ if (substr(input$pais,1,3)=="ARG"){
                   residencia_provincia_id,
                   residencia_departamento_id,
                   residencia_provincia_nombre) %>%
-    dplyr::mutate(gredad=case_when(edad_años_meses=="Meses" | edad_años_meses=="Años" & edad>=1 & edad <=19 ~ "00 a 19",
-                                   edad_años_meses=="Años" & edad>=20 & edad <=64 ~ "20 a 64",
-                                   edad_años_meses=="Años" & edad>=65 & edad <=110 ~ "65 y más",
+    dplyr::mutate(gredad=case_when(edad_años_meses=="Meses" | edad_años_meses=="Años" & edad>=1 & edad <=4 ~ "00 a 04",
+                                   edad_años_meses=="Años" & edad>=5 & edad <=9 ~ "05 a 09",
+                                   edad_años_meses=="Años" & edad>=10 & edad <=14 ~ "10 a 14",
+                                   edad_años_meses=="Años" & edad>=15 & edad <=19 ~ "15 a 19",
+                                   edad_años_meses=="Años" & edad>=20 & edad <=24 ~ "20 a 24",
+                                   edad_años_meses=="Años" & edad>=25 & edad <=29 ~ "25 a 29",
+                                   edad_años_meses=="Años" & edad>=30 & edad <=34 ~ "30 a 34",
+                                   edad_años_meses=="Años" & edad>=35 & edad <=39 ~ "35 a 39",
+                                   edad_años_meses=="Años" & edad>=40 & edad <=44 ~ "40 a 44",
+                                   edad_años_meses=="Años" & edad>=45 & edad <=49 ~ "45 a 49",
+                                   edad_años_meses=="Años" & edad>=50 & edad <=54 ~ "50 a 54",
+                                   edad_años_meses=="Años" & edad>=55 & edad <=59 ~ "55 a 59",
+                                   edad_años_meses=="Años" & edad>=60 & edad <=64 ~ "60 a 64",
+                                   edad_años_meses=="Años" & edad>=65 & edad <=69 ~ "65 a 69",
+                                   edad_años_meses=="Años" & edad>=70 & edad <=74 ~ "70 a 74",
+                                   edad_años_meses=="Años" & edad>=75 & edad <=79 ~ "75 a 79",
+                                   edad_años_meses=="Años" & edad>=80 & edad <=84 ~ "80 a 84",
+                                   edad_años_meses=="Años" & edad>=85 & edad <=89 ~ "85 a 89",
+                                   edad_años_meses=="Años" & edad>=90 & edad <=110 ~ "90 y más",
                                    TRUE ~ "Sin esp."),
                   residencia_provincia_id=as.character(residencia_provincia_id))
  
@@ -107,18 +123,50 @@ if (substr(input$pais,1,3)=="ARG"){
                                         countriesAndTerritories=residencia_provincia_nombre,
                                         countryterritoryCode=paste0("ARG_",residencia_provincia_id)) %>%
     dplyr::summarise(new_cases=n(),
-                     nc0019=sum(gredad=="00 a 19"),
-                     nc2064=sum(gredad=="20 a 64"),
-                     nc6599=sum(gredad=="65 y más"))
+                     nc0004=sum(gredad=="00 a 04"),
+                     nc0509=sum(gredad=="05 a 09"),
+                     nc1014=sum(gredad=="10 a 14"),
+                     nc1519=sum(gredad=="15 a 19"),
+                     nc2024=sum(gredad=="20 a 24"),
+                     nc2529=sum(gredad=="25 a 29"),
+                     nc3034=sum(gredad=="30 a 34"),
+                     nc3539=sum(gredad=="35 a 39"),
+                     nc4044=sum(gredad=="40 a 44"),
+                     nc4549=sum(gredad=="45 a 49"),
+                     nc5054=sum(gredad=="50 a 54"),
+                     nc5559=sum(gredad=="55 a 59"),
+                     nc6064=sum(gredad=="60 a 64"),
+                     nc6569=sum(gredad=="65 a 69"),
+                     nc7074=sum(gredad=="70 a 74"),
+                     nc7579=sum(gredad=="75 a 79"),
+                     nc8084=sum(gredad=="80 a 84"),
+                     nc8589=sum(gredad=="85 a 89"),
+                     nc9099=sum(gredad=="90 y más"))
   
   muertes <- dataMsal %>% dplyr::filter(fallecido=="SI") %>%
     dplyr::group_by(dateRep=as.Date(fecha_fallecimiento),
                     countriesAndTerritories=residencia_provincia_nombre,
                     countryterritoryCode=paste0("ARG_",residencia_provincia_id)) %>%
     dplyr::summarise(new_deaths=n(),
-                     nd0019=sum(gredad=="00 a 19"),
-                     nd2064=sum(gredad=="20 a 64"),
-                     nd6599=sum(gredad=="65 y más"))
+                     nd0004=sum(gredad=="00 a 04"),
+                     nd0509=sum(gredad=="05 a 09"),
+                     nd1014=sum(gredad=="10 a 14"),
+                     nd1519=sum(gredad=="15 a 19"),
+                     nd2024=sum(gredad=="20 a 24"),
+                     nd2529=sum(gredad=="25 a 29"),
+                     nd3034=sum(gredad=="30 a 34"),
+                     nd3539=sum(gredad=="35 a 39"),
+                     nd4044=sum(gredad=="40 a 44"),
+                     nd4549=sum(gredad=="45 a 49"),
+                     nd5054=sum(gredad=="50 a 54"),
+                     nd5559=sum(gredad=="55 a 59"),
+                     nd6064=sum(gredad=="60 a 64"),
+                     nd6569=sum(gredad=="65 a 69"),
+                     nd7074=sum(gredad=="70 a 74"),
+                     nd7579=sum(gredad=="75 a 79"),
+                     nd8084=sum(gredad=="80 a 84"),
+                     nd8589=sum(gredad=="85 a 89"),
+                     nd9099=sum(gredad=="90 y más"))
   
   combinaciones=list(seq(min(casos$dateRep[is.na(casos$dateRep)==F & casos$dateRep>="2020-03-01"]),max(casos$dateRep[is.na(casos$dateRep)==F]),by=1),
                      unique(casos$countryterritoryCode))
@@ -348,7 +396,7 @@ rm(seir_update_low)
 #### GUARDA ARCHIVO RDATA DE CADA PAIS ####
 
 save(list=ls()[!ls() %in% c("dataEcdcFull")], file=paste0("DatosIniciales/DatosIniciales_",input$pais,".RData"))
-save.image(paste0("DatosIniciales/DatosIniciales_",input$pais,".RData"))
+#save.image(paste0("DatosIniciales/DatosIniciales_",input$pais,".RData"))
 print(input$pais)
 }
 
