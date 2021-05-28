@@ -259,7 +259,7 @@ graficando <- function(input, output, session) {
                     hideOnMouseOut = FALSE) %>% 
         dyRangeSelector(height = 40, strokeColor = "", dateWindow = range_graf_select)%>% 
         dyLegend(width = 400) %>% 
-        dyEvent(x = hoy, label = "Hoy", labelLoc = "bottom", 
+        dyEvent(x = hoy, label = paste0("Actualización: ", hoy), labelLoc = "bottom", 
                 color = "grey", strokePattern = "dashed")
       if(trigger_on_app==0){
         dy <- dy %>% 
@@ -339,7 +339,7 @@ graficando <- function(input, output, session) {
                     hideOnMouseOut = FALSE) %>%
         dyRangeSelector(height = 40, strokeColor = "", dateWindow = range_graf_select)%>%
         dyLegend(width = 600) %>%
-        dyEvent(x = hoy, label = "Hoy", labelLoc = "bottom",
+        dyEvent(x = hoy, label = paste0("Actualización: ", hoy), labelLoc = "bottom",
                 color = "grey", strokePattern = "dashed")
 
       if(trigger_on_app==0){
@@ -457,7 +457,7 @@ graficando <- function(input, output, session) {
                     hideOnMouseOut = FALSE) %>% 
         dyRangeSelector(height = 40, strokeColor = "", dateWindow = range_graf_select)  %>% 
         dyLegend(width = 400) %>% 
-        dyEvent(x = hoy, label = "Hoy", labelLoc = "bottom", 
+        dyEvent(x = hoy, label = paste0("Actualización: ", hoy), labelLoc = "bottom", 
                 color = "grey", strokePattern = "dashed") %>% 
         dyLimit(ifelse(input$que_rrhh=="Camas", camasCriticas, 
                        ifelse(input$que_rrhh=="Ventiladores", ventiladores,

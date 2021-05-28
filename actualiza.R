@@ -23,7 +23,7 @@ dataEcdcFull <- read.csv("https://covid.ourworldindata.org/data/owid-covid-data.
 
 #### DEFINE DIA DE ACTUALIZACION Y PAISES ####
 
-hoy <<- diaActualizacion <<- as.Date("2021-04-12")
+hoy <<- diaActualizacion <<- as.Date("2021-05-15")
 paises_actualizar <- c(
                        "BOL","CRI","SLV","ECU","GTM","HND",
                        "JAM","PAN","PRY","DOM","CHL","NIC",
