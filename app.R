@@ -972,15 +972,15 @@ server <- function(input, output, session) {
       
       # acomodo df ppal
       modeloSimulado <<- modeloSimulado %>% 
-        filter(!is.na(fecha), fecha < as.Date("2021-07-01")) %>%
+        filter(!is.na(fecha), fecha < as.Date("2021-12-31")) %>%
         mutate(RtEstimado = round(RtEstimado,2),
                fecha = as.Date(as.character(fecha)))
       modeloSimulado_hi <<- modeloSimulado_hi %>% 
-        filter(!is.na(fecha), fecha < as.Date("2021-07-01")) %>%
+        filter(!is.na(fecha), fecha < as.Date("2021-12-31")) %>%
         mutate(RtEstimado = round(RtEstimado,2),
                fecha = as.Date(as.character(fecha)))
       modeloSimulado_low <<- modeloSimulado_low %>% 
-        filter(!is.na(fecha), fecha < as.Date("2021-07-01")) %>%
+        filter(!is.na(fecha), fecha < as.Date("2021-12-31")) %>%
         mutate(RtEstimado = round(RtEstimado,2),
                fecha = as.Date(as.character(fecha)))
       
