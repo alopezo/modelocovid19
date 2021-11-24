@@ -1,5 +1,6 @@
 library(xts)
 library(dygraphs)
+library(shiny.i18n)
 
 
 # not in ------------------------------------------------------------------

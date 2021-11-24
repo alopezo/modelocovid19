@@ -1,0 +1,936 @@
+{
+  "cultural_date_format": "%d-%m-%Y",
+  "languages": ["es", "en", "pt"],
+  "translation": [
+      {
+        "es": "IECS: Proyecciones COVID-19",
+        "en": "IECS: COVID-19 Projections",
+        "pt": "IECS: Projeções COVID-19"
+      },
+      {
+        "es": "Impacto del COVID-19 en los sistemas de salud de Latinoamérica y el Caribe",
+        "en": "Impact of COVID-19 in Latinamerica and the Caribbean Health Systems",
+        "pt": "Impacto do COVID-19 nos sistemas de saúde da América Latina e Caribe"
+      },
+      {
+        "es": "Proyecciones para la toma de decisiones públicas",
+        "en": "Projections for public decision making",
+        "pt": "Projeções para tomada de decisão pública"
+      },
+    {
+        "es": "El desarrollo de la metodología que da soporte a esta herramienta fue posible gracias al apoyo del Banco Interamericano de Desarrollo (BID) bajo el Contrato RG-E1696-P001",
+        "en": "The development of the methodology that supports this tool was made possible by the support of the Inter-American Development Bank (IDB) under Contract RG-E1696-P001",
+        "pt": "O desenvolvimento da metodologia que apóia esta ferramenta foi possível graças ao apoio do Banco Interamericano de Desenvolvimento (BID) sob o Contrato RG-E1696-P001"
+      },
+      {
+        "es": "Departamento de Evaluación de Tecnologías Sanitarias y Economía de la Salud",
+        "en": "Department of Health Technology Assessment and Health Economics",
+        "pt": "Departamento de Avaliação de Tecnologia da Saúde e Economia da Saúde"
+      },
+      {
+        "es": "Centro de Implementación e Innovación en Políticas de Salud",
+        "en": "Center for Health Policy Innovation and Implementation",
+        "pt": "Centro de Inovação e Implementação de Políticas de Saúde"
+      },
+      {
+        "es": "Instituto de Efectividad Clínica y Sanitaria, Buenos Aires, Argentina",
+        "en": "Institute of Clinical and Sanitary Effectiveness, Buenos Aires, Argentina",
+        "pt": "Instituto de Eficácia Clínica e Sanitária, Buenos Aires, Argentina"
+      },
+      {
+        "es": "Más información sobre el modelo",
+        "en": "More information about the model",
+        "pt": "Mais informações sobre o modelo"
+      },
+      {
+        "es": "Consultas y feedback",
+        "en": "Consultations and feedback",
+        "pt": "Consulta e feedback"
+      },
+      {
+        "es": "Lenguaje de la aplicación: ",
+        "en": "Application language: ",
+        "pt": "Linguagem de aplicação: "
+      },
+      {
+        "es": "Ultimos datos disponibles (fuentes ",
+        "en": "Latest available data (sources ",
+        "pt": "Últimos dados disponíveis (fontes "
+      },
+      {
+        "es": "Población:",
+        "en": "Population:",
+        "pt": "População:"
+      },
+      {
+        "es": "Casos confirm. diarios:",
+        "en": "Daily confirmed cases:",
+        "pt": "Casos confirmados diariamente:"
+      },
+      {
+        "es": "Muertes confirmadas diarias:",
+        "en": "Daily confirmed deaths:",
+        "pt": "Mortes diarias confirmadas:"
+      },
+      {
+        "es": "% de mayores de 65 años:",
+        "en": "% 65 years and older:",
+        "pt": "% 65 anos ou mais:"
+      },
+      {
+        "es": "Total casos confirmados:",
+        "en": "Total confirmed cases:",
+        "pt": "Total de casos confirmados:"
+      },
+      {
+        "es": "Total muertes confirmadas:",
+        "en": "Total confirmed deaths:",
+        "pt": "Total de mortes confirmadas:"
+      },
+      {
+        "es": "Esperanza de vida al nacer:",
+        "en": "Life expectancy:",
+        "pt": "Expectativa de vida:"
+      },
+      {
+        "es": "Tests por millón de habitantes:",
+        "en": "Total test per million:",
+        "pt": "Testes total por milhão:"
+      },
+      {
+        "es": "Tests diarios (últ. dato disp.)",
+        "en": "Daily test:",
+        "pt": "Testes por dia:"
+      },
+      {
+        "es": "Muertes Acum.",
+        "en": "Total deaths",
+        "pt": "Total de mortes"
+      },
+      {
+        "es": "c/Mill. hab.",
+        "en": "per million",
+        "pt": "por milhão"
+      },
+      {
+        "es": "prueba",
+        "en": "Newly infected",
+        "pt": "Infectados diariamente"
+      },
+      {
+        "es": "Proyecciones de ",
+        "en": "Projections for ",
+        "pt": "Projeções para"
+      },
+      {
+        "es": "La fecha de última actualización de datos es el",
+        "en": "Latest update",
+        "pt": "Actualização mais recente"
+      },
+      {
+        "es": " años",
+        "en": " years",
+        "pt": " anos"
+      },
+      {
+        "es": "Con esta plataforma interactiva es posible:",
+        "en": "With this interactive app it is possible to:",
+        "pt": "Com esta plataforma interactiva, é possível:"
+      },
+      {
+        "es": "Personalizar la proyección y crear un escenario nuevo.",
+        "en": "Customize the projection parameters, creating a new scenario.",
+        "pt": "Personalize os parâmetros de projeção, criando um novo cenário."
+      },
+      {
+        "es": "Seleccionar un escenario pre-definido.",
+        "en": "Select a pre-defined scenario.",
+        "pt": "Selecione um cenário pré-definido."
+      },
+      {
+        "es": "Configure los parámetros del nuevo escenario aquí.",
+        "en": "Configure the parameters of the new scenario here.",
+        "pt": "Configure os parâmetros do novo cenário aqui."
+      },
+      {
+        "es": "R0 según escenario vigente en proyección:",
+        "en": "R0 according to current scenario in projection:",
+        "pt": "R0 de acordo com o cenário actual em projecção:"
+      },
+      {
+        "es": "Hoy",
+        "en": "Today",
+        "pt": "Hoje"
+      },
+      {
+        "es": "Gráficos de resultados",
+        "en": "Results plots",
+        "pt": "Gráficos de resultados"
+      },
+      {
+        "es": "Los resultados esperados según la proyección son los siguientes:",
+        "en": "The expected results according to the projection are",
+        "pt": "Os resultados esperados de acordo com a projecção são"
+      },
+      {
+        "es": "Reporte",
+        "en": "Report",
+        "pt": "Relatório"
+      },
+      {
+        "es": "Parámetros",
+        "en": "Parameters",
+        "pt": "Parâmetros"
+      }
+      ,
+      {
+        "es": "Tabla de resultados (",
+        "en": "Results table (",
+        "pt": "Tabela de resultados ("
+      },
+      {
+        "es": "Actualizar resultados",
+        "en": "Update results",
+        "pt": "Actualização de resultado"
+      },
+      {
+        "es": "Se han modificado parámetros de:",
+        "en": "Modified parameters:",
+        "pt": "Parametros modificados:"
+      },
+      {
+        "es": "<br/>- Políticas de intervención",
+        "en": "<br/>- Intervention policies",
+        "pt": "<br/>- Políticas de intervenção"
+      },
+      {
+        "es": "Intervenciones de Salud Pública",
+        "en": "Public Health Interventions",
+        "pt": "Intervenções de Saúde Pública"
+      },
+      {
+        "es": " en ",
+        "en": " in ",
+        "pt": " en "
+      },
+      {
+        "es": " según ",
+        "en": " according to ",
+        "pt": " de acordo com "
+      },
+      {
+        "es": "metodología adoptada",
+        "en": "adopted methodology",
+        "pt": "metodologia adoptada"
+      },
+      {
+        "es": ". Otras estimaciones ",
+        "en": ". Other estimates ",
+        "pt": ". Outras estimativas "
+      },
+      {
+        "es": "disponibles.",
+        "en": "available.",
+        "pt": "disponível."
+      },
+      {
+        "es": "Lo anterior equivale a ",
+        "en": "This is equivalent to ",
+        "pt": "Isto é equivalente a "
+      },
+      {
+        "es": "Los días de duplicación de casos reportados se estiman en ",
+        "en": "The days of duplication of reported cases are estimated at ",
+        "pt": "Os dias de duplicação dos casos comunicados são estimados em "
+      },
+      {
+        "es": "Definir mediante:",
+        "en": "Define by:",
+        "pt": "Definir por:"
+      }
+      ,
+      {
+        "es": "R0 asociados a políticas de intervención: seleccionando niveles de restricción para cada mes de un menú de opciones simplificado.",
+        "en": "R0 associated with intervention policies: selecting restriction levels for each month from a simplified menu of options.",
+        "pt": "R0 associado às políticas de intervenção: seleccionar níveis de restrição para cada mês a partir de um menu simplificado de opções."
+      },
+      {
+        "es": "Recursos sanitarios",
+        "en": "Health Resources",
+        "pt": "Recursos sanitários"
+      },
+      {
+        "es": "Determine los recursos de camas críticas y ventiladores, y el porcentaje destinado a covid-19:",
+        "en": "Determine critical bed and ventilator resources and the percentage allocated to covid-19:",
+        "pt": "Determinar os recursos críticos do leito e do ventilador e a percentagem atribuída à covid-19:"
+      },
+      {
+        "es": "Cantidad de camas críticas",
+        "en": "Number of critical beds",
+        "pt": "Número de camas críticas"
+      },
+      {
+        "es": "Cantidad de ventiladores",
+        "en": "Number of ventilators",
+        "pt": "Número de ventiladores"
+      },
+      {
+        "es": "Médicos/as camas UCI",
+        "en": "Physicians for intensive care beds",
+        "pt": "Médicos para camas de cuidados intensivos"
+      },
+      {
+        "es": "Enfermeras/os camas UCI",
+        "en": "Nurses for intensive care beds",
+        "pt": "Enfermeras/os para camas de cuidados intensivos"
+      },
+      {
+        "es": "Porcentaje de camas críticas <br/> destinadas a COVID:",
+        "en": "Percentage of critical beds <br/> destined to COVID",
+        "pt": "Percentagem de camas críticas <br/> destinadas à COVID:"
+      },
+      {
+        "es": "Tasa de días de uso de ventiladores <br/> por días de uso de cama crítica:",
+        "en": "Rate of fan use days <br/> per critical bed use days",
+        "pt": "Taxa de dias de uso do ventilador <br/> por dias de uso crítico da cama"
+      },
+      {
+        "es": "Fuente: IECS. Datos recolectados y validados a partir de fuentes de cada país/jurisdicción.",
+        "en": "Source: IECS. Data collected and validated from sources in each country/jurisdiction.",
+        "pt": "Fonte: IECS. Dados recolhidos e validados a partir de fontes em cada país/jurisdição."
+      },
+      {
+        "es": "Epidemiología",
+        "en": "Epidemiology",
+        "pt": "Epidemiologia"
+      },
+      {
+        "es": "Las proyecciones fueron realizadas con los siguientes parámetros.",
+        "en": "The projections were made with the following parameters.",
+        "pt": "As projecções foram feitas com os seguintes parâmetros."
+      },
+      {
+        "es": "Puede editar los mismos para una nueva proyección:",
+        "en": "You can edit them for a new projection:",
+        "pt": "Pode editá-los para uma nova projecção:"
+      },
+      {
+        "es": "Parámetro",
+        "en": "Parameter",
+        "pt": "parâmetro"
+      },
+      {
+        "es": "Fuente",
+        "en": "Source",
+        "pt": "Fonte"
+      },
+      {
+        "es": "Período preinfeccioso promedio (días)",
+        "en": "Average pre-infectious period (days)",
+        "pt": "Período Médio Pré-Infeccioso (dias)"
+      },
+      {
+        "es": "Duración media de la infecciosidad (días)",
+        "en": "Average duration of infectivity (days)",
+        "pt": "Duração média da infecciosidade (dias)"
+      },
+      {
+        "es": "Porcentaje de casos críticos",
+        "en": "Percentage of critical cases",
+        "pt": "Percentagem de casos críticos"
+      },
+      {
+        "es": "Días de hospitalización para casos críticos",
+        "en": "Inpatient days for critical cases",
+        "pt": "Dias de Hospitalização de Cuidados Críticos"
+      },
+      {
+        "es": "Días UCI para casos críticos",
+        "en": "Critic care hospitalization days",
+        "pt": "Dias de cuidados intensivos"
+      },
+      {
+        "es": "Tasa de letalidad (IFR). En porcentaje (%)",
+        "en": "Infectious fatality rate (per houndred)",
+        "pt": "Taxa de letalidade (IFR). Em percentagem (%)"
+      },
+      {
+        "es": "Sensibilidad de escenarios",
+        "en": "Sensitivity of scenarios",
+        "pt": "Sensibilidade dos cenários"
+      },
+      {
+        "es": "Análisis basado en ",
+        "en": "Analysis based on ",
+        "pt": "Análise baseada em "
+      },
+      {
+        "es": " considerando IFR tomado como referencia.",
+        "en": " considering IFR taken as a reference.",
+        "pt": " considerando o IFR tomado como referência."
+      },
+      {
+        "es": "No aplica",
+        "en": "Not applicable",
+        "pt": "Não aplicável"
+      },
+      {
+        "es": "No Aplica",
+        "en": "Not Applicable",
+        "pt": "Não Aplicável"
+      },
+      {
+        "es": "<br/>- Epidemiología",
+        "en": "<br/>- Epidemiology",
+        "pt": "<br/>- Epidemiologia"
+      },
+      {
+        "es": "<br/>- Recursos Sanitarios",
+        "en": "<br/>- Health Resources",
+        "pt": "<br/>- Recursos de Saúde"
+      },
+      {
+        "es": "Sin medidas",
+        "en": "No measures",
+        "pt": "Nenhuma medida"
+      },
+      {
+        "es": "Medidas mínimas",
+        "en": "Minimum measures",
+        "pt": "Medidas mínimas"
+      },
+      {
+        "es": "Agregado de restricciones de reuniones y distanciamiento social",
+        "en": "Added restrictions on meetings and social distancing",
+        "pt": "Acrescentou restrições às reuniões e ao distanciamento social"
+      },
+      {
+        "es": "Agregado de cierre de negocios y escuelas; uso estricto y extendido de tapabocas, ampliación del testeo y rastreo de contactos",
+        "en": "Added Business and school closing; strict and extended use of mouthpieces, expanded testing and contact tracking",
+        "pt": "Agregado de fecho de empresas e escolas; utilização rigorosa e alargada de bocais, testes alargados e rastreio de contactos"
+      },
+      {
+        "es": "Cuarentena total",
+        "en": "Total lockdown",
+        "pt": "Confinamento total"
+      },
+      {
+        "es": "* El último valor ingresado se prolongará hasta el final de la proyección",
+        "en": "* The last value entered will be extended until the end of the projection",
+        "pt": "* O último valor introduzido será prolongado até ao fim da projecção"
+      },
+      {
+        "es": "R0 según intervenciones",
+        "en": "R0 according to interventions",
+        "pt": "R0 de acordo com as intervenções"
+      },
+      {
+        "es": "Comienzo",
+        "en": "Start",
+        "pt": "Início"
+      },
+      {
+        "es": "Final",
+        "en": "End",
+        "pt": "Final"
+      },
+      {
+        "es": "Población susceptible al inicio. En porcentaje (%)",
+        "en": "Susceptible population at the beginning. In percentage (%)",
+        "pt": "População susceptível no início. Em percentagem (%)"
+      },
+      {
+        "es": "Seleccione nivel de detalle para el ingreso de datos: ",
+        "en": "Select level of detail for data entry: ",
+        "pt": "Seleccionar nível de detalhe para introdução de dados: "
+      },
+      {
+        "es": "Herramientas",
+        "en": "Tools",
+        "pt": "Ferramentas"
+      },
+      {
+        "es": "Puede configurar el parámetro del número básico de reproducción mediante estos atajos. Especificando una estrategia, los niveles esperados de R0, y el período de aplicación puede generar un patrón de parámetros con pocos clicks.",
+        "en": "You can set the basic playback number setting using these shortcuts. By specifying a strategy, the expected levels of R0, and the application period you can generate a parameter pattern with a few clicks.",
+        "pt": "É possível definir o parâmetro de número básico de reprodução usando estes atalhos. Ao especificar uma estratégia, os níveis esperados de R0, e o período de aplicação, é possível gerar um padrão de parâmetros com alguns cliques."
+      },
+      {
+        "es": "Seleccione estrategia:",
+        "en": "Select strategy:",
+        "pt": "Seleccionar estratégia:"
+      },
+      {
+        "es": "Desde:",
+        "en": "From:",
+        "pt": "A partir de:"
+      },
+      {
+        "es": "Hasta:",
+        "en": "To:",
+        "pt": "Para:"
+      },
+      {
+        "es": "Actualizar parámetros",
+        "en": "Update parameters",
+        "pt": "Manter parâmetros"
+      },
+      {
+        "es": "Configure un R0 al momento de alcanzar un porcentaje de saturación deseado.",
+        "en": "Set an R0 when a desired percentage of saturation is reached.",
+        "pt": "Definir um R0 quando é atingida uma percentagem de saturação desejada."
+      },
+      {
+        "es": "Porcentaje de saturación de camas UCI destinadas a COVID que gatilla la intervención:",
+        "en": "Percentage of ICU bed saturation for IDOCs that triggers the intervention:",
+        "pt": "Percentagem de saturação do leito da UCI para IDOCs que desencadeia a intervenção:"
+      },
+      {
+        "es": "R0 de base de Proyección:",
+        "en": "Projection base R0:",
+        "pt": "Base de projecção R0:"
+      },
+      {
+        "es": "R0 de Intervención:",
+        "en": "Intervention R0:",
+        "pt": "R0 para Intervenção:"
+      },
+      {
+        "es": "Días de intervención",
+        "en": "Intervention days",
+        "pt": "Dias de intervenção"
+      },
+      {
+        "es": "Versión ",
+        "en": "Version ",
+        "pt": "Versão "
+      },
+      {
+        "es": "Nuevos infectados estimados totales por día",
+        "en": "Estimated total new infected per day",
+        "pt": "Total estimado de novos infectados por dia"
+      },
+      {
+        "es": "Esta herramienta presenta resultados basados en modelos y estimaciones, su utilización para la toma de decisiones queda bajo responsabilidad del usuario.",
+        "en": "This tool presents results based on models and estimates, its use for decision making is the responsibility of the user.",
+        "pt": "Esta ferramenta apresenta resultados baseados em modelos e estimativas, a sua utilização para a tomada de decisão é da responsabilidade do utilizador."
+      },
+      {
+        "es": "Políticas con nivel de rigurosidad estimado actual (escenario por defecto)",
+        "en": "Policies with current estimated stringency level (default scenario)",
+        "pt": "Políticas com nível de rigor estimado atual (cenário padrão)"
+      },
+      {
+        "es": "Infectados estimados acumulados (",
+        "en": "Estimated accumulated infections (",
+        "pt": "Estimativa de infecções acumuladas ("
+      }
+      ,
+      {
+        "es": "Infectados estimados acumulados por grupos de edad (",
+        "en": "Estimated accumulated infections by age group (",
+        "pt": "Estimativa de infecções acumuladas por grupo etário ("
+      }
+      ,
+      {
+        "es": "60 años y más",
+        "en": "60 years and older",
+        "pt": "60 anos e mais"
+      }
+      ,
+      {
+        "es": "20 a 59 años",
+        "en": "20 to 59 years old",
+        "pt": "20 a 59 anos de idade"
+      },
+      {
+        "es": "Menos de 20",
+        "en": "Less than 20",
+        "pt": "Menos de 20"
+      },
+      {
+        "es": "Nuevos Inf.",
+        "en": "Newly infected",
+        "pt": "Recém-infectados"
+      }
+      ,
+      {
+        "es": "Peor escenario",
+        "en": "Worst scenario",
+        "pt": "Pior cenário"
+      }
+      ,
+      {
+        "es": "Mejor escenario",
+        "en": "Best scenario",
+        "pt": "Melhor cenário"
+      }
+      ,
+      {
+        "es": "Casos diarios reportados",
+        "en": "Daily reported cases",
+        "pt": "Casos diários reportados"
+      },
+      {
+        "es": "El número de nuevos infectados estimados totales por día incluye los detectados y los no detectados (no testeados). Esto se calcula según el modelo SEIR ajustado para todo el período de la proyección.",
+        "en": "The total estimated number of new infections per day includes those detected and those not detected (not tested). This is calculated according to the SEIR model adjusted for the entire projection period.",
+        "pt": "O número total estimado de novas infecções por dia inclui as que foram detectadas e as que não foram detectadas (não testadas). Isto é calculado de acordo com o modelo SEIR ajustado para todo o período de projecção."
+      },
+      {
+        "es": "Nuevas defunciones estimadas por día (",
+        "en": "New estimated deaths per day (",
+        "pt": "Novas mortes estimadas por dia ("          
+      }
+      ,
+      {
+        "es": "Defunciones Diarias",
+        "en": "Daily Deaths",
+        "pt": "Mortes diárias"          
+      }
+      ,
+      {
+        "es": "Reportadas",
+        "en": "Reported",
+        "pt": "Reportadas"          
+      }
+      ,
+      {
+        "es": "Gráfico de R0",
+        "en": "R0 plot",
+        "pt": "Gráfico de R0"          
+      },
+      {
+        "es": "Nuevas defunciones estimadas por día",
+        "en": "New estimated deaths per day",
+        "pt": "Novas mortes estimadas por dia"          
+      },
+      {
+        "es": "El número de defunciones estimado para cada día del período proyectado, según el modelo SEIR ajustado.",
+        "en": "The number of deaths estimated for each day of the projected period, according to the adjusted SEIR model.",
+        "pt": "O número estimado de mortes para cada dia do período projectado, de acordo com o modelo SEIR ajustado."          
+      },
+      {
+        "es": "Fecha pico",
+        "en": "Peak day",
+        "pt": "Data de pico"
+      },
+      {
+        "es": "Camas UCI: utilización diaria estimada (",
+        "en": "Intensive care beds: estimated daily use (",
+        "pt": "Camas de cuidados intensivos: utilização diária estimada ("
+      },
+      {
+        "es": "Camas Críticas",
+        "en": "Intensive care beds",
+        "pt": "Camas de cuidados intensivos"
+      },
+      {
+        "es": "Utilización de camas de uso crítico - UCI",
+        "en": "Use of critical care beds",
+        "pt": "Utilização de camas de cuidados críticos"
+      },
+      {
+        "es": "El número de camas de uso crítico requeridas para cada día de la proyección. La ocupación se calcula comparando con los parámetros de capacidad especificados para cada país, que pueden modificarse en esta herramienta para recalcular los resultados.",
+        "en": "The number of critical use beds required for each day of the screening. The occupancy is calculated by comparing it to the capacity parameters specified for each country, which can be modified in this tool to recalculate the results.",
+        "pt": "O número de camas de uso crítico necessárias para cada dia de rastreio. A ocupação é calculada por comparação com os parâmetros de capacidade especificados para cada país, que podem ser modificados nesta ferramenta para recalcular os resultados."
+      },
+      {
+        "es": "Defunciones acumuladas estimadas (",
+        "en": "Estimated cumulative deaths (",
+        "pt": "Mortes acumuladas estimadas ("
+      },
+      {
+        "es": "Ventiladores: utilización diaria estimada (",
+        "en": "Ventilators: estimated daily use (",
+        "pt": "Ventiladores: utilização diária estimada ("
+      },
+      {
+        "es": "Infectados acumulados",
+        "en": "Accumulated infections",
+        "pt": "Infectado Acumulado"
+      },
+      {
+        "es": "Defunciones Acumuladas",
+        "en": "Accumulated deaths",
+        "pt": "Mortes Acumuladas"
+      },
+      {
+        "es": "Ventiladores",
+        "en": "Ventilators",
+        "pt": "Ventiladores"
+      },
+      {
+        "es": "Médicas/os en cuidados críticos: dedicación diaria (",
+        "en": "Critical care physicians: daily dedication (",
+        "pt": "Médicos de cuidados intensivos: dedicação diária ("
+      },
+      {
+        "es": "El número de médicos/as requeridos para cada día de la proyección. La ocupación se calcula comparando con los parámetros de capacidad especificados para cada país, que pueden modificarse en esta herramienta para recalcular los resultados.",
+        "en": "The number of doctors required for each day of the screening. The occupancy is calculated by comparing it to the capacity parameters specified for each country, which can be modified in this tool to recalculate the results.",
+        "pt": "O número de médicos necessários para cada dia de rastreio. A ocupação é calculada por comparação com os parâmetros de capacidade especificados para cada país, que podem ser modificados nesta ferramenta para recalcular os resultados."
+      },
+      {
+        "es": "Enfermeras/os en cuidados críticos: dedicación diaria (",
+        "en": "Critical care nurses: daily dedication (",
+        "pt": "Enfermeiros de cuidados intensivos: dedicação diária ("
+      },
+      {
+        "es": "Enfermeras/os",
+        "en": "Nurses",
+        "pt": "Enfermeiros"
+      },
+      {
+        "es": "Constante",
+        "en": "Constant",
+        "pt": "Constante"
+      },
+      {
+        "es": "Políticas con nivel de rigurosidad constante, R0 1,3. (Ej. apertura de negocios y escuelas)",
+        "en": "Policies with a constant level of stringency, R0 1.3. (e.g. opening of businesses and schools)",
+        "pt": "Políticas com um nível constante de rigor, R0 1.3 (por exemplo, abertura de empresas e escolas)"
+      },
+      {
+        "es": "Política adaptativa basada en ocupación de camas, cuarentena al llegar al 50%",
+        "en": "Adaptive policy based on bed occupancy, quarantine upon reaching 50%",
+        "pt": "Política adaptativa baseada na ocupação de camas, quarentena ao atingir 50%."
+      },
+      {
+        "es": "Política adaptativa basada en ocupación de camas, cuarentena al llegar al 70%",
+        "en": "Adaptive policy based on bed occupancy, quarantine upon reaching 70%",
+        "pt": "Política adaptativa baseada na ocupação de camas, quarentena quando 70% é atingida"
+      },
+      {
+        "es": "Política valvular intermitente, alterna cuarentena y disminución de restricciones en ciclos mensuales",
+        "en": "Intermittent valve policy, alternating quarantine and relaxation of restrictions in monthly cycles",
+        "pt": "Política de válvulas intermitentes, quarentena alternada e flexibilização das restrições em ciclos mensais"
+      }
+      ,
+      {
+        "es": "Este escenario se basa en la estimación vigente Rt=",
+        "en": "This scenario is based on the current estimate Rt=",
+        "pt": "Este cenário é baseado na estimativa actual Rt="
+      }
+      ,
+      {
+        "es": "Este escenario tiene un R0 constante de 1,3 durante toda el período de proyección. Un ejemplo de este nivel de restricción son las medidas de distanciamiento social con apertura de negocios y escuelas con protocolos definidos.",
+        "en": "This scenario has a constant R0 of 1.3 throughout the projection period. An example of this level of constraint is social distancing measures with opening of businesses and schools with defined protocols.",
+        "pt": "Este cenário tem uma constante R0 de 1,3 ao longo de todo o período de projecção. Um exemplo deste nível de constrangimento são as medidas de distanciamento social com aberturas de empresas e escolas com protocolos definidos."
+      },
+      {
+        "es": "Este escenario tiene un R0 base de 1,3 y cuando se alcanza el 50% de ocupación de camas de cuidados intensivos se inicia una cuarentena estricta con R0 de 1,0. La cuarentena se prolonga por 30 días y se renueva si el nivel de ocupación aún no bajó del 50%. Al lograrse el descenso deseado se levantan las restricciones y se vuelve al escenario base de un R0 de 1,3.",
+        "en": "This scenario has a base R0 of 1.3 and when 50% of intensive care bed occupancy is reached, strict quarantine is initiated with R0 of 1.0. The quarantine is prolonged for 30 days and renewed if the occupancy level is still not below 50%. When the desired decrease is achieved, the restrictions are lifted and the base scenario of an R0 of 1.3 is returned.",
+        "pt": "Este cenário tem uma base R0 de 1,3 e quando se atinge 50% de ocupação de camas de cuidados intensivos, é iniciada uma quarentena rigorosa com R0 de 1,0. A quarentena é prolongada por 30 dias e renovada se o nível de ocupação ainda não tiver descido abaixo dos 50%. Quando a diminuição desejada é alcançada, as restrições são levantadas e o cenário de base de um R0 de 1,3 é devolvido."
+      },
+      {
+        "es": "Este escenario tiene un R0 base de 1,3 y cuando se alcanza el 70% de ocupación de camas de cuidados intensivos se inicia una cuarentena estricta con R0 de 1,0. La cuarentena se prolonga por 30 días y se renueva si el nivel de ocupación aún no bajó del 70%. Al lograrse el descenso deseado se levantan las restricciones y se vuelve al escenario base de un R0 de 1,3.",
+        "en": "This scenario has a base R0 of 1.3 and when 70% of intensive care bed occupancy is reached, strict quarantine is initiated with R0 of 1.0. The quarantine is prolonged for 30 days and renewed if the occupancy level is still not below 70%. When the desired decrease is achieved, the restrictions are lifted and the base scenario of an R0 of 1.3 is returned.",
+        "pt": "Este cenário tem uma base R0 de 1,3 e quando se atinge 70% da ocupação de camas de cuidados intensivos, inicia-se uma quarentena rigorosa com R0 de 1,0. A quarentena é prolongada por 30 dias e renovada se o nível de ocupação não for ainda inferior a 70%. Quando a diminuição desejada é alcançada, as restrições são levantadas e o cenário de base de um R0 de 1,3 é devolvido."
+      },
+      {
+        "es": "Este escenario alterna a lo largo de todo el período proyectado períodos de 30 días con políticas restrictivas que resultan en un R0 de 1,1, y 30 días con políticas mas relajadas que resultan en un r0 de 1.3.",
+        "en": "This scenario alternates throughout the projected period 30-day periods with restrictive policies resulting in an R0 of 1.1, and 30 days with more relaxed policies resulting in an R0 of 1.3.",
+        "pt": "Este cenário alterna ao longo do período projectado períodos de 30 dias com políticas restritivas resultando num R0 de 1,1, e 30 dias com políticas mais relaxadas resultando num R0 de 1,3."
+      },
+      {
+        "es": "Nuevas Infecciones",
+        "en": "New Infections",
+        "pt": "Novas Infecções"
+      },
+      {
+        "es": "Nuevas Defunciones",
+        "en": "New Deaths",
+        "pt": "Novos Mortos"
+      },
+      {
+        "es": "Cantidad pico",
+        "en": "Peak quantity",
+        "pt": "Pico de quantidade"
+      },
+      {
+        "es": "Días hasta el pico",
+        "en": "Days to the peak",
+        "pt": "Dias para o pico"
+      },
+      {
+        "es": "% saturación",
+        "en": "% saturation",
+        "pt": "% saturação"
+      },
+      {
+        "es": "Primer día saturación",
+        "en": "First day saturation",
+        "pt": "Saturação no primeiro dia"
+      },
+      {
+        "es": "Indicador",
+        "en": "Indicator",
+        "pt": "Indicador"
+      },
+      {
+        "es": "Ingreso de R0 específicos: especificando el nivel de R0 para cada período, ajustable a meses, quincenas o semanas, con herramientas avanzadas.",
+        "en": "Specific R0 input: specifying the R0 level for each period, adjustable to months, fortnights or weeks, with advanced tools.",
+        "pt": "Entrada específica R0: especificar o nível R0 para cada período, ajustável a meses, quinzenas ou semanas, com ferramentas avançadas."
+      },
+      {
+        "es": "Configurar intervenciones gatilladas por la ocupación de camas en UCI (Adaptive triggering)",
+        "en": "Configure interventions triggered by ICU bed occupation (Adaptive triggering)",
+        "pt": "Configurar intervenções desencadeadas pela ocupação do leito da UCI (Desencadeamento adaptativo)"
+      },
+      {
+        "es": "Proyectando...",
+        "en": "Projecting...",
+        "pt": "Projectar..."
+      },
+      {
+        "es": "Máximo valor alcanzado el",
+        "en": "Maximum value reached on",
+        "pt": "Valor máximo alcançado em"
+      },
+      {
+        "es": "Capacidad no sobrepasada",
+        "en": "Capacity not exceeded",
+        "pt": "Capacidade não excedid"
+      },
+      {
+        "es": "Diarias",
+        "en": "Daily",
+        "pt": "Diário"
+      },
+      {
+        "es": "Acumuladas",
+        "en": "Accumulated",
+        "pt": "Acumulado"
+      },
+      {
+        "es": "Edades",
+        "en": "Ages",
+        "pt": "Idades"
+      },
+      {
+        "es": "Camas",
+        "en": "Beds",
+        "pt": "Camas"
+      },
+      {
+        "es": "Médicos",
+        "en": "Doctors",
+        "pt": "Doutores"
+      },
+      {
+        "es": "Enfermeras",
+        "en": "Nurses",
+        "pt": "Enfermeiras"
+      },
+      {
+        "es": "Seleccione el segmento visible del período completo de proyección",
+        "en": "Select the visible segment of the entire projection period",
+        "pt": "Selecione o segmento visível de todo o período de projeção"
+      },
+      {
+        "es": "Mes",
+        "en": "Month",
+        "pt": "Mes"
+      },
+      {
+        "es": "Valvular Intermitente",
+        "en": "Intermittent Valve",
+        "pt": "Válvula Intermitente"
+      },
+      {
+        "es": "Reducción gradual de restricciones",
+        "en": "Gradual reduction of restrictions",
+        "pt": "Redução gradual das restrições"
+      },
+      {
+        "es": "Tabla de R0",
+        "en": "R0 table",
+        "pt": "Tabela de R0"
+      },
+      {
+        "es": "Fecha desde",
+        "en": "Date from",
+        "pt": "Data de"
+      },
+      {
+        "es": "Fecha hasta",
+        "en": "Date to",
+        "pt": "Data para"
+      },
+      {
+        "es": "Quincena",
+        "en": "Fortnight",
+        "pt": "Quinzena"
+      },
+      {
+        "es": "Semana",
+        "en": "Week",
+        "pt": "Semana"
+      }
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+
+
+      
+      
+      
+      
+      
+    
+      
+      
+      
+      
+      
+      
+
+
+
+
+
+      
+      
+      
+      
+                                          
+                                          
+      
+      
+      
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    
+    
+    
+
+             
+                  
+                 
+      
+    ]
+}
