@@ -1,5 +1,6 @@
 library(xts)
 library(dygraphs)
+library(shiny.i18n)
 
 
 # not in ------------------------------------------------------------------
@@ -71,7 +72,7 @@ get_dias_dupl <- function(data, hoy, ventana = 7){
 
 # modulo de graficos dygraph ----------------------------------------------
 
-Grafica <- function(id, label = "Nada", i18n) {
+Grafica <- function(id, label = "Nada") {
   
   ns <- NS(id)
   
@@ -80,8 +81,7 @@ Grafica <- function(id, label = "Nada", i18n) {
     radioGroupButtons(
       inputId = ns("que_infecc"),
       label = "",
-      choiceNames = list(i18n$t("Diarias"),i18n$t("Acumuladas"),i18n$t("Edades")),
-      choiceValues = list("Diarias","Acumuladas","Edades"),
+      choices = c("Diarias","Acumuladas"),
       selected = "Diarias",
       status = "success",
       checkIcon = list(yes = icon("check"))
@@ -99,7 +99,7 @@ Grafica <- function(id, label = "Nada", i18n) {
       column(8,
              p(
                align = "center",
-               i18n$t("Seleccione el segmento visible del período completo de proyección")
+               paste("Seleccione el segmento visible del período completo de proyección")
              )
       ),
       column(2, align = "center", textOutput(ns("max_graf_inf"))
@@ -111,8 +111,7 @@ Grafica <- function(id, label = "Nada", i18n) {
     radioGroupButtons(
       inputId = ns("que_defs"),
       label = "",
-      choiceNames = list(i18n$t("Diarias"),i18n$t("Acumuladas")),
-      choiceValues = list("Diarias","Acumuladas"),
+      choices = c("Diarias","Acumuladas"),
       selected = "Diarias",
       status = "success",
       checkIcon = list(yes = icon("check"))
@@ -129,7 +128,7 @@ Grafica <- function(id, label = "Nada", i18n) {
       column(8,
              p(
                align = "center",
-               i18n$t("Seleccione el segmento visible del período completo de proyección")
+               paste("Seleccione el segmento visible del período completo de proyección")
              )
       ),
       column(2, align = "center", textOutput(ns("max_graf_mue"))
@@ -142,8 +141,7 @@ Grafica <- function(id, label = "Nada", i18n) {
     radioGroupButtons(
       inputId = ns("que_rrhh"),
       label = "Impacto en recursos sanitarios",
-      choiceNames = list(i18n$t("Camas"),i18n$t("Ventiladores"),i18n$t("Médicos"),i18n$t("Enfermeras")),
-      choiceValues = list("Camas","Ventiladores","Médicos","Enfermeras"),
+      choices = c("Camas","Ventiladores","Médicos","Enfermeras"),
       selected = "Camas",
       status = "success",
       checkIcon = list(yes = icon("check"))
@@ -162,7 +160,7 @@ Grafica <- function(id, label = "Nada", i18n) {
       column(8,
              p(
                align = "center",
-               i18n$t("Seleccione el segmento visible del período completo de proyección")
+               paste("Seleccione el segmento visible del período completo de proyección")
              )
       ),
       column(2, align = "center", textOutput(ns("max_graf_cam"))
@@ -195,12 +193,11 @@ Grafica <- function(id, label = "Nada", i18n) {
 }
 
 
-graficando <- function(input, output, session, i18n) {
+graficando <- function(input, output, session) {
   
   rango_data = paste0(month(range(modeloSimulado$fecha),label = T,abbr = F),"-",
                       year(range(modeloSimulado$fecha)))
-  range_graf_select = c(min(as.Date("2020-06-01")),as.Date("2021-06-30")) + c(60,0)
-  # modeloSimulado$fecha
+  range_graf_select = c(min(as.Date(modeloSimulado$fecha)+90),as.Date("2021-06-30")) + c(60,0)
   output$min_graf_inf <- renderText({str_to_sentence(as.character(rango_data[1]))})
   output$max_graf_inf <- renderText({str_to_sentence(as.character(rango_data[2]))})
   output$min_graf_cam <- renderText({str_to_sentence(as.character(rango_data[1]))})
@@ -213,33 +210,31 @@ graficando <- function(input, output, session, i18n) {
   # output$min_graf_SEIR <- renderText({str_to_sentence(as.character(rango_data[1]))})
   # output$max_graf_SEIR <- renderText({str_to_sentence(as.character(rango_data[2]))})
   
-  color_dyg = c("#3a3a3b","#ff9191","#8ae691","#d95f02", "#7570b3","#1b9e77")
+  color_dyg = c("#3a3a3b","#ff9191","#8ae691")
   
   
   ##### Infecciones
   observe({
+    
     if(input$que_infecc=="Diarias"){
       df <- cbind(modeloSimulado %>% dplyr::select(fecha, i = i_5d_ma),
                   modeloSimulado_hi %>% dplyr::select(i2 = i_5d_ma),
                   modeloSimulado_low %>% dplyr::select(i3 = i_5d_ma)) 
-      df <- merge(df,dataEcdc %>% dplyr::select(dateRep,new_cases), by.x="fecha", by.y="dateRep", all.x=TRUE)
-      df$new_cases[is.na(df$new_cases)==TRUE] <- 0
-      
-      labels = c(i18n$t("Nuevos Inf."),
-                 i18n$t("Peor escenario"),
-                 i18n$t("Mejor escenario"), 
-                 i18n$t("Casos diarios reportados"))
+      labels = c("Nuevos Inf.","Peor escenario","Mejor escenario")
       addPopover(session, 
-                 "info_I", i18n$t("Nuevos infectados estimados totales por día"), 
-                 content = paste0(i18n$t("El número de nuevos infectados estimados totales por día incluye los detectados y los no detectados (no testeados). Esto se calcula según el modelo SEIR ajustado para todo el período de la proyección.")),  
+                 "info_I", "Nuevos infectados estimados totales por día", 
+                 content = paste0("El número de nuevos infectados estimados totales 
+                              por día incluye los detectados y los no detectados 
+                              (no testeados). Esto se calcula según el modelo SEIR 
+                              ajustado para todo el período de la proyección."),  
                  trigger = 'click')
-      output$titulo_infecciones <-renderText({  paste0(i18n$t("Nuevos infectados estimados totales por día")," (", 
+      output$titulo_infecciones <-renderText({  paste0("Nuevos infectados estimados totales por día (", 
                                                        poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
-    } else if (input$que_infecc=="Acumuladas"){
+    }else{
       df <- cbind(modeloSimulado %>% mutate(I = I+R) %>% dplyr::select(fecha, i = I),
                   modeloSimulado_hi %>% mutate(I = I+R) %>% dplyr::select(i2 = I),
                   modeloSimulado_low %>% mutate(I = I+R) %>% dplyr::select(i3 = I))
-      labels = c(i18n$t("Infectados acumulados"),i18n$t("Peor escenario"),i18n$t("Mejor escenario"))
+      labels = c("Infectados acumulados","Peor escenario","Mejor escenario")
       addPopover(session, 
                  "info_I", "Infectados estimados acumulados a cada día", 
                  content = paste0("El número de infectados acumulados 
@@ -247,77 +242,32 @@ graficando <- function(input, output, session, i18n) {
                               (no testeados), independientemente de si luego
                                fueron recuperados o muertos"),  
                  trigger = 'click')
-      output$titulo_infecciones <-renderText({  paste0(i18n$t("Infectados estimados acumulados ("), 
-                                                       poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
-    } else if (input$que_infecc=="Edades"){
-      df <- cbind(modeloSimulado %>% dplyr::select(fecha, i = incid_00_19),
-                  modeloSimulado %>% dplyr::select(i2 = incid_20_59),
-                  modeloSimulado %>% dplyr::select(i3 = incid_60_mas))
-      labels = c(i18n$t("60 años y más"),
-                 i18n$t("20 a 59 años"),
-                 i18n$t("Menos de 20"))
-      addPopover(session, 
-                 "info_I", "Infectados estimados acumulados por grupos de edad", 
-                 content = paste0("El número de infectados acumulados 
-                              incluye los detectados y los no detectados 
-                              (no testeados), independientemente de si luego
-                               fueron recuperados o muertos"),  
-                 trigger = 'click')
-      output$titulo_infecciones <-renderText({  paste0(i18n$t("Infectados estimados acumulados por grupos de edad ("), 
+      output$titulo_infecciones <-renderText({  paste0("Infectados estimados acumulados (", 
                                                        poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
     }
     if(trigger_on_app==1){df <- df %>% dplyr::select(fecha, i)}
-    
     dg <- xts(df[,-1], order.by=as.Date(df[,1]))
-    #browser()
+    
     output$g_i <- renderDygraph({
-      
-      if(input$que_infecc=="Diarias")
-      {
       dy <- dygraph(dg, group = "grupo") %>% 
-        dySeries(c(names(dg[,c(1)])), label = labels[1], strokeWidth = 3,  color = if (input$que_infecc=="Edades") {color=color_dyg[4]} else {color=color_dyg[1]})  %>% 
-        dySeries(c(names(dg[,c(4)])), label = labels[4], stepPlot = T, fillGraph = TRUE, color = "#c3c3c7") %>%
-        dyOptions(stackedGraph = input$que_infecc=="Edades", drawGrid = FALSE, labelsKMB=F,maxNumberWidth=10, rightGap=100, digitsAfterDecimal=0)  %>%  dyAxis("y", label = labels[1], 
+        dySeries(c(names(dg[,c(1)])), label = labels[1], strokeWidth = 3,  color = color_dyg[1]) %>%
+        dyOptions(drawGrid = FALSE, labelsKMB=F,
+                  maxNumberWidth=10, rightGap=100, digitsAfterDecimal=0) %>% 
+        dyAxis("y", label = labels[1], 
                valueRange = c(0, max(dg)*1.1)) %>% 
         dyHighlight(highlightCircleSize = 5, 
                     highlightSeriesBackgroundAlpha = 1,
                     hideOnMouseOut = FALSE) %>% 
         dyRangeSelector(height = 40, strokeColor = "", dateWindow = range_graf_select)%>% 
         dyLegend(width = 400) %>% 
-        dyEvent(x = hoy, label = "Hoy", labelLoc = "bottom", 
+        dyEvent(x = hoy, label = paste0("Actualización: ", hoy), labelLoc = "bottom", 
                 color = "grey", strokePattern = "dashed")
-      }
-      else
-      {
-        dy <- dygraph(dg[,-4], group = "grupo") %>% 
-          dySeries(c(names(dg[,c(1)])), label = labels[1], strokeWidth = 3,  color = if (input$que_infecc=="Edades") {color=color_dyg[4]} else {color=color_dyg[1]})  %>% 
-          dyOptions(stackedGraph = input$que_infecc=="Edades", drawGrid = FALSE, labelsKMB=F,maxNumberWidth=10, rightGap=100, digitsAfterDecimal=0)  %>%  dyAxis("y", label = labels[1], 
-                                                                                                                      valueRange = c(0, max(dg)*1.1))  %>% 
-          dyHighlight(highlightCircleSize = 5, 
-                      highlightSeriesBackgroundAlpha = 1,
-                      hideOnMouseOut = FALSE) %>% 
-          dyRangeSelector(height = 40, strokeColor = "", dateWindow = range_graf_select)%>% 
-          dyLegend(width = 400) %>% 
-          dyEvent(x = hoy, label = "Hoy", labelLoc = "bottom", 
-                  color = "grey", strokePattern = "dashed")
-      }
-      
       if(trigger_on_app==0){
-        if (input$que_infecc=="Edades")
-        {
-          dy <- dy %>% 
-            dySeries(c(names(dg[,c(2)])), label = labels[2], strokeWidth = 3,
-                     color = color_dyg[5]) %>%
-            dySeries(c(names(dg[,c(3)])), label = labels[3], strokeWidth = 3,
-                     color = color_dyg[6])  
-        } else
-        {  
         dy <- dy %>% 
           dySeries(c(names(dg[,c(2)])), label = labels[2], strokeWidth = 1,
                  strokePattern = "dashed",  color = color_dyg[2]) %>%
           dySeries(c(names(dg[,c(3)])), label = labels[3], strokeWidth = 1,
-                     strokePattern = "dashed",  color = color_dyg[3])
-        }
+                   strokePattern = "dashed",  color = color_dyg[3])
       }
       if(trigger_on_app==1 & !is.null(fechaIntervencionesTrigger)){
         for(i in 1:length(fechaIntervencionesTrigger)){
@@ -332,6 +282,7 @@ graficando <- function(input, output, session, i18n) {
 
 ##### Defunciones
   observe({
+    
     if(input$que_defs == "Diarias" | input$que_defs == "Acumuladas"){
       df <- cbind(fecha = modeloSimulado$fecha,
                   m = modeloSimulado$muertes_smooth,
@@ -340,15 +291,14 @@ graficando <- function(input, output, session, i18n) {
                   m_real = modeloSimulado$muertesDiariasReal)
       
 
-      labels = c(i18n$t("Defunciones Diarias"),
-                 i18n$t("Peor escenario"),
-                 i18n$t("Mejor escenario"),
-                 i18n$t("Reportadas"))
+      labels = c("Defunciones Diarias","Peor escenario","Mejor escenario","Reportadas")
       addPopover(session,
-                 "info_D", i18n$t("Nuevas defunciones estimadas por día"),
-                 content = paste0(i18n$t("El número de defunciones estimado para cada día del período proyectado, según el modelo SEIR ajustado.")),
+                 "info_D", "Nuevas defunciones estimadas por día",
+                 content = paste0("El número de defunciones estimado para
+                              cada día del período proyectado, según
+                              el modelo SEIR ajustado."),
                  trigger = 'click')
-      output$titulo_defunciones <-renderText({  paste0(i18n$t("Nuevas defunciones estimadas por día ("), poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
+      output$titulo_defunciones <-renderText({  paste0("Nuevas defunciones estimadas por día (", poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
 
     }
 
@@ -360,14 +310,14 @@ graficando <- function(input, output, session, i18n) {
       df[which(as.Date(modeloSimulado$fecha)<hoy), 3] = NA
       df[which(as.Date(modeloSimulado$fecha)<hoy), 4] = NA
 
-      labels = c(i18n$t("Defunciones Acumuladas"),i18n$t("Peor escenario"),i18n$t("Mejor escenario"),i18n$t("Reportadas"))
+      labels = c("Defunciones Acumuladas","Peor escenario","Mejor escenario","Reportadas")
       addPopover(session,
                  "info_D_acum", "Defunciones estimadas Acumuladas",
                  content = paste0("El número de defunciones estimado
                               que se se acumula a cada día, según
                               el modelo SEIR ajustado."),
                  trigger = 'click')
-      output$titulo_defunciones <-renderText({  paste0(i18n$t("Defunciones acumuladas estimadas ("), poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
+      output$titulo_defunciones <-renderText({  paste0("Defunciones acumuladas estimadas (", poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
     }
 
     df[which(as.Date(modeloSimulado$fecha)<hoy), 3] = NA
@@ -390,7 +340,7 @@ graficando <- function(input, output, session, i18n) {
                     hideOnMouseOut = FALSE) %>%
         dyRangeSelector(height = 40, strokeColor = "", dateWindow = range_graf_select)%>%
         dyLegend(width = 600) %>%
-        dyEvent(x = hoy, label = "Hoy", labelLoc = "bottom",
+        dyEvent(x = hoy, label = paste0("Actualización: ", hoy), labelLoc = "bottom",
                 color = "grey", strokePattern = "dashed")
 
       if(trigger_on_app==0){
@@ -417,20 +367,24 @@ graficando <- function(input, output, session, i18n) {
                   modeloSimulado_hi %>% dplyr::select(v2 = HHRR.criticCareBeds),
                   modeloSimulado_low %>% dplyr::select(v3 = HHRR.criticCareBeds)) %>% 
         dplyr::rename(Fecha=1) %>% as.data.frame()
-      labels = c(i18n$t("Camas Críticas"),
-                 i18n$t("Peor escenario"),
-                 i18n$t("Mejor escenario"))
+      labels = c("Camas Críticas","Peor escenario","Mejor escenario")
       addPopover(session, 
-                 "info_C", i18n$t("Utilización de camas de uso crítico - UCI"), 
-                 content = paste0(i18n$t("El número de camas de uso crítico requeridas para cada día de la proyección. La ocupación se calcula comparando con los parámetros de capacidad especificados para cada país, que pueden modificarse en esta herramienta para recalcular los resultados.")), 
+                 "info_C", "Utilización de camas de uso crítico - UCI", 
+                 content = paste0("El número de camas de uso crítico
+                              requeridas para cada día de la proyección. 
+                              La ocupación se calcula
+                              comparando con los parámetros de capacidad
+                              especificados para cada país, que pueden 
+                              modificarse en esta herramienta para
+                              recalcular los resultados."), 
                  trigger = 'click')
-      output$titulo_camas_vents <-renderText({  paste0(i18n$t("Camas UCI: utilización diaria estimada ("), poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
+      output$titulo_camas_vents <-renderText({  paste0("Camas UCI: utilización diaria estimada (", poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
     } else if(input$que_rrhh == "Ventiladores") {
       df <- cbind(modeloSimulado %>% dplyr::select(fecha, v = HHRR.ventilators),
                   modeloSimulado_hi %>% dplyr::select(v2 = HHRR.ventilators),
                   modeloSimulado_low %>% dplyr::select(v3 = HHRR.ventilators)) %>% 
         dplyr::rename(Fecha=1) %>% as.data.frame()
-      labels = c(i18n$t("Ventiladores"),i18n$t("Peor escenario"),i18n$t("Mejor escenario"))
+      labels = c("Ventiladores","Peor escenario","Mejor escenario")
       addPopover(session, 
                  "info_V", "Utilización de Ventiladores / Respiradores", 
                  content = paste0("El número de dispositivos de soporte respiratorio
@@ -441,7 +395,7 @@ graficando <- function(input, output, session, i18n) {
                               modificarse en esta herramienta para
                               recalcular los resultados."), 
                  trigger = 'click')
-      output$titulo_camas_vents <-renderText({  paste0(i18n$t("Ventiladores: utilización diaria estimada ("), poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
+      output$titulo_camas_vents <-renderText({  paste0("Ventiladores: utilización diaria estimada (", poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
   } else if(input$que_rrhh == "Médicos") {
     df <- cbind(modeloSimulado %>% dplyr::select(fecha, v = HHRR.criticCarePhysicans),
                 modeloSimulado_hi %>% dplyr::select(v2 = HHRR.criticCarePhysicans),
@@ -449,16 +403,22 @@ graficando <- function(input, output, session, i18n) {
       dplyr::rename(Fecha=1) %>% as.data.frame()
     labels = c("Médicas/os","Peor escenario","Mejor escenario")
     addPopover(session, 
-               "info_V", i18n$t("Médicas/os en cuidados críticos: dedicación diaria"), 
-               content = paste0(i18n$t("El número de médicos/as requeridos para cada día de la proyección. La ocupación se calcula comparando con los parámetros de capacidad especificados para cada país, que pueden modificarse en esta herramienta para recalcular los resultados.")), 
+               "info_V", "Médicas/os en cuidados críticos: dedicación diaria", 
+               content = paste0("El número de médicos/as
+                                requeridos para cada día de la proyección. 
+                              La ocupación se calcula
+                              comparando con los parámetros de capacidad
+                              especificados para cada país, que pueden 
+                              modificarse en esta herramienta para
+                              recalcular los resultados."), 
                trigger = 'click')
-    output$titulo_camas_vents <-renderText({  paste0(i18n$t("Médicas/os en cuidados críticos: dedicación diaria ("), poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
+    output$titulo_camas_vents <-renderText({  paste0("Médicas/os en cuidados críticos: dedicación diaria (", poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
   } else if(input$que_rrhh == "Enfermeras") {
     df <- cbind(modeloSimulado %>% dplyr::select(fecha, v = HHRR.criticCareNurses),
                 modeloSimulado_hi %>% dplyr::select(v2 = HHRR.criticCareNurses),
                 modeloSimulado_low %>% dplyr::select(v3 = HHRR.criticCareNurses)) %>% 
       dplyr::rename(Fecha=1) %>% as.data.frame()
-    labels = c(i18n$t("Enfermeras/os"),i18n$t("Peor escenario"),i18n$t("Mejor escenario"))
+    labels = c("Enfermeras/os","Peor escenario","Mejor escenario")
     addPopover(session, 
                "info_V", "Enfermeras/os en cuidados críticos: dedicación diaria", 
                content = paste0("El número de enfermeros/as
@@ -469,7 +429,7 @@ graficando <- function(input, output, session, i18n) {
                                 modificarse en esta herramienta para
                                 recalcular los resultados."), 
                trigger = 'click')
-    output$titulo_camas_vents <-renderText({  paste0(i18n$t("Enfermeras/os en cuidados críticos: dedicación diaria ("), poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
+    output$titulo_camas_vents <-renderText({  paste0("Enfermeras/os en cuidados críticos: dedicación diaria (", poblacion_data$label[poblacion_data$pais==pais_actual][1],")") })
   }
     
     if(trigger_on_app==1){df <- df %>% dplyr::select(1:2)}
@@ -498,7 +458,7 @@ graficando <- function(input, output, session, i18n) {
                     hideOnMouseOut = FALSE) %>% 
         dyRangeSelector(height = 40, strokeColor = "", dateWindow = range_graf_select)  %>% 
         dyLegend(width = 400) %>% 
-        dyEvent(x = hoy, label = "Hoy", labelLoc = "bottom", 
+        dyEvent(x = hoy, label = paste0("Actualización: ", hoy), labelLoc = "bottom", 
                 color = "grey", strokePattern = "dashed") %>% 
         dyLimit(ifelse(input$que_rrhh=="Camas", camasCriticas, 
                        ifelse(input$que_rrhh=="Ventiladores", ventiladores,
